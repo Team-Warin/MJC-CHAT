@@ -1,3 +1,97 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+/* body tag */
+body {
+    margin: 0;
+    font-family: Pretendard;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+/* Full screen */
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+/* 좌측 메뉴 전체 */
+.left {
+    width: 260px;
+    background: #DEDCFF;
+}
+
+/* 좌측 메뉴 위의 아이콘 */
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    height: 70px;
+}
+
+/* 채팅 목록 */
+.chat-list {
+    padding: 15px 25px;
+    height: 100%;
+    align-items: center;
+}
+
+.chat-list span {
+    letter-spacing: -0.5px;
+}
+
+.chat-list div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* 채팅 화면 전체 */
+.chat-screen {
+    flex-grow: 1;
+    background: #ffffff;
+}
+
+/* 채팅 화면 위쪽 아이콘 */
+.chat-top {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 20px;
+    height: 70px;
+}
+
+.chat {
+    width: 100%;
+}
+
+.chat div {
+    width: 100%;
+    max-width: 768px;
+    margin: auto;
+    padding: 15px;
+}
+
+/* .conversation {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.conversation input {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    max-width: 768px;
+    min-width: 320px;
+    padding: 15px;
+    background: lightblue;
+    box-sizing: border-box;
+} */
