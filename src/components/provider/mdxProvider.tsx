@@ -1,4 +1,4 @@
-import '@/style/markdown.css';
+import '@/styles/markdown.css';
 
 export default function MDXProvider({
   children,
