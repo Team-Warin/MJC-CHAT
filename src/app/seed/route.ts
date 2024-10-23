@@ -5,7 +5,7 @@ import seedJson from '@/../seed.json'
 // 시드데이터의 데이터 타입 지정하기 위함
 interface SeedData {
     user: { googleId: string }[];
-    chatroom: { title: string; userId: number }[];
+    chatRoom: { title: string; userId: number }[];
     userConversation: { message: string; chatroomId: number }[];
     botConversation: { message: string; metaData: {}; userconversationId: number }[];
     report: { description: string; botconversationId: number, userId: number}[];
