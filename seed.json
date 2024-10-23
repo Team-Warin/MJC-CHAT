@@ -1,10 +1,10 @@
 {
-    "User": [
+    "user": [
         {
             "googleId": "gh10043510@gmail.com"
         }
     ],
-    "Chatroom": [
+    "chatRoom": [
         {
             "title": "첫번째 채팅방",
             "userId": 1
@@ -18,7 +18,7 @@
             "userId": 1
         }
     ],
-    "UserConversation": [
+    "userConversation": [
         {
             "message": "아이언맨이 왼쪽으로 움직이면?",
             "chatroomId": 1
@@ -36,48 +36,48 @@
             "chatroomId": 4
         }
     ],
-    "BotConversation": [
+    "botConversation": [
         {
             "message": "스타크 래프트",
-            "type": "NORMARL",
-            "meataData": {},
+            "metaData": {},
             "userconversationId": 1
         },
         {
             "message": "루이 비 똥",
-            "type": "NORMARL",
-            "meataData": {},
+            "metaData": {},
             "userconversationId": 2
         },
         {
             "message": "소말리아",
-            "type": "NORMARL",
-            "meataData": {},
+            "metaData": {},
             "userconversationId": 3
         },
         {
             "message": "아홉이나 여덟만 받는다.",
-            "type": "NORMARL",
-            "meataData": {},
+            "metaData": {},
             "userconversationId": 4
         }
     ],
-    "Report": [
+    "report": [
         {
             "status": "UNCHECKED",
-            "botconversationId": 1
+            "botconversationId": 1,
+            "userId": 1
         },
         {
             "status": "CHECKED",
-            "botconversationId": 2
+            "botconversationId": 2,
+            "userId": 1
         },
         {
             "status": "UNCHECKED",
-            "botconversationId": 3
+            "botconversationId": 3,
+            "userId": 1
         },
         {
             "status": "CHECKED",
-            "botconversationId": 4
+            "botconversationId": 4,
+            "userId": 1
         }
     ]
 }
