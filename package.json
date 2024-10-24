@@ -15,6 +15,7 @@
     "@langchain/community": "^0.3.8",
     "@langchain/core": "^0.3.13",
     "@langchain/mongodb": "^0.1.0",
+    "@langchain/ollama": "^0.1.0",
     "@langchain/openai": "^0.3.11",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
