@@ -23,39 +23,25 @@ model ChatRoom {
   userId    Int
 }
 
-model UserConversation {
-  id         Int      @id @default(autoincrement())
-  message    String
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  chatroomId Int
+enum Sender {
+  user
+  ai
 }
 
-enum BotConversationType {
-  NORMAL
-  METRO
-}
-
-model BotConversation {
-  id                 Int                 @id @default(autoincrement())
-  message            String
-  type               BotConversationType @default(NORMAL)
-  metaData           Json
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
-  userconversationId Int
-}
-
-enum ReportStatus {
-  CHECKED
-  UNCHECKED
+model Conversation {
+  id                     Int      @id @default(autoincrement())
+  sender                 Sender
+  message                String
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+  chatroomId             Int
+  previousConversationId Int
 }
 
 model Report {
-  id                Int          @id @default(autoincrement())
-  status            ReportStatus @default(UNCHECKED)
-  createdAt         DateTime     @default(now()) @map("created_at")
-  updatedAt         DateTime     @updatedAt @map("updated_at")
-  botconversationId Int
-  userId            Int
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  conversationId Int
+  userId         Int
 }

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // langchain.js에서 지원
-import { ChatOpenAI } from "@langchain/openai"
 import { PromptTemplate } from "@langchain/core/prompts"
 import { HttpResponseOutputParser } from "langchain/output_parsers"
 

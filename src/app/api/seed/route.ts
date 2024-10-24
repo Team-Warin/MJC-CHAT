@@ -4,11 +4,10 @@ import seedJson from '@/../seed.json'
 
 // 시드데이터의 데이터 타입 지정하기 위함
 interface SeedData {
-    user: { googleId: string }[];
-    chatRoom: { title: string; userId: number }[];
-    userConversation: { message: string; chatroomId: number }[];
-    botConversation: { message: string; metaData: {}; userconversationId: number }[];
-    report: { description: string; botconversationId: number, userId: number}[];
+    user: { googleId: string }[]; // 기존과 동일
+    chatRoom: { title: string; userId: number }[]; // 기존과 동일
+    conversation: { sender: string; message: string; chatroomId: number; previousConversationId: number }[]; // previousConversationId 추가
+    report: { conversationId: number; userId: number }[]; // conversationId로 변경
 }
 
 // 데이터베이스에 시드 삽입하는 함수

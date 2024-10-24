@@ -6,77 +6,87 @@
     ],
     "chatRoom": [
         {
-            "title": "첫번째 채팅방",
+            "title": "첫번째 채팅방은 척척박사",
             "userId": 1
         },
         {
-            "title": "첫번째 채팅방",
+            "title": "두번쨰 채팅방은 돌다리도 두드려서 신중하게",
             "userId": 1
         },
         {
-            "title": "첫번째 채팅방",
+            "title": "세번째 채팅방은 세종대왕",
+            "userId": 1
+        },
+        {
+            "title": "네번째 채팅방은 네네치킨",
             "userId": 1
         }
     ],
-    "userConversation": [
+    "conversation": [
         {
+            "sender": "user",
             "message": "아이언맨이 왼쪽으로 움직이면?",
-            "chatroomId": 1
+            "chatroomId": 1,
+            "previousConversationId": 0
         },
         {
+            "sender": "ai",
+            "message": "스타크래프트",
+            "chatroomId": 1,
+            "previousConversationId": 0
+        },
+        {
+            "sender": "user",
             "message": "마리 앙투아네트가 싼 똥은?",
-            "chatroomId": 2
+            "chatroomId": 2,
+            "previousConversationId": 0
         },
         {
-            "message": "말가 소가 햄버거 가게를 차리면?",
-            "chatroomId": 3
+            "sender": "ai",
+            "message": "루이비 똥",
+            "chatroomId": 2,
+            "previousConversationId": 0
         },
         {
-            "message": "열받지 않는 법은?",
-            "chatroomId": 4
-        }
-    ],
-    "botConversation": [
-        {
-            "message": "스타크 래프트",
-            "metaData": {},
-            "userconversationId": 1
+            "sender": "user",
+            "message": "소와 말이 햄버거 가게를 차리면?",
+            "chatroomId": 3,
+            "previousConversationId": 0
         },
         {
-            "message": "루이 비 똥",
-            "metaData": {},
-            "userconversationId": 2
-        },
-        {
+            "sender": "ai",
             "message": "소말리아",
-            "metaData": {},
-            "userconversationId": 3
+            "chatroomId": 3,
+            "previousConversationId": 0
         },
         {
+            "sender": "user",
+            "message": "열받지 않는 법은?",
+            "chatroomId": 4,
+            "previousConversationId": 0
+        },
+        {
+            "sender": "ai",
             "message": "아홉이나 여덟만 받는다.",
-            "metaData": {},
-            "userconversationId": 4
+            "chatroomId": 4,
+            "previousConversationId": 0
         }
     ],
     "report": [
         {
-            "status": "UNCHECKED",
-            "botconversationId": 1,
+            "conversationId": 1,
             "userId": 1
         },
         {
-            "status": "CHECKED",
-            "botconversationId": 2,
+            "conversationId": 2,
             "userId": 1
         },
         {
-            "status": "UNCHECKED",
-            "botconversationId": 3,
+            "conversationId": 3,
             "userId": 1
         },
         {
-            "status": "CHECKED",
-            "botconversationId": 4,
+            "conversationId": 4,
             "userId": 1
         }
     ]
