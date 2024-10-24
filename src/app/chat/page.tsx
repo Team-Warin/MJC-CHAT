@@ -3,8 +3,11 @@ import Conversation from '@/components/conversation';
 import Chatroom from '@/components/chatroom';
 
 import prisma from '@/lib/prisma';
+import { useState } from 'react';
 
 export default async function Chat() {
+  const [input, setInput] = useState("");
+
   const chatRooms = await prisma.chatRoom.findMany({
     where: {
       userId: 1,
@@ -43,14 +46,22 @@ export default async function Chat() {
         <div className={style.chat_screen}>
           <div className={style.chatting}>
             {chatList.map((conv) => (
-              <Conversation content = {conv.message} userType={conv.sender}></Conversation>
-            ))}                 
+              <Conversation content={conv.message} userType={conv.sender}></Conversation>
+            ))}
           </div>
         </div>
         <div className={style.message_box}>
-          <form>
+          <form onSubmit={e => {
+            e.preventDefault();
+            console.log(input);
+          }}>
             <div className={style.send_msg}>
-              <input placeholder='메시지를 입력하세요' />
+              <input
+                type='text'
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder='메시지를 입력하세요'
+              />
               <img
                 src='../favicon.ico'
                 alt=''
