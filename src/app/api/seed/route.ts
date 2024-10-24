@@ -1,4 +1,4 @@
-// seed.json의 데이터로 초기데이터를 생성함
+// 초기데이터 생성함
 import prisma from '@/lib/prisma'
 import seedJson from '@/../seed.json'
 
