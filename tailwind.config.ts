@@ -16,6 +16,8 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        mjcblue: '#002968',
+        mjcsky: '#0086D1',
       },
     },
   },

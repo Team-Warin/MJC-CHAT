@@ -1,0 +1,193 @@
+'use client';
+
+import style from '@/styles/bannerchat.module.css';
+
+import { delay } from '@/lib/delay';
+
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
+
+import { textStream } from '@/lib/textstream';
+
+import { motion, useAnimate, useMotionValueEvent } from 'framer-motion';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
+import { Button } from '@nextui-org/button';
+import { pre } from 'framer-motion/client';
+
+export default function BannerChat() {
+  const events: { role: 'user' | 'ai'; content: string }[][] = [
+    [
+      {
+        role: 'user',
+        content: '안녕!',
+      },
+      {
+        role: 'ai',
+        content:
+          '안녕하세요. 저는 명지전문대학 학사도우미 "명전이" 입니다! 무엇을 도와드릴까요?',
+      },
+      {
+        role: 'user',
+        content:
+          '아파서 오늘 수업을 못 들어서 결석이 됐는데 출석 인정을 받고 싶어.',
+      },
+      {
+        role: 'ai',
+        content:
+          '본인의 질병으로 출석 인정을 받는법을 알려드리겠습니다. 종합병원(2차 의료기관 이상) 진단서 및 진료확인서(소견서 포함)를 준비하여 2주 이내에 출석인정 서류를 제출하시면 됩니다.',
+      },
+    ],
+  ];
+
+  const [btn, animate] = useAnimate();
+  const [value, setValue] = useState('');
+  const [chat, setChat] = useState<{ role: 'user' | 'ai'; message: string }[]>(
+    []
+  );
+
+  // 이거 넘 힘들었음
+  async function chatPromise(eventIndex: number, messageIndex: number) {
+    const promise = new Promise((resolve) => {
+      if (events[eventIndex][messageIndex].role === 'user') {
+        // 유저 메세지는 input -> 채팅방
+        textStream(events[eventIndex][messageIndex].content).forEach(
+          (text, i) => {
+            delay(70 * i, () => {
+              setValue(text);
+            }).then(() => {
+              if (text === events[eventIndex][messageIndex].content)
+                delay(400, () => {
+                  setValue('');
+                  setChat((prev) => [
+                    ...prev,
+                    {
+                      role: events[eventIndex][messageIndex].role,
+                      message: text,
+                    },
+                  ]);
+                }).then(() => {
+                  if (messageIndex + 1 < events[eventIndex].length) {
+                    delay(400, () => {
+                      chatPromise(eventIndex, messageIndex + 1);
+                    });
+                  } else {
+                    resolve(text);
+                  }
+                });
+            });
+          }
+        );
+      } else if (events[eventIndex][messageIndex].role === 'ai') {
+        // AI 메세지는 즉시 입력
+        textStream(events[eventIndex][messageIndex].content).forEach(
+          (text, i) => {
+            delay(30 * i, () => {
+              setChat((prev) => {
+                const lastMessage = prev[prev.length - 1];
+                if (lastMessage && lastMessage.role === 'ai') {
+                  // 마지막 메시지가 AI일 경우, 메시지를 업데이트
+                  return [
+                    ...prev.slice(0, -1), // 마지막 메시지를 제외한 나머지
+                    { ...lastMessage, message: text }, // 메시지 추가
+                  ];
+                } else {
+                  // 새로운 메시지 추가
+                  return [
+                    ...prev,
+                    {
+                      role: events[eventIndex][messageIndex].role,
+                      message: text,
+                    },
+                  ];
+                }
+              });
+            }).then(() => {
+              if (text === events[eventIndex][messageIndex].content)
+                if (messageIndex + 1 < events[eventIndex].length) {
+                  delay(400, () => {
+                    chatPromise(eventIndex, messageIndex + 1);
+                  });
+                } else {
+                  resolve(text);
+                }
+            });
+          }
+        );
+      }
+    });
+
+    return promise;
+  }
+
+  useEffect(() => {
+    if (value.length > 1) {
+      animate(btn.current, { scale: 1 }, { duration: 0.75, type: 'spring' });
+    } else {
+      animate(btn.current, { scale: 0 }, { duration: 0.75, type: 'spring' });
+    }
+  }, [value]);
+
+  useEffect(() => {
+    chatPromise(0, 0);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      className={style.container}
+    >
+      <div className={style.chat_header}>
+        <div className={style.chat_header_icon}>
+          <div className={style.close}></div>
+          <div className={style.minimize}></div>
+          <div className={style.maximize}></div>
+        </div>
+        <div className={style.chat_header_title}>
+          <Image src='/mjc.webp' alt='mjc' width={20} height={20} />
+          <p>명전이</p>
+        </div>
+        <div className={style.dummy}></div>
+      </div>
+      <div className={style.chat_body}>
+        {chat.map((item, i) => (
+          <div
+            key={i}
+            className={`${style.chat_message} ${
+              item.role !== 'ai' && style.user
+            }`}
+          >
+            <motion.p
+              initial={{ scale: 0, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              transition={{ duration: 0.5, type: 'spring', stiffness: 50 }}
+            >
+              {item.message}
+            </motion.p>
+          </div>
+        ))}
+      </div>
+      <div className={style.chat_footer}>
+        <div className={style.chat_footer_input_container}>
+          <input
+            className={style.chat_footer_input}
+            type='text'
+            readOnly
+            value={value}
+            placeholder='자유롭게 대화해 보세요.'
+          />
+          <motion.div ref={btn} initial={{ scale: 0 }}>
+            <Button isIconOnly radius='full' size='sm'>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Button>
+          </motion.div>
+        </div>
+        <p>이 팝업은 예시 입니다. 실제 답변은 다를 수 도 있습니다.</p>
+      </div>
+    </motion.div>
+  );
+}
