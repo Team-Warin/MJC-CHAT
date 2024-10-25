@@ -1,9 +1,9 @@
 .container {
-  @apply flex flex-col rounded-lg shadow-lg bg-white overflow-hidden;
+  @apply hidden md:flex flex-col rounded-lg shadow-lg bg-white overflow-hidden;
 }
 
 .chat_header {
-  @apply flex items-center justify-between p-5 h-[40px] bg-slate-100 shadow-sm;
+  @apply flex items-center justify-between p-5 h-[40px] bg-slate-100 shadow-sm scrollbar-hide;
 
   & > .chat_header_icon {
     @apply flex items-center gap-1;
@@ -31,7 +31,7 @@
 }
 
 .chat_body {
-  @apply flex flex-col gap-3 w-[600px] h-[500px] p-5 overflow-y-scroll;
+  @apply flex flex-col gap-3 w-[400px] lg:w-[550px] h-[calc(100dvh-300px)] p-5 overflow-y-scroll;
 
   & > .chat_message {
     @apply flex w-full text-sm;
@@ -45,13 +45,13 @@
     }
 
     & > p {
-      @apply p-3 ps-5 pe-5 max-w-[50%] bg-slate-100 rounded-2xl;
+      @apply p-3 lg:ps-5 lg:pe-5 max-w-[50%] bg-slate-100 rounded-2xl;
     }
   }
 }
 
 .chat_footer {
-  @apply flex flex-col items-center gap-1 p-3 rounded-b-md;
+  @apply flex flex-col items-center gap-1 ps-3 pe-3 pb-3 rounded-b-md;
 
   & > p {
     @apply text-xs text-slate-500;

@@ -1,0 +1,15 @@
+.footer {
+  @apply p-14 mb-20 flex gap-20 w-full h-[100px] bg-white;
+}
+
+.links {
+  @apply mt-2 flex flex-col gap-5;
+
+  & a {
+    @apply text-lg text-mjcblue;
+  }
+
+  & .title {
+    @apply text-xl font-bold;
+  }
+}

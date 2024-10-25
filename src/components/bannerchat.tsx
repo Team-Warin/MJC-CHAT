@@ -5,7 +5,8 @@ import style from '@/styles/bannerchat.module.css';
 import { delay } from '@/lib/delay';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useWindowSize } from '@/components/hook/useWindowSize';
 
 import { textStream } from '@/lib/textstream';
 
@@ -17,6 +18,8 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@nextui-org/button';
 
 export default function BannerChat() {
+  const window = useWindowSize();
+
   const events: { role: 'user' | 'ai'; content: string }[][] = [
     [
       {
@@ -26,7 +29,7 @@ export default function BannerChat() {
       {
         role: 'ai',
         content:
-          '안녕하세요. 저는 명지전문대학 학사도우미 "명전이" 입니다! 무엇을 도와드릴까요?',
+          '안녕하세요. 저는 명지전문대학 학사 도우미 명전이 입니다! 무엇을 도와드릴까요?',
       },
       {
         role: 'user',
@@ -36,7 +39,7 @@ export default function BannerChat() {
       {
         role: 'ai',
         content:
-          '본인의 질병으로 출석 인정을 받는법을 알려드리겠습니다. 종합병원(2차 의료기관 이상) 진단서 및 진료확인서(소견서 포함)를 준비하여 2주 이내에 출석인정 서류를 제출하시면 됩니다.',
+          '본인의 질병으로 출석 인정을 받는 법을 알려드리겠습니다. 종합병원(2차 의료기관 이상) 진단서 및 진료확인서(소견서 포함)를 준비하여 2주 이내에 대체 과제물과 함께 출석 인정 서류를 제출하시면 됩니다.',
       },
       {
         role: 'user',
@@ -48,6 +51,24 @@ export default function BannerChat() {
           '별말씀을요. 학사관련해서 도움이 필요하다면 언제든지 저를 찾아주세요!',
       },
     ],
+    [
+      {
+        role: 'user',
+        content: '너는 누가 만들었어?',
+      },
+      {
+        role: 'ai',
+        content: '명지전문대학 Ai빅데이터학과 팀 Warin에서 만들었습니다.',
+      },
+      {
+        role: 'user',
+        content: '너는 뭘 할 수 있어?',
+      },
+      {
+        role: 'ai',
+        content: '저는 명지전문대학에 관한 학사관련 도움을 드릴 수 있습니다.',
+      },
+    ],
   ];
 
   const [btn, animate] = useAnimate();
@@ -56,36 +77,56 @@ export default function BannerChat() {
     []
   );
 
+  const chatBodyRef = useRef<HTMLDivElement | null>(null);
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   // 이거 넘 힘들었음
+  const abortController = new AbortController(); // 중단 컨트롤러
   async function chatPromise(eventIndex: number, messageIndex: number) {
-    const promise = new Promise((resolve) => {
+    const promise = new Promise(() => {
       const currentEvent = events[eventIndex][messageIndex];
       const isUser = currentEvent.role === 'user';
 
       const handleUserMessage = (text: string, i: number) => {
-        delay(70 * i, () => {
-          setValue(text);
-        }).then(() => {
+        delay(
+          50 * i,
+          () => {
+            setValue(text);
+          },
+          abortController
+        ).then(() => {
           if (text === currentEvent.content) {
-            delay(400, () => {
-              setValue('');
-              setChat((prev) => [
-                ...prev,
-                { role: currentEvent.role, message: text },
-              ]);
-            }).then(() => {
+            delay(
+              400,
+              () => {
+                setValue('');
+                setChat((prev) => [
+                  ...prev,
+                  { role: currentEvent.role, message: text },
+                ]);
+              },
+              abortController
+            ).then(() => {
               if (messageIndex + 1 < events[eventIndex].length) {
-                delay(400, () => {
-                  chatPromise(eventIndex, messageIndex + 1);
-                });
+                delay(
+                  400,
+                  () => {
+                    chatPromise(eventIndex, messageIndex + 1);
+                  },
+                  abortController
+                );
               } else {
-                delay(1000, () => {
-                  setChat([]);
-                  chatPromise(
-                    eventIndex + 1 < events.length ? eventIndex + 1 : 0,
-                    0
-                  );
-                });
+                delay(
+                  1000,
+                  () => {
+                    setChat([]);
+                    chatPromise(
+                      eventIndex + 1 < events.length ? eventIndex + 1 : 0,
+                      0
+                    );
+                  },
+                  abortController
+                );
               }
             });
           }
@@ -93,29 +134,44 @@ export default function BannerChat() {
       };
 
       const handleAIMessage = (text: string, i: number) => {
-        delay(30 * i, () => {
-          setChat((prev) => {
-            const lastMessage = prev[prev.length - 1];
-            if (lastMessage && lastMessage.role === 'ai') {
-              return [...prev.slice(0, -1), { ...lastMessage, message: text }];
-            } else {
-              return [...prev, { role: currentEvent.role, message: text }];
-            }
-          });
-        }).then(() => {
+        delay(
+          30 * i,
+          () => {
+            setChat((prev) => {
+              const lastMessage = prev[prev.length - 1];
+              if (lastMessage && lastMessage.role === 'ai') {
+                return [
+                  ...prev.slice(0, -1),
+                  { ...lastMessage, message: text },
+                ];
+              } else {
+                return [...prev, { role: currentEvent.role, message: text }];
+              }
+            });
+          },
+          abortController
+        ).then(() => {
           if (text === currentEvent.content) {
             if (messageIndex + 1 < events[eventIndex].length) {
-              delay(400, () => {
-                chatPromise(eventIndex, messageIndex + 1);
-              });
+              delay(
+                400,
+                () => {
+                  chatPromise(eventIndex, messageIndex + 1);
+                },
+                abortController
+              );
             } else {
-              delay(1000, () => {
-                setChat([]);
-                chatPromise(
-                  eventIndex + 1 < events.length ? eventIndex + 1 : 0,
-                  0
-                );
-              });
+              delay(
+                1000,
+                () => {
+                  setChat([]);
+                  chatPromise(
+                    eventIndex + 1 < events.length ? eventIndex + 1 : 0,
+                    0
+                  );
+                },
+                abortController
+              );
             }
           }
         });
@@ -123,6 +179,7 @@ export default function BannerChat() {
 
       // 유저 또는 AI 메시지 처리
       textStream(currentEvent.content).forEach((text, i) => {
+        if (abortController.signal.aborted) return;
         isUser ? handleUserMessage(text, i) : handleAIMessage(text, i);
       });
     });
@@ -139,8 +196,22 @@ export default function BannerChat() {
   }, [value]);
 
   useEffect(() => {
-    chatPromise(0, 0);
-  }, []);
+    if (messageEndRef.current && chatBodyRef.current) {
+      chatBodyRef.current.scrollTo({
+        top: messageEndRef.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  }, [chat]);
+
+  useEffect(() => {
+    if ((window.width ?? 0) >= 768) chatPromise(0, 0);
+
+    return () => {
+      setChat([]);
+      abortController.abort();
+    };
+  }, [window.width]);
 
   return (
     <motion.div
@@ -161,7 +232,7 @@ export default function BannerChat() {
         </div>
         <div className={style.dummy}></div>
       </div>
-      <div className={style.chat_body}>
+      <div ref={chatBodyRef} className={style.chat_body}>
         {chat.map((item, i) => (
           <div
             key={i}
@@ -178,6 +249,7 @@ export default function BannerChat() {
             </motion.p>
           </div>
         ))}
+        <div ref={messageEndRef}></div>
       </div>
       <div className={style.chat_footer}>
         <div className={style.chat_footer_input_container}>

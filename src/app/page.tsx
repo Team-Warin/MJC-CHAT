@@ -8,15 +8,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
+import Footer from '@/components/footer';
 import BannerChat from '@/components/bannerchat';
 
 /** Main Page */
 export default function Main() {
   return (
-    <main>
-      <Banner />
-      <Intro />
-    </main>
+    <>
+      <main>
+        <Banner />
+        <Intro />
+      </main>
+      <Footer />
+    </>
   );
 }
 
