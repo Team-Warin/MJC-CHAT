@@ -31,7 +31,7 @@
 }
 
 .chat_body {
-  @apply flex flex-col gap-3 w-[600px] h-[500px] p-5;
+  @apply flex flex-col gap-3 w-[600px] h-[500px] p-5 overflow-y-scroll;
 
   & > .chat_message {
     @apply flex w-full text-sm;

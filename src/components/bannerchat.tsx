@@ -9,13 +9,12 @@ import { useState, useEffect } from 'react';
 
 import { textStream } from '@/lib/textstream';
 
-import { motion, useAnimate, useMotionValueEvent } from 'framer-motion';
+import { motion, useAnimate } from 'framer-motion';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
-import { pre } from 'framer-motion/client';
 
 export default function BannerChat() {
   const events: { role: 'user' | 'ai'; content: string }[][] = [
@@ -39,6 +38,15 @@ export default function BannerChat() {
         content:
           '본인의 질병으로 출석 인정을 받는법을 알려드리겠습니다. 종합병원(2차 의료기관 이상) 진단서 및 진료확인서(소견서 포함)를 준비하여 2주 이내에 출석인정 서류를 제출하시면 됩니다.',
       },
+      {
+        role: 'user',
+        content: '고마워!',
+      },
+      {
+        role: 'ai',
+        content:
+          '별말씀을요. 학사관련해서 도움이 필요하다면 언제든지 저를 찾아주세요!',
+      },
     ],
   ];
 
@@ -51,72 +59,72 @@ export default function BannerChat() {
   // 이거 넘 힘들었음
   async function chatPromise(eventIndex: number, messageIndex: number) {
     const promise = new Promise((resolve) => {
-      if (events[eventIndex][messageIndex].role === 'user') {
-        // 유저 메세지는 input -> 채팅방
-        textStream(events[eventIndex][messageIndex].content).forEach(
-          (text, i) => {
-            delay(70 * i, () => {
-              setValue(text);
+      const currentEvent = events[eventIndex][messageIndex];
+      const isUser = currentEvent.role === 'user';
+
+      const handleUserMessage = (text: string, i: number) => {
+        delay(70 * i, () => {
+          setValue(text);
+        }).then(() => {
+          if (text === currentEvent.content) {
+            delay(400, () => {
+              setValue('');
+              setChat((prev) => [
+                ...prev,
+                { role: currentEvent.role, message: text },
+              ]);
             }).then(() => {
-              if (text === events[eventIndex][messageIndex].content)
+              if (messageIndex + 1 < events[eventIndex].length) {
                 delay(400, () => {
-                  setValue('');
-                  setChat((prev) => [
-                    ...prev,
-                    {
-                      role: events[eventIndex][messageIndex].role,
-                      message: text,
-                    },
-                  ]);
-                }).then(() => {
-                  if (messageIndex + 1 < events[eventIndex].length) {
-                    delay(400, () => {
-                      chatPromise(eventIndex, messageIndex + 1);
-                    });
-                  } else {
-                    resolve(text);
-                  }
+                  chatPromise(eventIndex, messageIndex + 1);
                 });
+              } else {
+                delay(1000, () => {
+                  setChat([]);
+                  chatPromise(
+                    eventIndex + 1 < events.length ? eventIndex + 1 : 0,
+                    0
+                  );
+                });
+              }
             });
           }
-        );
-      } else if (events[eventIndex][messageIndex].role === 'ai') {
-        // AI 메세지는 즉시 입력
-        textStream(events[eventIndex][messageIndex].content).forEach(
-          (text, i) => {
-            delay(30 * i, () => {
-              setChat((prev) => {
-                const lastMessage = prev[prev.length - 1];
-                if (lastMessage && lastMessage.role === 'ai') {
-                  // 마지막 메시지가 AI일 경우, 메시지를 업데이트
-                  return [
-                    ...prev.slice(0, -1), // 마지막 메시지를 제외한 나머지
-                    { ...lastMessage, message: text }, // 메시지 추가
-                  ];
-                } else {
-                  // 새로운 메시지 추가
-                  return [
-                    ...prev,
-                    {
-                      role: events[eventIndex][messageIndex].role,
-                      message: text,
-                    },
-                  ];
-                }
+        });
+      };
+
+      const handleAIMessage = (text: string, i: number) => {
+        delay(30 * i, () => {
+          setChat((prev) => {
+            const lastMessage = prev[prev.length - 1];
+            if (lastMessage && lastMessage.role === 'ai') {
+              return [...prev.slice(0, -1), { ...lastMessage, message: text }];
+            } else {
+              return [...prev, { role: currentEvent.role, message: text }];
+            }
+          });
+        }).then(() => {
+          if (text === currentEvent.content) {
+            if (messageIndex + 1 < events[eventIndex].length) {
+              delay(400, () => {
+                chatPromise(eventIndex, messageIndex + 1);
               });
-            }).then(() => {
-              if (text === events[eventIndex][messageIndex].content)
-                if (messageIndex + 1 < events[eventIndex].length) {
-                  delay(400, () => {
-                    chatPromise(eventIndex, messageIndex + 1);
-                  });
-                } else {
-                  resolve(text);
-                }
-            });
+            } else {
+              delay(1000, () => {
+                setChat([]);
+                chatPromise(
+                  eventIndex + 1 < events.length ? eventIndex + 1 : 0,
+                  0
+                );
+              });
+            }
           }
-        );
-      }
+        });
+      };
+
+      // 유저 또는 AI 메시지 처리
+      textStream(currentEvent.content).forEach((text, i) => {
+        isUser ? handleUserMessage(text, i) : handleAIMessage(text, i);
+      });
     });
 
     return promise;
