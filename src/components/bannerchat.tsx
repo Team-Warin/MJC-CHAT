@@ -180,7 +180,8 @@ export default function BannerChat() {
       // 유저 또는 AI 메시지 처리
       textStream(currentEvent.content).forEach((text, i) => {
         if (abortController.signal.aborted) return;
-        isUser ? handleUserMessage(text, i) : handleAIMessage(text, i);
+        if (isUser) handleUserMessage(text, i);
+        else handleAIMessage(text, i);
       });
     });
 

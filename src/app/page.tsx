@@ -70,5 +70,5 @@ function Banner() {
 
 /** Intro */
 function Intro() {
-  return <div className={style.intro}></div>;
+  return <div id='intro' className={style.intro}></div>;
 }

@@ -1,0 +1,11 @@
+.container {
+  @apply w-full h-dvh bg-slate-50;
+}
+
+.modal_container {
+  @apply fixed flex justify-center items-center w-full h-dvh backdrop-blur-sm z-10;
+}
+
+.modal {
+  @apply w-[700px] h-[500px] bg-white shadow-xl rounded-2xl;
+}

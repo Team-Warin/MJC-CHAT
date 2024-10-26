@@ -7,54 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  googleId  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-}
-
-model ChatRoom {
-  id        Int      @id @default(autoincrement())
-  title     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  userId    Int
-}
-
-model UserConversation {
-  id         Int      @id @default(autoincrement())
-  message    String
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  chatroomId Int
-}
-
-enum BotConversationType {
-  NORMAL
-  METRO
-}
-
-model BotConversation {
-  id                 Int                 @id @default(autoincrement())
-  message            String
-  type               BotConversationType @default(NORMAL)
-  metaData           Json
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
-  userconversationId Int
-}
-
-enum ReportStatus {
-  CHECKED
-  UNCHECKED
-}
-
-model Report {
-  id                Int          @id @default(autoincrement())
-  status            ReportStatus @default(UNCHECKED)
-  createdAt         DateTime     @default(now()) @map("created_at")
-  updatedAt         DateTime     @updatedAt @map("updated_at")
-  botconversationId Int
-  userId            Int
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Test {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
 }

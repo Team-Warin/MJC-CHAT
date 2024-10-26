@@ -13,6 +13,7 @@ import {
 } from 'framer-motion';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 /** Navbar Component */
 export default function Navbar() {
@@ -61,6 +62,8 @@ export default function Navbar() {
     lastScrollY = latest;
   });
 
+  const pathname = usePathname();
+  if (pathname?.startsWith('/auth/')) return null;
   return (
     <motion.div
       ref={navbar}
