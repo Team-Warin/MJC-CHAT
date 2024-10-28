@@ -1,6 +1,6 @@
 import style from '@/styles/chat.module.css';
-import SideNav from '@/components/chat/sidenav';
-import ChatWindow from '@/components/chat/chatwindow';
+import SideNav from '@/components/sidenav';
+import ChatWindow from '@/components/chatwindow';
 
 export default async function Chat() {
   return (
