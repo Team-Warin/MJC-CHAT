@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 export default function ChatWindow() {
     return (
-        <div className={style.chat_container}>
+        <div className={style.chat_window}>
             <div className={style.chat_header}>
                 <img src='Settings.png' alt='' />
             </div>
