@@ -20,11 +20,11 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -37,33 +37,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -74,8 +74,40 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
+}
+
+// 채팅 위한 코드
+model ChatRoom {
+  id        Int      @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    Int
+}
+
+enum SenderType {
+  user
+  ai
+}
+
+model Conversation {
+  id                     Int        @id @default(autoincrement())
+  sender                 SenderType
+  message                String
+  createdAt              DateTime   @default(now()) @map("created_at")
+  updatedAt              DateTime   @updatedAt @map("updated_at")
+  chatroomId             Int
+  previousConversationId Int
+}
+
+model Report {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  conversationId Int
+  userId         Int
 }
