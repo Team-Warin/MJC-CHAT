@@ -1,7 +1,21 @@
+.chat_container {
+  @apply flex-col;
+}
+
+.chat_sidenav {
+  @apply w-200
+}
+
+.chat_window {
+  @apply w-500
+}
+
 .container {
+  background-color: black;
 }
 
 .sidenav {
+
 }
 
 .menu_container {
