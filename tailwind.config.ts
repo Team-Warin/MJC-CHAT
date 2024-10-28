@@ -9,7 +9,7 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
 
     // NextUi Tailwind setup 추가할때마다 | 넣고 추가로 써줘야함
-    './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input).js',
+    './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input|avatar|popover|dropdown|modal|select).js',
   ],
   theme: {
     extend: {
@@ -18,6 +18,7 @@ const config: Config = {
         foreground: 'var(--foreground)',
         mjcblue: '#002968',
         mjcsky: '#0086D1',
+        google: '#f1f4f9',
       },
     },
   },

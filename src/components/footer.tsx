@@ -28,7 +28,7 @@ export default function Footer() {
         href: 'http://cyber.mjc.ac.kr/index.jsp',
       },
       {
-        title: '명지전문대학 학사일정',
+        title: '명지전문대학 평생교육원',
         href: 'https://edu.mjc.ac.kr/main/main.html',
       },
     ],
@@ -48,16 +48,14 @@ export default function Footer() {
         {links.map((link, i) => (
           <div key={i} className={style.links}>
             {link.map((item, j) => (
-              <>
-                <Link
-                  className={j === 0 ? style.title : style.sub}
-                  key={j}
-                  href={item.href}
-                >
-                  {item.title}
-                  {j !== 0 && <hr className={style.line} />}
-                </Link>
-              </>
+              <Link
+                className={j === 0 ? style.title : style.sub}
+                key={j}
+                href={item.href}
+              >
+                {item.title}
+                {j !== 0 && <hr className={style.line} />}
+              </Link>
             ))}
           </div>
         ))}
