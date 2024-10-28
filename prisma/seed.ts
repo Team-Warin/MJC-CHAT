@@ -1,7 +1,10 @@
 // 이 코드는 /seed.json을 읽어서 데이터베이스에 초기 데이터를 넣는 코드입니다
 // 사용법 package.json 확인: npx prisma seed 
-import prisma from '@/lib/prisma';
-import seedJson from '@/../seed.json';
+import { PrismaClient } from "@prisma/client";
+import seedJson from '../seed.json';
+
+// 
+const prisma = new PrismaClient();
 
 interface SeedData {
     chatRoom: { title: string; userId: number }[];
