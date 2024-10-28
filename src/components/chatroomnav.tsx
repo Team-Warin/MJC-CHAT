@@ -1,8 +1,12 @@
 'use client'
 
 import style from '@/styles/chat.module.css';
-import { constants } from 'buffer';
 import { useEffect, useState } from 'react';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
+
+import { Button } from '@nextui-org/button';
 
 // 채팅방 형태
 interface ChatRoom {
@@ -11,7 +15,7 @@ interface ChatRoom {
 }
 
 // 좌측 채팅방 목록 코드
-export default function SideNav() {
+export default function ChatroomNav() {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
     // 컴포넌트 로딩시 실행됨
@@ -57,7 +61,7 @@ export default function SideNav() {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' }
         });
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error(`HTTP 에러 ${response.status}`);
         }
 
@@ -66,12 +70,24 @@ export default function SideNav() {
 
     // 목록 반환
     return (
-        <div className={style.chat_sidenav}>
-            <div className={style.menu_icon}>
-                <img src='Chat-minimum.png' alt='' className='minimum' />
-                <img src='new_chat.png' alt='' className='new' onClick={createChatRoom} />
+        <div className={style.chatroom_nav}>
+            <div className={style.nav_menu}>
+                <Button isIconOnly
+                    size='lg'
+                    color='primary'
+                    variant="light"
+                    endContent={<FontAwesomeIcon icon={faBars} />}
+                >
+                </Button>
+                <Button
+                    size='lg'
+                    color='primary'
+                    endContent={<FontAwesomeIcon icon={faPlus} />}
+                >
+                    새 채팅방
+                </Button>
             </div>
-            <div className={style.menu_chat}>
+            <div className={style.chatroom_list}>
                 {chatRooms.map((chatRoom) => (
                     <div className={style.chat_list}>
                         <span>{chatRoom.title}</span>
