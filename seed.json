@@ -102,13 +102,11 @@
     "report": [
         {
             "conversationId": 3,
-            "userId": 1,
-            "reason": "잘못된 정보"
+            "userId": 1
         },
         {
             "conversationId": 10,
-            "userId": 2,
-            "reason": "불친절한 답변"
+            "userId": 2
         }
     ]
 }
