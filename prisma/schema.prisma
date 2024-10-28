@@ -84,8 +84,8 @@ model Authenticator {
 model ChatRoom {
   id        Int      @id @default(autoincrement())
   title     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   userId    Int
 }
 
@@ -98,16 +98,16 @@ model Conversation {
   id                     Int        @id @default(autoincrement())
   sender                 SenderType
   message                String
-  createdAt              DateTime   @default(now()) @map("created_at")
-  updatedAt              DateTime   @updatedAt @map("updated_at")
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
   chatroomId             Int
   previousConversationId Int
 }
 
 model Report {
   id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   conversationId Int
   userId         Int
 }
