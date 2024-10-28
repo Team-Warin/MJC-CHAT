@@ -2,9 +2,7 @@
 import prisma from '@/lib/prisma'
 import seedJson from '@/../seed.json'
 
-// 시드데이터 seed.json의 형태
 interface SeedData {
-    user: { googleId: string }[];
     chatRoom: { title: string; userId: number }[]; 
     conversation: { sender: string; message: string; chatroomId: number; previousConversationId: number }[]; 
     report: { conversationId: number; userId: number }[];
