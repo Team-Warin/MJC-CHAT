@@ -9,7 +9,7 @@ interface ChatRoom {
     title: string;
 }
 
-// 채팅방 좌측 네비게이션 코드
+// 좌측 채팅방 목록 코드
 export default function SideNav() {
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
@@ -30,9 +30,7 @@ export default function SideNav() {
 
     // 새 채팅방 생성
     const createChatRoom = async () => {
-        const response = await fetch('/api/chatrooms', {
-            method: 'POST'
-        });
+        const response = await fetch('/api/chatrooms', { method: 'POST' });
         if (!response.ok) {
             throw new Error(`HTTP 에러 ${response.status}`);
         }
@@ -51,8 +49,14 @@ export default function SideNav() {
         setChatRooms(chatRooms.filter(chatRoom => chatRoom.id !== id)); // id 채팅방 제외
     }
 
+    // 채팅방 이름 변경
+    const renameChatroom = async (id: number, title: string) => {
+        
+    }
+
+    // 목록 반환
     return (
-        <div className={style.sidenav}>
+        <div className={style.chat_sidenav}>
             <div className={style.menu_icon}>
                 <img src='Chat-minimum.png' alt='' className='minimum' />
                 <img src='new_chat.png' alt='' className='new' onClick={createChatRoom} />
