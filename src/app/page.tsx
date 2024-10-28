@@ -5,6 +5,7 @@ import * as motion from 'framer-motion/client';
 import Mjc_Animation from '@/components/animation/leaf';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
@@ -28,6 +29,14 @@ export default function Main() {
 function Banner() {
   return (
     <div className={style.banner}>
+      <motion.div
+        className='absolute bottom-10 flex w-full justify-center text-2xl'
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+      >
+        <FontAwesomeIcon icon={faAnglesDown} />
+      </motion.div>
       <div className={style.banner_content}>
         <div className={style.banner_text}>
           <motion.h1
@@ -70,5 +79,5 @@ function Banner() {
 
 /** Intro */
 function Intro() {
-  return <div className={style.intro}></div>;
+  return <div id='intro' className={style.intro}></div>;
 }

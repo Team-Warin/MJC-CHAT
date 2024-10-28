@@ -2,9 +2,13 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 
+import { auth } from '@/auth';
+
 import { Inter } from 'next/font/google';
 
 import Navbar from '@/components/navbar';
+import FirstModal from '@/components/firstmodal';
+import NextAuthProvider from '@/components/providers/NextAuthProvider';
 
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -17,16 +21,23 @@ export const metadata: Metadata = {
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
+  console.log(session);
+
   return (
     <html lang='ko'>
       <body className={inter.className}>
-        <Navbar />
-        {children}
+        <NextAuthProvider session={session}>
+          <Navbar session={session} />
+          {session?.user?.nickname === '' ? <FirstModal /> : null}
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );

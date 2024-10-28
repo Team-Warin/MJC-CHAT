@@ -1,6 +1,7 @@
 'use client'
 
 import style from '@/styles/chat.module.css';
+import { constants } from 'buffer';
 import { useEffect, useState } from 'react';
 
 // 채팅방 형태
@@ -51,7 +52,16 @@ export default function SideNav() {
 
     // 채팅방 이름 변경
     const renameChatroom = async (id: number, title: string) => {
-        
+        const body = JSON.stringify({ title });
+        const response = await fetch(`/api/chatrooms/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if(!response.ok) {
+            throw new Error(`HTTP 에러 ${response.status}`);
+        }
+
+        // 이름 변경 코드
     }
 
     // 목록 반환

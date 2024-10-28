@@ -1,0 +1,39 @@
+.container {
+  @apply w-full h-dvh bg-slate-50;
+}
+
+.modal_container {
+  @apply fixed flex justify-center items-center w-full h-dvh backdrop-blur-sm z-10;
+}
+
+.modal {
+  @apply p-8 flex flex-col justify-between items-center w-[700px] h-[500px] bg-white shadow-xl rounded-2xl;
+}
+
+.modal_title {
+  @apply flex flex-col items-center gap-3;
+
+  & > p {
+    @apply text-lg font-bold;
+  }
+
+  & > .modal_title_logo {
+    @apply flex items-center gap-2;
+
+    & > h1 {
+      @apply text-mjcblue text-3xl font-bold;
+    }
+  }
+}
+
+.modal_content {
+  @apply w-full flex justify-center;
+
+  & > form {
+    @apply w-full flex justify-center;
+
+    & > button {
+      @apply max-w-md w-full shadow-md;
+    }
+  }
+}

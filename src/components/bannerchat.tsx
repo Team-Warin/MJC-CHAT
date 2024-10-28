@@ -180,7 +180,8 @@ export default function BannerChat() {
       // 유저 또는 AI 메시지 처리
       textStream(currentEvent.content).forEach((text, i) => {
         if (abortController.signal.aborted) return;
-        isUser ? handleUserMessage(text, i) : handleAIMessage(text, i);
+        if (isUser) handleUserMessage(text, i);
+        else handleAIMessage(text, i);
       });
     });
 
@@ -217,7 +218,7 @@ export default function BannerChat() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.7, delay: 0.5 }}
       className={style.container}
     >
       <div className={style.chat_header}>
@@ -227,7 +228,7 @@ export default function BannerChat() {
           <div className={style.maximize}></div>
         </div>
         <div className={style.chat_header_title}>
-          <Image src='/mjc.webp' alt='mjc' width={20} height={20} />
+          <Image src='/webps/mjc.webp' alt='mjc' width={20} height={20} />
           <p>명전이</p>
         </div>
         <div className={style.dummy}></div>
@@ -237,7 +238,7 @@ export default function BannerChat() {
           <div
             key={i}
             className={`${style.chat_message} ${
-              item.role !== 'ai' && style.user
+              item.role !== 'ai' ? style.user : ''
             }`}
           >
             <motion.p
