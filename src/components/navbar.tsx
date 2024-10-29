@@ -80,7 +80,8 @@ export default function Navbar({ session }: { session: Session | null }) {
 
   const pathname = usePathname();
 
-  if (pathname?.startsWith('/auth/')) return null;
+  if (pathname?.startsWith('/auth/') || pathname?.startsWith('/admin'))
+    return null;
 
   return (
     <motion.div
