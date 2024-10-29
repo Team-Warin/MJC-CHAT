@@ -1,16 +1,8 @@
-'use server'
-
 import prisma from "@/lib/prisma"
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from 'next/server';
 
-// API 설계
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-    if (req.method === 'GET') {
-        res.status(200).json({});
-    }
+export async function GET() {
+  return NextResponse.json({ message: 'API is working' });
 }
 
 

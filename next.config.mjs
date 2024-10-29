@@ -12,9 +12,6 @@ const nextConfig = {
         hostname: 'lh3.googleusercontent.com',
       },
     ],
-  },
-  experimental: {
-    appDir: true, // pages 라우터를 사용하기 위함
   }
 };
 
