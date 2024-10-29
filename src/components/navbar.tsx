@@ -81,6 +81,7 @@ export default function Navbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
 
   if (pathname?.startsWith('/auth/')) return null;
+  else if (pathname?.startsWith('/api')) return null;
   else if (pathname?.startsWith('/chat')) return null;
 
   return (

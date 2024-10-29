@@ -23,7 +23,9 @@ export default function ChatroomNav() {
     // 컴포넌트 로딩시 실행됨
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('/api/chatrooms', { method: 'GET' });
+            const response = await fetch('/api/chatrooms', { method: 'GET', headers: {
+                'Content-Type': 'application/json'
+              }});
             if (!response.ok) {
                 throw new Error(`HTTP 에러 ${response.status}`);
             }
@@ -41,6 +43,8 @@ export default function ChatroomNav() {
         if (!response.ok) {
             throw new Error(`HTTP 에러 ${response.status}`);
         }
+
+        
 
         const newChatRoom = await response.json(); // 생성된 채팅방 추가
         setChatRooms([...chatRooms, newChatRoom]);
@@ -74,17 +78,21 @@ export default function ChatroomNav() {
     return (
         <div className={style.chatroom_nav}>
             <div className={style.nav_menu}>
-                <Button isIconOnly
-                    size='lg'
+                <Button
+                    className={style.menu_btn}
+                    isIconOnly
+                    size='sm'
                     color='primary'
                     variant="light"
                     endContent={<FontAwesomeIcon icon={faBars} />}
                 >
                 </Button>
-                <Button
-                    size='lg'
+                <Button 
+                    className={style.new_btn}
+                    size='sm'
                     color='primary'
                     endContent={<FontAwesomeIcon icon={faPlus} />}
+                    onClick={createChatRoom}
                 >
                     새 채팅방
                 </Button>
@@ -92,7 +100,7 @@ export default function ChatroomNav() {
             <ScrollShadow>
                 <Listbox className={style.chatroom_list}>
                     {chatRooms.map((chatRoom) => (
-                        <ListboxItem key={chatRoom.id} className={style.chatroom_item}>
+                        <ListboxItem className={style.chatroom_item} key={chatRoom.id} >
                             <span>{chatRoom.title}</span>
                             <Button isIconOnly
                                 size='lg'
