@@ -4,9 +4,11 @@ import style from '@/styles/chat.module.css';
 import { useEffect, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faBars, faClose } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
+import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import { Listbox, ListboxItem } from '@nextui-org/listbox';
 
 // 채팅방 형태
 interface ChatRoom {
@@ -21,7 +23,7 @@ export default function ChatroomNav() {
     // 컴포넌트 로딩시 실행됨
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('/api/chatrooms');
+            const response = await fetch('/api/chatrooms', { method: 'GET' });
             if (!response.ok) {
                 throw new Error(`HTTP 에러 ${response.status}`);
             }
@@ -30,7 +32,7 @@ export default function ChatroomNav() {
             setChatRooms(chatRooms);
         }
 
-        fetchData().catch(console.error);
+        fetchData().catch(console.log);
     }, []);
 
     // 새 채팅방 생성
@@ -87,14 +89,21 @@ export default function ChatroomNav() {
                     새 채팅방
                 </Button>
             </div>
-            <div className={style.chatroom_list}>
-                {chatRooms.map((chatRoom) => (
-                    <div className={style.chat_list}>
-                        <span>{chatRoom.title}</span>
-                        <img src='Vector.png' alt='' onClick={() => { deleteChatRoom(chatRoom.id) }} />
-                    </div>
-                ))}
-            </div>
+            <ScrollShadow>
+                <Listbox className={style.chatroom_list}>
+                    {chatRooms.map((chatRoom) => (
+                        <ListboxItem key={chatRoom.id} className={style.chatroom_item}>
+                            <span>{chatRoom.title}</span>
+                            <Button isIconOnly
+                                size='lg'
+                                color='primary'
+                                variant="light"
+                                endContent={<FontAwesomeIcon icon={faClose} />}
+                            ></Button>
+                        </ListboxItem>
+                    ))}
+                </Listbox>
+            </ScrollShadow>
         </div>
     );
 }

@@ -20,7 +20,7 @@ export async function GET(req: Request) {
     const userId = 1; // 임시
 
     const chatRooms = await prisma.chatRoom.findMany({
-        where: { userId },
+        // where: { userId },
         orderBy: { createdAt: 'asc' }
     });
 
