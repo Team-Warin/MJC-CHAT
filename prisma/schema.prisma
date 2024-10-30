@@ -3,26 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id            String          @id @default(cuid())
   name          String?
-  nickname      String?
   email         String          @unique
   emailVerified DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   avatar        String?
   roles         String[]
+  nickname      String?
   accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sessions      Session[]
 }
 
 model Account {
@@ -37,11 +34,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -50,10 +45,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -64,7 +58,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -74,40 +67,38 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
 
-// 채팅 위한 코드
 model ChatRoom {
-  id        Int      @id @default(autoincrement())
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-}
-
-enum SenderType {
-  user
-  ai
+  id         Int      @id @default(autoincrement())
+  title      String
+  created_at DateTime @default(now())
+  updated_at DateTime
+  userId     Int
 }
 
 model Conversation {
   id                     Int        @id @default(autoincrement())
   sender                 SenderType
   message                String
-  createdAt              DateTime   @default(now())
-  updatedAt              DateTime   @updatedAt
+  created_at             DateTime   @default(now())
+  updated_at             DateTime
   chatroomId             Int
   previousConversationId Int
 }
 
 model Report {
   id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  created_at     DateTime @default(now())
+  updated_at     DateTime
   conversationId Int
   userId         Int
+}
+
+enum SenderType {
+  user
+  ai
 }

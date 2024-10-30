@@ -2,15 +2,15 @@ import style from '@/styles/main.module.css';
 
 import * as motion from 'framer-motion/client';
 
-import Mjc_Animation from '@/components/animation/leaf';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
+
 import Footer from '@/components/footer';
 import BannerChat from '@/components/bannerchat';
+import Mjc_Animation from '@/components/animation/leaf';
 
 /** Main Page */
 export default function Main() {
