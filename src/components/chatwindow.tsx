@@ -34,7 +34,7 @@ export default function ChatWindow() {
             >
                 <Conversation
                     userType='user'
-                    content='휴학 신청 하고 싶다고!!!'
+                    content='휴학 신청 하고 싶다고!!!휴학 신청 하고 싶다고!!!휴학 신청 하고 싶다고!!!휴학 신청 하고 싶다고!!!휴학 신청 하고 싶다고!!!휴학 신청 하고 싶다고!!!'
                 ></Conversation>
                 <Conversation
                     userType='ai'
@@ -93,6 +93,8 @@ export default function ChatWindow() {
             <div className={style.chat_div}>
                 <Textarea
                     className={style.chat_message}
+                    placeholder='자유롭게 대화해 보세요'
+                    minRows={1}
                 />
                 <Button
                     className={style.chat_btn}

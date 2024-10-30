@@ -17,15 +17,41 @@ TODO: @apply 작업, 컴포넌트 분리
 
 /* chatroom part */
 .chat_window {
-  @apply flex-grow relative bg-gray-200 flex flex-col
+  @apply flex-grow relative bg-white flex flex-col
 }
 
 .chat_scroll {
   @apply py-4 w-full h-full flex-grow
 }
 
-.paragraph_ai, .paragraph_user{
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px]
+.paragraph_ai, .paragraph_user {
+  @apply w-2/3 max-w-[768px] m-auto mb-[20px] flex;
+}
+
+.paragraph_ai {
+  @apply justify-start
+}
+
+.paragraph_user {
+  @apply justify-end
+}
+
+/* ai span style */
+.paragraph_ai span {
+  @apply bg-slate-100 px-5 py-2.5 rounded-3xl;
+}
+
+/* user span style */
+.paragraph_user span {
+  @apply bg-sky-500 text-white px-5 py-2.5 rounded-3xl max-w-[70%];
+}
+
+.paragraph_user img {
+  @apply hidden
+}
+
+.icon {
+  @apply w-6 h-6 mt-[5px] mr-4;
 }
 
 .setting_btn {
@@ -33,7 +59,7 @@ TODO: @apply 작업, 컴포넌트 분리
 }
 
 .chat_div {
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px] relative
+  @apply w-2/3 max-w-[768px] m-auto mb-[30px] relative
 }
 
 .chat_btn {
