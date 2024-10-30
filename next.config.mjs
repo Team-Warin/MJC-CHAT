@@ -13,9 +13,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    appDir: true, // pages 라우터를 사용하기 위함
-  }
 };
 
 const withMDX = createMDX({});

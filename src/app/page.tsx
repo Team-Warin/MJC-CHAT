@@ -1,5 +1,7 @@
 import style from '@/styles/main.module.css';
 
+import Link from 'next/link';
+
 import * as motion from 'framer-motion/client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -59,13 +61,15 @@ function Banner() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
           >
-            <Button
-              size='lg'
-              color='primary'
-              endContent={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}
-            >
-              명전이와 대화하기
-            </Button>
+            <Link href='/chat'>
+              <Button
+                size='lg'
+                color='primary'
+                endContent={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}
+              >
+                명전이와 대화하기
+              </Button>
+            </Link>
           </motion.div>
         </div>
         <div className={style.banner_chat}>
