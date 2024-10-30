@@ -5,25 +5,16 @@ import Image from 'next/image';
 
 export default function Conversation({
   userType,
-  children,
+  content,
 }: {
   userType: 'user' | 'ai';
-  children: React.ReactNode;
+  content: string;
 }) {
   /** AI 대화일 경우 */
-  if (userType === 'ai') {
-    return (
-      <div className={style.paragraph}>
-        <Image src='/favicon.ico' alt='' width={20} height={20} />
-        <span>{children}</span>
-      </div>
-    );
-  }
-
-  /** User 대화일 경우 */
   return (
-    <div className={style.paragraph}>
-      <span>{children}</span>
+    <div className={(userType === 'ai') ? style.paragraph_ai : style.paragraph_user}>
+      <Image src='/favicon.ico' alt='' width={20} height={20} />
+      <span>{content}</span>
     </div>
   );
 }

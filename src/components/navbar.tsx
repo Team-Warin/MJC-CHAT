@@ -80,7 +80,7 @@ export default function Navbar({ session }: { session: Session | null }) {
 
   const pathname = usePathname();
 
-  if (pathname?.startsWith('/auth/') || pathname?.startsWith('/admin'))
+  if (pathname?.startsWith('/auth/') || pathname?.startsWith('/admin') || pathname?.startsWith('/api') || pathname?.startsWith('/chat'))
     return null;
 
   return (
