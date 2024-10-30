@@ -206,10 +206,13 @@ export default function BannerChat() {
   }, [chat]);
 
   useEffect(() => {
-    if ((window.width ?? 0) >= 768) chatPromise(0, 0);
+    const timer = setTimeout(() => {
+      chatPromise(0, 0);
+    }, 1_000);
 
     return () => {
       setChat([]);
+      clearTimeout(timer);
       abortController.abort();
     };
   }, [window.width]);
