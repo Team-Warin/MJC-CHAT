@@ -94,14 +94,12 @@ function Leaf({ color }: { color: 'sky' | 'blue' }) {
 
 export default function Mjc_Animation() {
   return (
-    <div className='w-full h-dvh'>
-      <Canvas>
-        <ambientLight intensity={2} />
-        <directionalLight intensity={1} />
-        {Array.from({ length: LEAVES_COUNT }).map((_, i) => (
-          <Leaf key={i} color={i % 2 === 0 ? 'sky' : 'blue'} />
-        ))}
-      </Canvas>
-    </div>
+    <Canvas>
+      <ambientLight intensity={2} />
+      <directionalLight intensity={1} />
+      {Array.from({ length: LEAVES_COUNT }).map((_, i) => (
+        <Leaf key={i} color={i % 2 === 0 ? 'sky' : 'blue'} />
+      ))}
+    </Canvas>
   );
 }

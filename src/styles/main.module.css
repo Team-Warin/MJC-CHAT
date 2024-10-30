@@ -1,0 +1,27 @@
+.banner {
+  @apply relative flex items-center h-dvh w-full;
+}
+
+.banner_content {
+  @apply ps-[6%] pe-[6%] absolute flex w-full h-full z-10;
+}
+
+.banner_text {
+  @apply flex flex-col gap-2 w-full h-full justify-center;
+
+  & h1 {
+    @apply text-7xl font-black opacity-80 text-mjcblue;
+  }
+
+  & p {
+    @apply text-2xl font-semibold opacity-80 text-mjcsky;
+  }
+}
+
+.banner_chat {
+  @apply flex w-full justify-center items-center;
+}
+
+.intro {
+  @apply w-full h-dvh bg-mjcblue;
+}

@@ -1,0 +1,33 @@
+.footer {
+  @apply p-14 mb-8 flex flex-col gap-5 w-full bg-white;
+}
+.link_container {
+  @apply flex gap-20 mb-10;
+}
+
+.links {
+  @apply mt-2 flex flex-col gap-5;
+
+  & a {
+    @apply text-lg text-mjcblue;
+  }
+
+  & .line {
+    @apply w-0 opacity-0 border-[1px] border-mjcblue rounded-full transition-[width,opacity];
+  }
+
+  & .title {
+    @apply text-xl font-bold;
+  }
+  & > .sub:hover .line {
+    @apply w-full opacity-100;
+  }
+}
+
+.divider {
+  @apply w-full h-[10px] border-t border-slate-400;
+}
+
+.copyright {
+  @apply text-sm text-slate-500;
+}

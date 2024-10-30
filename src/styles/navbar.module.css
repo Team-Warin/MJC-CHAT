@@ -1,0 +1,24 @@
+.container {
+  @apply fixed top-0 flex justify-between ps-[7%] pe-[7%] items-center w-full h-14 z-50 transition-colors;
+  transition: box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    @apply backdrop-blur-md shadow-md;
+  }
+}
+
+.logo {
+  @apply flex items-center gap-1 text-xl font-bold;
+}
+
+.menu {
+  @apply flex items-center gap-6 font-semibold;
+}
+
+.auth {
+  @apply transition-all;
+
+  &:hover {
+    @apply text-mjcblue font-bold;
+  }
+}

@@ -8,53 +8,97 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  googleId  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  avatar        String?
+  roles         String[]
+  nickname      String?
+  accounts      Account[]
+  Authenticator Authenticator[]
+  sessions      Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
 
 model ChatRoom {
-  id        Int      @id @default(autoincrement())
-  title     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  userId    Int
-}
-
-model UserConversation {
   id         Int      @id @default(autoincrement())
-  message    String
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  chatroomId Int
+  title      String
+  created_at DateTime @default(now())
+  updated_at DateTime
+  userId     Int
 }
 
-enum BotConversationType {
-  NORMAL
-  METRO
-}
-
-model BotConversation {
-  id                 Int                 @id @default(autoincrement())
-  message            String
-  type               BotConversationType @default(NORMAL)
-  metaData           Json
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
-  userconversationId Int
-}
-
-enum ReportStatus {
-  CHECKED
-  UNCHECKED
+model Conversation {
+  id                     Int        @id @default(autoincrement())
+  sender                 SenderType
+  message                String
+  created_at             DateTime   @default(now())
+  updated_at             DateTime
+  chatroomId             Int
+  previousConversationId Int
 }
 
 model Report {
-  id                Int          @id @default(autoincrement())
-  status            ReportStatus @default(UNCHECKED)
-  createdAt         DateTime     @default(now()) @map("created_at")
-  updatedAt         DateTime     @updatedAt @map("updated_at")
-  botconversationId Int
-  userId            Int
+  id             Int      @id @default(autoincrement())
+  created_at     DateTime @default(now())
+  updated_at     DateTime
+  conversationId Int
+  userId         Int
+}
+
+enum SenderType {
+  user
+  ai
 }

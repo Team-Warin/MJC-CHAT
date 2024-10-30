@@ -1,0 +1,112 @@
+{
+    "chatRoom": [
+        {
+            "title": "첫 번째 채팅방: 고양이 잡담",
+            "userId": 1
+        },
+        {
+            "title": "두 번째 채팅방: 역사 이야기",
+            "userId": 2
+        },
+        {
+            "title": "세 번째 채팅방: 과학 잡지식",
+            "userId": 3
+        }
+    ],
+    "conversation": [
+        {
+            "sender": "user",
+            "message": "고양이가 왜 그렇게 졸린 걸까요?",
+            "chatroomId": 1,
+            "previousConversationId": 0
+        },
+        {
+            "sender": "ai",
+            "message": "고양이는 포식자라서 많은 에너지를 비축하려고 낮잠을 많이 자요!",
+            "chatroomId": 1,
+            "previousConversationId": 1
+        },
+        {
+            "sender": "user",
+            "message": "알려줘서 고마워요! 고양이와 놀아줄 땐 어떻게 해야 할까요?",
+            "chatroomId": 1,
+            "previousConversationId": 2
+        },
+        {
+            "sender": "ai",
+            "message": "고양이는 빠르게 움직이는 물체를 좋아하니, 장난감을 흔들며 유도해 보세요!",
+            "chatroomId": 1,
+            "previousConversationId": 3
+        },
+        {
+            "sender": "user",
+            "message": "고양이의 하루 루틴이 궁금하네요.",
+            "chatroomId": 1,
+            "previousConversationId": 4
+        },
+        {
+            "sender": "ai",
+            "message": "대부분의 시간은 잠과 식사로 이루어져 있어요. 가끔은 사냥 놀이도 하죠!",
+            "chatroomId": 1,
+            "previousConversationId": 5
+        },
+        {
+            "sender": "user",
+            "message": "프랑스 혁명 때 어떤 일이 일어났나요?",
+            "chatroomId": 2,
+            "previousConversationId": 0
+        },
+        {
+            "sender": "ai",
+            "message": "1789년에 일어나 국민들이 자유와 평등을 위해 봉기했어요!",
+            "chatroomId": 2,
+            "previousConversationId": 7
+        },
+        {
+            "sender": "user",
+            "message": "그 시기 유명한 인물은 누구인가요?",
+            "chatroomId": 2,
+            "previousConversationId": 8
+        },
+        {
+            "sender": "ai",
+            "message": "루이 16세와 마리 앙투아네트, 그리고 로베스피에르가 있죠.",
+            "chatroomId": 2,
+            "previousConversationId": 9
+        },
+        {
+            "sender": "user",
+            "message": "과학적 사실로 인간의 뇌는 몇 퍼센트나 사용할까요?",
+            "chatroomId": 3,
+            "previousConversationId": 0
+        },
+        {
+            "sender": "ai",
+            "message": "영화에서는 10%라고 하지만 실제로는 거의 대부분을 사용해요!",
+            "chatroomId": 3,
+            "previousConversationId": 11
+        },
+        {
+            "sender": "user",
+            "message": "그렇군요! AI도 인간의 뇌처럼 발전할까요?",
+            "chatroomId": 3,
+            "previousConversationId": 12
+        },
+        {
+            "sender": "ai",
+            "message": "아직은 많이 부족하지만, 계속 발전하고 있어요. 언젠간 비슷해질지도 몰라요!",
+            "chatroomId": 3,
+            "previousConversationId": 13
+        }
+    ],
+    "report": [
+        {
+            "conversationId": 3,
+            "userId": 1
+        },
+        {
+            "conversationId": 10,
+            "userId": 2
+        }
+    ]
+}
