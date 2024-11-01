@@ -20,12 +20,20 @@ TODO: @apply 작업, 컴포넌트 분리
   @apply flex-grow relative bg-white flex flex-col
 }
 
+.chat_header {
+  @apply flex justify-end py-4 px-2   border-b-2 border-b-slate-200;
+}
+
+.bookmark_btn {
+  @apply mr-2
+}
+
 .chat_scroll {
   @apply py-4 w-full h-full flex-grow
 }
 
 .paragraph_ai, .paragraph_user {
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px] flex;
+  @apply w-2/3 max-w-[992px] m-auto mb-[20px] flex;
 }
 
 .paragraph_ai {
@@ -36,12 +44,10 @@ TODO: @apply 작업, 컴포넌트 분리
   @apply justify-end
 }
 
-/* ai span style */
 .paragraph_ai span {
   @apply bg-slate-100 px-5 py-2.5 rounded-3xl;
 }
 
-/* user span style */
 .paragraph_user span {
   @apply bg-sky-500 text-white px-5 py-2.5 rounded-3xl max-w-[70%];
 }
@@ -50,18 +56,44 @@ TODO: @apply 작업, 컴포넌트 분리
   @apply hidden
 }
 
-.icon {
-  @apply w-6 h-6 mt-[5px] mr-4;
+.chat_quick {
+  @apply w-2/3 max-w-[992px] m-auto mb-[40px]
 }
 
-.setting_btn {
-  @apply absolute top-4 right-4
+.quick_header {
+  @apply flex justify-between mb-[20px]
+}
+
+.header_div {
+  @apply flex align-middle
+}
+
+.header_title {
+  @apply font-bold
+}
+
+.left_btn {
+  @apply mr-2
+}
+
+.quick_cards {
+  @apply flex justify-between
+}
+
+.card {
+  @apply px-6 py-8 w-[260px] border-1 border-primary-200
 }
 
 .chat_div {
-  @apply w-2/3 max-w-[768px] m-auto mb-[30px] relative
+  @apply w-2/3 max-w-[992px] m-auto mb-[30px] relative
 }
 
 .chat_btn {
   @apply absolute bottom-1 right-1
+}
+
+/* conversation part */
+
+.icon {
+  @apply w-6 h-6 mt-[5px] mr-4;
 }
