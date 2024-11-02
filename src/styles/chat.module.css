@@ -28,6 +28,70 @@ TODO: @apply 작업, 컴포넌트 분리
   @apply mr-2
 }
 
+.setting_modal {
+  @apply absolute top-16 right-0 bg-gray-800
+}
+
+.pop_window {
+  @apply px-2 py-4
+}
+
+.pop_header {
+  @apply flex justify-center items-center mb-[20px]; 
+
+  & > img {
+    @apply mr-2 size-9;
+  }
+}
+
+.pop_user_name {
+  @apply text-base font-bold
+}
+
+.pop_user_email {
+  @apply text-sm
+}
+
+.pop_middle {
+  @apply flex gap-4 justify-center mb-[20px];
+}
+
+.pop_setting_btn {
+  @apply w-[90px]
+}
+
+.pop_logout_btn {
+  @apply w-[90px]
+}
+
+.quick_link {
+  @apply text-center;
+
+  & > div {
+    @apply py-3
+  }
+}
+
+.modal_header {
+  /* @apply flex flex-col gap-1 */
+}
+
+.modal_contents {
+  @apply flex justify-between items-center mb-8
+}
+
+.modal_content_title {
+  @apply text-base font-bold mb-2.5
+}
+
+.modal_content {
+  @apply text-sm text-gray-500
+}
+
+.select_box {
+  @apply max-w-32
+}
+
 .chat_scroll {
   @apply py-4 w-full h-full flex-grow
 }
