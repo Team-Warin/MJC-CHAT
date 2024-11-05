@@ -16,6 +16,8 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@langchain/core": "^0.3.17",
+    "@langchain/ollama": "^0.1.1",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^14.2.14",

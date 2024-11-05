@@ -8,16 +8,24 @@ TODO: @apply 작업, 컴포넌트 분리
 
 /* navagation part */
 .chatroom_nav {
-  @apply w-72 h-full bg-gray-800
+  @apply flex flex-col w-72 h-full bg-gray-200
 }
 
 .nav_menu {
-  @apply flex w-full p-4 justify-between
+  @apply flex grow-0 p-3 justify-between items-center
+}
+
+.chatroom_scroll {
+  @apply grow
+}
+
+.chatroom_item {
+  @apply  h-[50px] p-3
 }
 
 /* chatroom part */
 .chat_window {
-  @apply flex-grow relative bg-gray-200 flex flex-col
+  @apply flex-grow relative flex flex-col
 }
 
 .chat_scroll {
