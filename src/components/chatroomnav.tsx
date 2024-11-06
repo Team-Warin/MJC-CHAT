@@ -84,7 +84,7 @@ export default function ChatroomNav() {
                     headers: { 'Content-Type': 'application/json' }
                 });
 
-                // reponse 상태를 체크해서, 200이 아닐시 오류 반환
+                // reponse 상태를 체크해서, 이 아닐시 오류 반환
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`);
                 }
