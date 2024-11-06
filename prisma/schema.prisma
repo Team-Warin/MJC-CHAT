@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp"), vector]
 }
 
 model User {
@@ -73,29 +75,38 @@ model Authenticator {
 }
 
 model ChatRoom {
-  id         Int      @id @default(autoincrement())
-  title      String
-  created_at DateTime @default(now())
-  updated_at DateTime
-  userId     Int
+  id        Int      @id @default(autoincrement())
+  title     String
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  important Boolean  @default(false)
+  sortOrder Int      @default(0)
 }
 
 model Conversation {
   id                     Int        @id @default(autoincrement())
   sender                 SenderType
   message                String
-  created_at             DateTime   @default(now())
-  updated_at             DateTime
   chatroomId             Int
   previousConversationId Int
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime
 }
 
 model Report {
   id             Int      @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime
   conversationId Int
   userId         Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+}
+
+model Document {
+  id      String                 @id @default(cuid())
+  content String
+  latest  DateTime               @db.Timestamptz(6)
+  vector  Unsupported("vector")?
 }
 
 enum SenderType {
