@@ -1,6 +1,14 @@
 import prisma from "@/lib/prisma";
 import { NextResponse, NextRequest} from "next/server";
 
+import { Ollama } from '@langchain/ollama';
+
+const llm = new Ollama({
+    model: 'mistalite',
+    temperature: 0,
+    maxRetries: 2
+});
+
 // get 요청하면, 대화 목록 받기
 export async function GET (
     req: NextRequest,
