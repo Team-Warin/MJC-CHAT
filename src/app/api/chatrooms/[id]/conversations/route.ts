@@ -1,16 +1,16 @@
 import prisma from "@/lib/prisma"
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
 // GET 요청을 받으면 채팅방의 모든 채팅을 불러옴
 export async function GET(
-    req: NextApiRequest,
-    res: NextApiResponse
+    req: NextRequest,
+    { params }: { params: { id: string } }
 ) {
-    const id = Number(req.query.id);
-
     try {
+        const chatroomId = Number(params.id);
+
         const conversations = await prisma.conversation.findMany({
-            where: { chatroomId: id }
+            where: { chatroomId }
         });
     } catch (error) {
         res.status(500).json({});

@@ -98,7 +98,7 @@ model Conversation {
   id                     Int        @id @default(autoincrement())
   sender                 SenderType
   message                String
-  chatroomId             Int
+  chatRoomId             Int
   previousConversationId Int
   createdAt              DateTime   @default(now())
   updatedAt              DateTime   @updatedAt

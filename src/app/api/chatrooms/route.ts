@@ -18,42 +18,45 @@ interface GroupedChatRooms {
     last30days: ChatRoom[];
 }
 
-// 채팅방 추가
-export async function POST(
-    req: NextRequest,
-) {
-    const title = '새 채팅방'; // 임시값
-    const userId = 1; // 임시값
+// 채팅방 추가한다.
+export async function POST(req: NextRequest) {
+    try {
+        const title = '새 채팅방'; // Temporary value
+        const userId = 1; // Temporary value
 
-    const newChatRoom = await prisma.chatRoom.create({
-        data: { title, userId }
-    });
+        const newChatRoom = await prisma.chatRoom.create({
+            data: { title, userId }
+        });
 
-    return NextResponse.json(newChatRoom);
+        return NextResponse.json(newChatRoom);
+    } catch (error) {
+        return NextResponse.json(
+            { message: error },
+            { status: 500 }
+        )
+    }
 }
 
-// 채팅방 목록
-export async function GET(
-    req: NextRequest
-) {
-    const userId = 1; // 임시값 
+// 채팅방 목록 가져온다.
+export async function GET(req: NextRequest) {
+    try {
+        const userId = 1; // Temporary value
+        const groupByDate = (req.nextUrl.searchParams.get('group') === "true");
 
-    // 채팅방 목록 가져옴
-    const chatRooms = await prisma.chatRoom.findMany({
-        where: { userId },
-        orderBy: [
-            { createdAt: 'asc' },
-            { updatedAt: 'desc' }
-        ]
-    });
+        const chatRooms = await prisma.chatRoom.findMany({
+            where: { userId },
+            orderBy: [
+                { createdAt: 'asc' },
+                { updatedAt: 'desc' }
+            ]
+        });
 
-    // URL 파라미터로 ?group=true 여부 확인
-    const group = req.nextUrl.searchParams.get('group') === "true";
+        // ?group=true일 경우 그룹화해서 전송한다.
+        if (!groupByDate) {
+            return NextResponse.json(chatRooms);
+        }
 
-    if (group) {
-        // 그룹화 로직
         const today = new Date();
-
         const groupedChatRooms: GroupedChatRooms = {
             important: [],
             today: [],
@@ -76,9 +79,11 @@ export async function GET(
             }
         });
 
-        // group=true일 경우 그룹화해서 반환, false일경우 일반 반환
         return NextResponse.json(groupedChatRooms);
-    } else {
-        return NextResponse.json(chatRooms)
+    } catch (error) {
+        return NextResponse.json(
+            { message: error },
+            { status: 500 }
+        )
     }
 }
