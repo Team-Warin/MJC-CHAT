@@ -1,10 +1,13 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp"), vector]
 }
 
 model User {
@@ -72,30 +75,49 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model Document {
+  id      String                 @id @default(cuid())
+  content String
+  latest  DateTime               @db.Timestamptz(6)
+  vector  Unsupported("vector")?
+}
+
+// 진건희 관할
+
 model ChatRoom {
-  id         Int      @id @default(autoincrement())
-  title      String
-  created_at DateTime @default(now())
-  updated_at DateTime
-  userId     Int
+  id        Int      @id @default(autoincrement())
+  important Boolean  @default(false)
+  title     String
+  userId    Int
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Conversation {
   id                     Int        @id @default(autoincrement())
   sender                 SenderType
   message                String
-  created_at             DateTime   @default(now())
-  updated_at             DateTime
-  chatroomId             Int
+  chatRoomId             Int
   previousConversationId Int
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
 }
 
 model Report {
   id             Int      @id @default(autoincrement())
-  created_at     DateTime @default(now())
-  updated_at     DateTime
   conversationId Int
   userId         Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+}
+
+model Document {
+  id       Int                    @id @default(autoincrement())
+  content  String
+  latest   DateTime               @db.Timestamptz(6)
+  vector   Unsupported("vector")?
+  metadata Json
 }
 
 enum SenderType {

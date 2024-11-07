@@ -36,6 +36,8 @@ export default function Navbar({ session }: { session: Session | null }) {
   const { scrollY } = useScroll();
   const [navbar, animate] = useAnimate();
 
+  const menus = [{ name: '문의', href: '/support' }];
+
   const [navbarBg, setNavbarBg] = useState(false);
 
   let lastScrollY = 0;
@@ -92,12 +94,28 @@ export default function Navbar({ session }: { session: Session | null }) {
         <Image src={'/webps/mjc.webp'} alt='logo' width={30} height={30} />
         <h1 className='text-mjcblue'>명전이</h1>
       </Link>
-      <div className={style.auth}>
-        {session ? (
-          <UserMenu session={session} />
-        ) : (
-          <LoginButton pathname={pathname} />
-        )}
+      <div className={style.menu}>
+        {menus.map((menu) => (
+          <Link href={menu.href} key={menu.href}>
+            <p
+              className={style.hoverText}
+              style={
+                pathname === menu.href
+                  ? { color: '#002968', fontWeight: 'bold' }
+                  : {}
+              }
+            >
+              {menu.name}
+            </p>
+          </Link>
+        ))}
+        <div className={style.auth}>
+          {session ? (
+            <UserMenu session={session} />
+          ) : (
+            <LoginButton pathname={pathname} />
+          )}
+        </div>
       </div>
     </motion.div>
   );
@@ -150,7 +168,7 @@ function LoginButton({ pathname }: { pathname: string | null }) {
         query: { callbackurl: pathname },
       }}
     >
-      로그인
+      <p className={style.hoverText}>로그인</p>
     </Link>
   );
 }
