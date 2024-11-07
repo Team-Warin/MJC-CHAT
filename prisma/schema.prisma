@@ -85,6 +85,7 @@ model Document {
 // 진건희 관할
 
 model ChatRoom {
+<<<<<<< Updated upstream
   id        Int      @id @default(autoincrement())
   important Boolean  @default(false)
   title     String
@@ -92,6 +93,17 @@ model ChatRoom {
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+=======
+  id         Int      @id @default(autoincrement())
+  title      String
+  userId     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  important  Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  tempUserId String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+>>>>>>> Stashed changes
 }
 
 model Conversation {

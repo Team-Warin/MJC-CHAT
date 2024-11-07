@@ -1,15 +1,7 @@
 import prisma from "@/lib/prisma"
 import { NextRequest, NextResponse } from 'next/server';
 
-interface ChatRoom {
-    id: number;
-    title: string;
-    userId: number;
-    sortOrder: number;
-    createdAt: Date;
-    updatedAt: Date;
-    important: boolean;
-}
+import { ChatRoom } from "@prisma/client";
 
 interface GroupedChatRooms {
     important: ChatRoom[];
@@ -22,7 +14,7 @@ interface GroupedChatRooms {
 export async function POST(req: NextRequest) {
     try {
         const title = '새 채팅방'; // Temporary value
-        const userId = 1; // Temporary value
+        const userId = 'cm3728hbk0000q14vmgio5lz3'; // Temporary value
 
         const newChatRoom = await prisma.chatRoom.create({
             data: { title, userId }
@@ -40,7 +32,7 @@ export async function POST(req: NextRequest) {
 // 채팅방 목록 가져온다.
 export async function GET(req: NextRequest) {
     try {
-        const userId = 1; // Temporary value
+        const userId = 'cm3728hbk0000q14vmgio5lz3'; // Temporary value
         const groupByDate = (req.nextUrl.searchParams.get('group') === "true");
 
         const chatRooms = await prisma.chatRoom.findMany({
