@@ -34,3 +34,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## /model 폴더에 컴파일된 gguf 파일을 위치시키기
+
+.gguf 파일을 /model 폴더에 위치시키시오
+모델 컴파일 시키기 위해서 llama-cpp 다운 후 컴파일, huggingface에서 llama3.x 프로젝트 다운받아서 컴파일 시켜야 함
+이 작업은 colab에서 실행 후, gguf 파일을 huggingface에 올려서 공유하는 것을 추천함
