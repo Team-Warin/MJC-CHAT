@@ -1,41 +1,112 @@
-/*
-TODO: @apply 작업, 컴포넌트 분리
-*/
-
 .container {
-  @apply w-full h-dvh bg-white flex
+  @apply w-full h-dvh bg-white flex;
+}
+
+.logo {
+  @apply flex gap-1 items-center;
+
+  & > h1 {
+    @apply text-2xl font-bold text-mjcblue;
+  }
+}
+
+.paragraph {
+  @apply flex gap-3 items-center font-medium;
+
+  & > img {
+    @apply rounded-full;
+  }
+
+  &[data-type='ai'] {
+    @apply justify-start;
+  }
+
+  &[data-type='user'] {
+    @apply justify-end;
+
+    & > span {
+      @apply order-first;
+    }
+  }
+}
+
+/* chat window part */
+.chat_window {
+  @apply flex flex-col flex-1 w-full;
+}
+
+.chat_window_header {
+  @apply p-5 flex justify-between items-center w-full h-16;
+
+  & > .title {
+    @apply flex items-center gap-5;
+  }
 }
 
 /* navagation part */
 .chatroom_nav {
-  @apply w-72 h-full bg-gray-800
+  @apply flex flex-col w-[256px] h-dvh bg-white border-r-1 border-slate-200;
 }
 
-.nav_menu {
-  @apply flex w-full p-4 justify-between
+.bars {
+  @apply w-10 h-10 p-3 flex flex-col items-center justify-center gap-[4px] cursor-pointer;
+
+  & > div {
+    @apply flex-shrink-0 w-6 h-[2px] bg-mjcblue rounded-full;
+  }
+
+  &:hover {
+    @apply bg-mjcsky/20 rounded-full;
+  }
 }
 
-/* chatroom part */
-.chat_window {
-  @apply flex-grow relative bg-gray-200 flex flex-col
+.chatroom_nav_header {
+  @apply p-5 flex gap-1 items-center justify-center w-full h-16;
+
+  .logo {
+    @apply flex gap-1 items-center;
+
+    & > h1 {
+      @apply text-2xl font-bold text-mjcblue;
+    }
+  }
+}
+.chat_window_body {
+  @apply ps-72 pe-72 flex-1 w-full;
 }
 
-.chat_scroll {
-  @apply py-4 w-full h-full flex-grow
+.chatroom_nav_body {
+  @apply p-2 flex flex-col items-center gap-1 text-[17px];
 }
 
-.paragraph_ai, .paragraph_user{
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px]
+.chatroom_item {
+  @apply p-1 px-4 flex justify-between items-center gap-2 w-full rounded-full text-medium cursor-pointer overflow-hidden;
+
+  &:hover {
+    @apply bg-slate-100;
+  }
+
+  & .edit_input {
+    @apply px-1 py-0 w-[180px];
+  }
 }
 
-.setting_btn {
-  @apply absolute top-4 right-4
-}
+.chat_window_footer {
+  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-72 pe-72;
 
-.chat_div {
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px] relative
-}
+  & > div {
+    @apply relative w-full flex items-center gap-2;
 
-.chat_btn {
-  @apply absolute bottom-1 right-1
+    & > .send_button {
+      @apply absolute right-2 bottom-2;
+
+      & > button {
+        @apply text-lg bg-black text-white;
+      }
+    }
+  }
+
+  & > p {
+    @apply text-sm text-slate-400;
+  }
 }

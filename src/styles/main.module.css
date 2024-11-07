@@ -25,3 +25,15 @@
 .intro {
   @apply w-full h-dvh bg-mjcblue;
 }
+
+.credit {
+  @apply flex flex-col gap-10 justify-around items-center w-full h-dvh bg-white;
+}
+
+.credit_title {
+  @apply text-6xl font-black text-mjcblue;
+}
+
+.dev_credit {
+  @apply flex gap-10;
+}
