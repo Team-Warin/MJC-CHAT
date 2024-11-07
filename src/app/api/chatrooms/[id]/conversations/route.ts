@@ -1,22 +1,11 @@
-// get 요청하면, 대화 목록 받기
-
 import prisma from "@/lib/prisma";
 import { NextResponse, NextRequest} from "next/server";
 
+// get 요청하면, 대화 목록 받기
 export async function GET (
     req: NextRequest,
+    { params }: { params: { id: string } }
 ) {
-<<<<<<< Updated upstream
-    const { searchParams } = new URL(req.url);
-    const id = Number(searchParams.get("id"));
-
-    console.log(searchParams.toString());
-    console.log(id);
-    
-    try {
-        const conversations = await prisma.conversation.findMany( {
-            where: {chatroomId: id}
-=======
     try {
         const chatRoomId = Number(params.id);
         const searchParams = req.nextUrl.searchParams;
@@ -29,15 +18,9 @@ export async function GET (
             where: { chatRoomId },
             skip: offset,
             take: limit
->>>>>>> Stashed changes
         });
 
         return NextResponse.json(conversations);
-<<<<<<< Updated upstream
-    } catch (e) {
-        console.log(e);
-        return NextResponse.json({e:"Failed to fetch conversations"}, {status : 500});
-=======
     } catch (error) {
         return NextResponse.json(
             { message: error },
@@ -84,6 +67,5 @@ export async function POST(
             { message: error },
             { status: 500 }
         )
->>>>>>> Stashed changes
     }
 }
