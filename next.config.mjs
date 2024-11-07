@@ -12,7 +12,7 @@ const nextConfig = {
         hostname: 'lh3.googleusercontent.com',
       },
     ],
-  }
+  },
 };
 
 const withMDX = createMDX({});

@@ -1,18 +1,24 @@
-import prisma from "@/lib/prisma"
-import { NextRequest, NextResponse } from 'next/server';
+// get 요청하면, 대화 목록 받기
 
-// GET 요청을 받으면 채팅방의 모든 채팅을 불러옴
-export async function GET(
+import prisma from "@/lib/prisma";
+import { NextResponse, NextRequest} from "next/server";
+
+export async function GET (
     req: NextRequest,
-    { params }: { params: { id: string } }
 ) {
-    try {
-        const chatroomId = Number(params.id);
+    const { searchParams } = new URL(req.url);
+    const id = Number(searchParams.get("id"));
 
-        const conversations = await prisma.conversation.findMany({
-            where: { chatroomId }
+    console.log(searchParams.toString());
+    console.log(id);
+    
+    try {
+        const conversations = await prisma.conversation.findMany( {
+            where: {chatroomId: id}
         });
-    } catch (error) {
-        res.status(500).json({});
+        return NextResponse.json(conversations);
+    } catch (e) {
+        console.log(e);
+        return NextResponse.json({e:"Failed to fetch conversations"}, {status : 500});
     }
 }

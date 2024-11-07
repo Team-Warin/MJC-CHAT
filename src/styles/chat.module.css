@@ -25,25 +25,147 @@ TODO: @apply 작업, 컴포넌트 분리
 
 /* chatroom part */
 .chat_window {
-  @apply flex-grow relative flex flex-col
+  @apply flex-grow relative bg-white flex flex-col
+}
+
+.chat_header {
+  @apply flex justify-end py-4 px-2   border-b-2 border-b-slate-200;
+}
+
+.bookmark_btn {
+  @apply mr-2
+}
+
+.setting_modal {
+  @apply absolute top-16 right-0 bg-gray-800
+}
+
+.pop_window {
+  @apply px-2 py-4
+}
+
+.pop_header {
+  @apply flex justify-center items-center mb-[20px]; 
+
+  & > img {
+    @apply mr-2 size-9;
+  }
+}
+
+.pop_user_name {
+  @apply text-base font-bold
+}
+
+.pop_user_email {
+  @apply text-sm
+}
+
+.pop_middle {
+  @apply flex gap-4 justify-center mb-[20px];
+}
+
+.pop_setting_btn {
+  @apply w-[90px]
+}
+
+.pop_logout_btn {
+  @apply w-[90px]
+}
+
+.quick_link {
+  @apply text-center;
+
+  & > div {
+    @apply py-3
+  }
+}
+
+.modal_header {
+  /* @apply flex flex-col gap-1 */
+}
+
+.modal_contents {
+  @apply flex justify-between items-center mb-8
+}
+
+.modal_content_title {
+  @apply text-base font-bold mb-2.5
+}
+
+.modal_content {
+  @apply text-sm text-gray-500
+}
+
+.select_box {
+  @apply max-w-32
 }
 
 .chat_scroll {
   @apply py-4 w-full h-full flex-grow
 }
 
-.paragraph_ai, .paragraph_user{
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px]
+.paragraph_ai, .paragraph_user {
+  @apply w-2/3 max-w-[992px] m-auto mb-[20px] flex;
 }
 
-.setting_btn {
-  @apply absolute top-4 right-4
+.paragraph_ai {
+  @apply justify-start
+}
+
+.paragraph_user {
+  @apply justify-end
+}
+
+.paragraph_ai span {
+  @apply bg-slate-100 px-5 py-2.5 rounded-3xl;
+}
+
+.paragraph_user span {
+  @apply bg-sky-500 text-white px-5 py-2.5 rounded-3xl max-w-[70%];
+}
+
+.paragraph_user img {
+  @apply hidden
+}
+
+.chat_quick {
+  @apply w-2/3 max-w-[992px] m-auto mb-[40px]
+}
+
+.quick_header {
+  @apply flex justify-between mb-[20px]
+}
+
+.header_div {
+  @apply flex align-middle
+}
+
+.header_title {
+  @apply font-bold
+}
+
+.left_btn {
+  @apply mr-2
+}
+
+.quick_cards {
+  @apply flex justify-between
+}
+
+.card {
+  @apply px-6 py-8 w-[260px] border-1 border-primary-200
 }
 
 .chat_div {
-  @apply w-2/3 max-w-[768px] m-auto mb-[20px] relative
+  @apply w-2/3 max-w-[992px] m-auto mb-[30px] relative
 }
 
 .chat_btn {
   @apply absolute bottom-1 right-1
+}
+
+/* conversation part */
+
+.icon {
+  @apply w-6 h-6 mt-[5px] mr-4;
 }

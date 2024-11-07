@@ -1,16 +1,18 @@
 import style from '@/styles/main.module.css';
 
-import * as motion from 'framer-motion/client';
+import Link from 'next/link';
 
-import Mjc_Animation from '@/components/animation/leaf';
+import * as motion from 'framer-motion/client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
+
 import Footer from '@/components/footer';
 import BannerChat from '@/components/bannerchat';
+import Mjc_Animation from '@/components/animation/leaf';
 
 /** Main Page */
 export default function Main() {
@@ -59,13 +61,15 @@ function Banner() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
           >
-            <Button
-              size='lg'
-              color='primary'
-              endContent={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}
-            >
-              명전이와 대화하기
-            </Button>
+            <Link href='/chat'>
+              <Button
+                size='lg'
+                color='primary'
+                endContent={<FontAwesomeIcon icon={faArrowUpRightFromSquare} />}
+              >
+                명전이와 대화하기
+              </Button>
+            </Link>
           </motion.div>
         </div>
         <div className={style.banner_chat}>
