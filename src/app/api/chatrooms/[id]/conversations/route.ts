@@ -5,16 +5,19 @@ import { NextResponse, NextRequest} from "next/server";
 
 export async function GET (
     req: NextRequest,
+    { params }: { params: { id: string }}
 ) {
-    const { searchParams } = new URL(req.url);
-    const id = Number(searchParams.get("id"));
+    const id = Number(params.id);
+    const searchParams = req.nextUrl.searchParams;
 
-    console.log(searchParams.toString());
-    console.log(id);
-    
+    const page = Number(searchParams.get('page'));
+    const limit = Number(searchParams.get('limit'));
+
+    console.log(page, limit);
+
     try {
         const conversations = await prisma.conversation.findMany( {
-            where: {chatroomId: id}
+            where: {chatRoomId: id}
         });
         return NextResponse.json(conversations);
     } catch (e) {
