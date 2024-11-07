@@ -7,10 +7,10 @@ import style from '@/styles/chat.module.css';
 
 import Image from 'next/image';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 
 import { createChatRoom } from '@/action/chatRoomHandler';
 
@@ -25,6 +25,8 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
+import { Conversation as ConversationType } from '@prisma/client'
+
 export default function ChatWindow({
   session,
   isOpen,
@@ -35,8 +37,51 @@ export default function ChatWindow({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
+  const { id: chatRoomId } = useParams();
 
+  const [conversations, setConversations] = useState<ConversationType[]>([]);
   const [value, setValue] = useState('');
+
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const response = await fetch(`/api/chatrooms/${chatRoomId}/conversations?page=1&limit=10`);
+        const data = await response.json();
+        console.log(data);
+        setConversations(data);
+      } catch (error) {
+        console.error('Failed to fetch messages:', error);
+      }
+    };
+    fetchConversations();
+  }, []);
+
+  const sendConversation = async () => {
+    if (value.trim().length === 0) return;
+
+    try {
+      const conversationTemp = {
+        id: 0,
+        sender: 'user',
+        message: value
+      };
+
+      setConversations([...conversations, conversationTemp as ConversationType]); // 유저 메시지 추가
+      setValue(''); // 입력창 초기화
+
+      const response = await fetch(`/api/chatrooms/${chatRoomId}/conversations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: conversationTemp.message }),
+      });
+
+      const [, conversationAI] = await response.json();
+
+      setConversations(prevConversations => [...prevConversations, conversationAI]); // AI 메시지 추가
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
 
   return (
     <main className={style.chat_window}>
@@ -68,18 +113,18 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        <Conversation userType='user'>
-          <span>안녕하세요.</span>
-        </Conversation>
-        <Conversation userType='ai'>
-          <span>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</span>
-        </Conversation>
+        {conversations.map(conversation => (
+          <Conversation userType={conversation.sender}>
+            <span>{conversation.message}</span>
+          </Conversation>
+        ))}
       </div>
       <div className={style.chat_window_footer}>
         <div>
           <Textarea
             value={value}
             onValueChange={setValue}
+            onKeyDown={e => (e.key === 'Enter') && sendConversation()}
             size='lg'
             variant='bordered'
             minRows={2}
@@ -91,7 +136,10 @@ export default function ChatWindow({
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
-            <Button isIconOnly radius='full'>
+            <Button
+              onClick={sendConversation}
+              isIconOnly
+              radius='full'>
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>
           </motion.div>
