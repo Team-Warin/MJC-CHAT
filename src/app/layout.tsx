@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
 import './globals.css';
-import schedule from 'node-schedule';
 
 import { auth } from '@/auth';
 
@@ -29,18 +28,9 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
-  const job = schedule.scheduleJob('0 * * * *', function (fireDate) {
-    console.log(
-      'This job was supposed to run at ' +
-        fireDate +
-        ', but actually ran at ' +
-        new Date()
-    );
-  });
-
   return (
     <html lang='ko'>
-      <body className={inter.className}>
+      <body className={inter.className} data-theme='light'>
         <NextAuthProvider session={session}>
           <Navbar session={session} />
           {session?.user?.nickname === '' ? <FirstModal /> : null}
