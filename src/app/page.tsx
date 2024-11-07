@@ -4,6 +4,8 @@ import Link from 'next/link';
 
 import * as motion from 'framer-motion/client';
 
+import { dev } from '@/lib/credit';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +13,7 @@ import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@nextui-org/button';
 
 import Footer from '@/components/footer';
+import Profile from '@/components/ui/profile';
 import BannerChat from '@/components/bannerchat';
 import Mjc_Animation from '@/components/animation/leaf';
 
@@ -21,6 +24,7 @@ export default function Main() {
       <main>
         <Banner />
         <Intro />
+        <Credit />
       </main>
       <Footer />
     </>
@@ -84,4 +88,24 @@ function Banner() {
 /** Intro */
 function Intro() {
   return <div id='intro' className={style.intro}></div>;
+}
+
+function Credit() {
+  return (
+    <div id='credit' className={style.credit}>
+      <motion.h1
+        className={style.credit_title}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        이런 사람들이 개발했어요~!!
+      </motion.h1>
+      <div className={style.dev_credit}>
+        {dev.map((item) => (
+          <Profile key={item.name} {...item} />
+        ))}
+      </div>
+    </div>
+  );
 }

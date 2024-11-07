@@ -1,0 +1,59 @@
+.profile {
+  @apply overflow-hidden flex justify-start items-center w-[200px] h-[200px] bg-white border border-slate-100 rounded-2xl shadow-lg cursor-pointer;
+}
+
+.avatar {
+  @apply flex flex-col flex-shrink-0 justify-center items-center w-[200px] h-[200px] overflow-hidden;
+
+  & > .name {
+    @apply text-lg font-semibold text-black;
+  }
+
+  & > .role {
+    @apply text-sm font-light text-slate-500;
+  }
+
+  & > img {
+    @apply rounded-full;
+  }
+}
+
+.info {
+  @apply pt-5 pb-5 flex flex-col justify-around items-start w-[300px] h-[200px] text-nowrap;
+
+  & > p:nth-child(1) {
+    @apply text-sm font-light text-slate-500;
+  }
+
+  & > .role_info {
+    @apply flex flex-col;
+
+    & > p {
+      @apply text-sm font-light text-slate-500;
+    }
+
+    & > div {
+      @apply flex gap-2;
+
+      & > p:nth-child(1) {
+        @apply text-lg font-semibold text-black;
+      }
+
+      & > p:nth-child(2) {
+        @apply p-1 ps-3 pe-3 text-sm font-light text-white bg-blue-400 opacity-80 rounded-lg;
+      }
+    }
+  }
+
+  & > .roles {
+    @apply pe-2 w-[300px] flex flex-wrap gap-2;
+
+    & > p {
+      @apply p-1 ps-3 pe-3 text-[12px] font-light text-slate-500 bg-slate-50 rounded-lg;
+    }
+  }
+}
+
+.social {
+  @apply flex gap-1 text-lg text-slate-500;
+}
