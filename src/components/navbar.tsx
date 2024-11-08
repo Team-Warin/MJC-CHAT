@@ -82,7 +82,12 @@ export default function Navbar({ session }: { session: Session | null }) {
 
   const pathname = usePathname();
 
-  if (pathname?.startsWith('/auth/') || pathname?.startsWith('/admin') || pathname?.startsWith('/api') || pathname?.startsWith('/chat'))
+  if (
+    pathname?.startsWith('/auth/') ||
+    pathname?.startsWith('/admin') ||
+    pathname?.startsWith('/api') ||
+    pathname?.startsWith('/chat')
+  )
     return null;
 
   return (
@@ -121,7 +126,13 @@ export default function Navbar({ session }: { session: Session | null }) {
   );
 }
 
-function UserMenu({ session }: { session: Session | null }) {
+export function UserMenu({
+  session,
+  size = 'md',
+}: {
+  session: Session | null;
+  size?: 'sm' | 'md' | 'lg';
+}) {
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -160,7 +171,7 @@ function UserMenu({ session }: { session: Session | null }) {
   );
 }
 
-function LoginButton({ pathname }: { pathname: string | null }) {
+export function LoginButton({ pathname }: { pathname: string | null }) {
   return (
     <Link
       href={{

@@ -5,22 +5,22 @@ import Image from 'next/image';
 
 export default function Conversation({
   userType,
-  content,
+  children,
 }: {
   userType: 'user' | 'ai';
-  content: string;
+  children: string | React.ReactNode;
 }) {
   /** AI 대화일 경우 */
   return (
-    <div className={(userType === 'ai') ? style.paragraph_ai : style.paragraph_user}>
-      <Image 
-        src='/favicon.ico' 
-        alt='' 
-        width={20} 
-        height={20}
+    <div className={style.paragraph} data-type={userType}>
+      <Image
+        src={userType === 'ai' ? '/avatar/mjc_face.webp' : '/avatar/user.webp'}
+        alt=''
+        width={27}
+        height={27}
         className={style.icon}
       />
-      <span>{content}</span>
+      {typeof children === 'string' ? <span>{children}</span> : children}
     </div>
   );
 }
