@@ -8,6 +8,7 @@ export default function Footer() {
     [
       { title: '명전이', href: '/' },
       { title: '명전이 소개', href: '/#intro' },
+      { title: '명전이 크레딧', href: '/#credit' },
     ],
     [
       { title: '명지전문대학', href: 'https://www.mjc.ac.kr/mjcIntro.do' },
