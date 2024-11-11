@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.72",
     "@auth/prisma-adapter": "^2.7.2",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
@@ -40,6 +41,7 @@
     "@react-three/fiber": "^8.17.8",
     "@types/mdx": "^2.0.13",
     "@types/three": "^0.168.0",
+    "ai": "^3.4.33",
     "bcrypt": "^5.1.1",
     "cheerio": "^1.0.0",
     "es-hangul": "^2.1.0",
@@ -48,6 +50,7 @@
     "langchain": "^0.3.5",
     "next": "14.2.13",
     "next-auth": "^5.0.0-beta.25",
+    "ollama-ai-provider": "^0.16.1",
     "pdf-parse": "^1.1.1",
     "pgvector": "^0.2.0",
     "prisma-extension-pgvector": "^0.11.0",
@@ -55,7 +58,8 @@
     "react-dom": "^18",
     "three": "^0.169.0",
     "ts-node": "^10.9.2",
-    "uuid": "^11.0.2"
+    "uuid": "^11.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
