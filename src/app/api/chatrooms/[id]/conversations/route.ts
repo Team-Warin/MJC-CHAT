@@ -1,7 +1,12 @@
 import prisma from "@/lib/prisma";
-import { NextResponse, NextRequest} from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 import { Ollama } from '@langchain/ollama';
+import { HttpResponseOutputParser } from "langchain/output_parsers";
+import { StringOutputParser } from '@langchain/core/output_parsers';
+
+import { LangChainAdapter } from 'ai';
+import { Message as VercelChatMessage } from "ai";
 
 const llm = new Ollama({
     model: 'mistalite',
@@ -9,15 +14,46 @@ const llm = new Ollama({
     maxRetries: 2
 });
 
-// get 요청하면, 대화 목록 받기
-export async function GET (
+const formatMessage = (message: VercelChatMessage) => {
+    return `${message.role}: ${message.content}`;
+};
+
+// 
+export async function POST(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    const body = await req.json();
+    const messages = body.messages ?? [];
+    const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
+    const currentMessageContent = messages[messages.length - 1].content;
+    const chatRoomId = Number(params.id);
+
+    const outputParser = new StringOutputParser();
+    const chain = llm.pipe(outputParser);
+
+    const stream = await chain.stream(currentMessageContent);
+
+    /* 주석해제하여 터미널에서 확인
+    const chunks = [];
+    for await (const chunk of stream) {
+        chunks.push(chunk);
+        console.log(`${chunk}|`);
+    }
+    */
+
+    return LangChainAdapter.toDataStreamResponse(stream);
+}
+
+// 
+export async function GET(
     req: NextRequest,
     { params }: { params: { id: string } }
 ) {
     try {
         const chatRoomId = Number(params.id);
         const searchParams = req.nextUrl.searchParams;
-    
+
         const page = Number(searchParams.get('page'));
         const limit = Number(searchParams.get('limit'));
         const offset = (page * limit);
@@ -34,46 +70,5 @@ export async function GET (
             { message: error },
             { status: 500 }
         );
-    }
-}
-
-// POST 요청하면 대화 생성, AI 모델 응답
-export async function POST(
-    req: NextRequest,
-    { params }: { params: { id: string } }
-) {
-    try {
-        const chatRoomId = Number(params.id);
-        const body = await req.json();
-        const message = body.message;
-
-        if (!message) {
-            throw Error("json request needs 'message' field");
-        }
-
-        const msgAI = await llm.invoke(message);
-
-        const convUser = await prisma.conversation.create({
-            data: {
-                chatRoomId,
-                message,
-                sender: 'user'
-            }
-        });
-
-        const convAI = await prisma.conversation.create({
-            data: {
-                chatRoomId,
-                message: msgAI,
-                sender: 'ai'
-            }
-        });
-
-        return NextResponse.json([convUser, convAI]);
-    } catch (error) {
-        return NextResponse.json(
-            { message: error },
-            { status: 500 }
-        )
     }
 }
