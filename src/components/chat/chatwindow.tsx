@@ -17,6 +17,7 @@ import { createChatRoom } from '@/action/chatRoomHandler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
@@ -24,6 +25,7 @@ import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
+import Bookmark from '@/components/chat/chatbookmark';
 
 export default function ChatWindow({
   session,
@@ -59,12 +61,15 @@ export default function ChatWindow({
             </Button>
           )}
         </div>
-        <div>
-          {session ? (
-            <UserMenu size='sm' session={session} />
-          ) : (
-            <LoginButton pathname={pathname} />
-          )}
+        <div className={style.settings}>
+          <Bookmark />
+          <div>
+            {session ? (
+              <UserMenu size='sm' session={session} />
+            ) : (
+              <LoginButton pathname={pathname} />
+            )}
+          </div>
         </div>
       </div>
       <div className={style.chat_window_body}>

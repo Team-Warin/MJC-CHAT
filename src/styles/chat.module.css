@@ -41,7 +41,32 @@
   & > .title {
     @apply flex items-center gap-5;
   }
+
+  & > .settings {
+    @apply flex;
+  }
 }
+
+.bookmark_btn {
+  @apply mr-2;
+}
+
+.bookmark_list {
+  @apply p-4 flex flex-col gap-3;
+}
+
+.bookmark_items {
+  @apply cursor-pointer border border-slate-300 hover:border-indigo-300 p-3 rounded-lg;
+
+  & > h1 {
+    @apply block text-left text-base;
+  }
+  
+  & > p {
+    @apply block text-left text-sm;
+  }
+}
+
 
 /* navagation part */
 .chatroom_nav {
