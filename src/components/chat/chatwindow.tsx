@@ -13,7 +13,6 @@ import { motion } from 'framer-motion';
 import { usePathname, useParams } from 'next/navigation';
 
 import { createChatRoom } from '@/action/chatRoomHandler';
-import { askConversationStream } from '@/action/conversationHandler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -47,7 +46,6 @@ export default function ChatWindow({
 
   const { messages, input, handleInputChange, handleSubmit, setData } = useChat({
     api: `/api/chatrooms/${chatRoomId}/conversations`,
-    streamProtocol: 'text'
   });
 
   return (
