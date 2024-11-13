@@ -43,10 +43,6 @@
   }
 }
 
-.chat_form {
-  @apply w-full;
-}
-
 /* navagation part */
 .chatroom_nav {
   @apply flex flex-col w-[256px] h-dvh bg-white border-r-1 border-slate-200;
@@ -98,7 +94,7 @@
 .chat_window_footer {
   @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-72 pe-72;
 
-  & > div {
+  & > form {
     @apply relative w-full flex items-center gap-2;
 
     & > .send_button {
