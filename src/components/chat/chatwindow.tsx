@@ -22,6 +22,7 @@ import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
 import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
+import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 import Conversation from '@/components/conversation';
 
@@ -73,14 +74,16 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        {messages.map(message => (
-          <Conversation
-            userType={message.role === 'user' ? 'user' : 'ai'}
-            key={message.id}
-          >
-            <span>{message.content}</span>
-          </Conversation>
-        ))}
+        <ScrollShadow>
+          {messages.map(message => (
+            <Conversation
+              userType={message.role === 'user' ? 'user' : 'ai'}
+              key={message.id}
+            >
+              <span>{message.content}</span>
+            </Conversation>
+          ))}
+        </ScrollShadow>
       </div>
       <div className={style.chat_window_footer}>
         <form
