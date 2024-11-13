@@ -7,10 +7,10 @@ import style from '@/styles/chat.module.css';
 
 import Image from 'next/image';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-import { usePathname, useParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { createChatRoom } from '@/action/chatRoomHandler';
 
@@ -25,10 +25,6 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
-import { Conversation as ConversationPrisma } from '@prisma/client'
-
-import { useChat } from 'ai/react';
-
 export default function ChatWindow({
   session,
   isOpen,
@@ -39,31 +35,8 @@ export default function ChatWindow({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
-  const { id: chatRoomId } = useParams();
 
-  const [conversations, setConversations] = useState<ConversationPrisma[]>([]);
   const [value, setValue] = useState('');
-
-  const { messages, input, handleInputChange, handleSubmit, setData, setMessages } = useChat({
-    api: `/api/chatrooms/${chatRoomId}/conversations`,
-  });
-
-  // 초기에 채팅 히스토리 불러오기
-  useEffect(() => {
-    if (chatRoomId) {
-      const fetchConversationHistory = async () => {
-        try {
-          const response = await fetch(`/api/chatrooms/${chatRoomId}/conversations?page=0&limit=20`);
-          const data = await response.json();
-          setConversations(data);
-        } catch (error) {
-          console.error("채팅 히스토리를 로드하는 중 에러 발생:", error);
-        }
-      };
-
-      fetchConversationHistory();
-    }
-  }, [chatRoomId]);
 
   return (
     <main className={style.chat_window}>
@@ -95,51 +68,34 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        {messages.map(message => (
-          <Conversation
-            userType={message.role === 'user' ? 'user' : 'ai'}
-            key={message.id}
-          >
-            <span>{message.content}</span>
-          </Conversation>
-        ))}
+        <Conversation userType='user'>
+          <span>안녕하세요.</span>
+        </Conversation>
+        <Conversation userType='ai'>
+          <span>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</span>
+        </Conversation>
       </div>
       <div className={style.chat_window_footer}>
-        <form
-          onSubmit={e => {
-            setData(undefined);
-            handleSubmit(e);
-          }}
-          className={style.chat_form}
-        >
+        <div>
           <Textarea
-            value={input}
-            onChange={handleInputChange}
+            value={value}
+            onValueChange={setValue}
             size='lg'
             variant='bordered'
             minRows={2}
             placeholder='자유롭게 대화해 보세요.'
           />
-          <Button
-            type='submit'
-            isIconOnly
-            radius='full'>
-            <FontAwesomeIcon size='sm' icon={faArrowRight} />
-          </Button>
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: value.length > 0 ? 1 : 0 }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
-            <Button
-              type='submit'
-              isIconOnly
-              radius='full'>
+            <Button isIconOnly radius='full'>
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>
           </motion.div>
-        </form>
+        </div>
         <p>
           명전이는 부정확한 정보를 제공할 수 있으며, 이는 명지전문대학의 입장을
           대변하지 않습니다.
