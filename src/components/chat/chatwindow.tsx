@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 
 import { createChatRoom } from '@/action/chatRoomHandler';
 
@@ -25,6 +25,8 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
+import { useChat } from 'ai/react';
+
 export default function ChatWindow({
   session,
   isOpen,
@@ -35,8 +37,11 @@ export default function ChatWindow({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
+  const { id: chatRoomId } = useParams();
 
-  const [value, setValue] = useState('');
+  const { messages, input, handleInputChange, handleSubmit, setData } = useChat({
+    api: `/api/chatrooms/${chatRoomId}/conversations`,
+  });
 
   return (
     <main className={style.chat_window}>
@@ -68,18 +73,26 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        <Conversation userType='user'>
-          <span>안녕하세요.</span>
-        </Conversation>
-        <Conversation userType='ai'>
-          <span>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</span>
-        </Conversation>
+        {messages.map(message => (
+          <Conversation
+            userType={message.role === 'user' ? 'user' : 'ai'}
+            key={message.id}
+          >
+            <span>{message.content}</span>
+          </Conversation>
+        ))}
       </div>
       <div className={style.chat_window_footer}>
-        <div>
+        <form
+          onSubmit={e => {
+            setData(undefined);
+            handleSubmit(e);
+          }}
+          className={style.chat_form}
+        >
           <Textarea
-            value={value}
-            onValueChange={setValue}
+            value={input}
+            onChange={handleInputChange}
             size='lg'
             variant='bordered'
             minRows={2}
@@ -87,15 +100,19 @@ export default function ChatWindow({
           />
           <motion.div
             initial={{ scale: 0 }}
-            animate={{ scale: value.length > 0 ? 1 : 0 }}
+            animate={{ scale: input.length > 0 ? 1 : 0 }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
-            <Button isIconOnly radius='full'>
+            <Button
+              isIconOnly
+              type='submit'
+              radius='full'
+            >
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>
           </motion.div>
-        </div>
+        </form>
         <p>
           명전이는 부정확한 정보를 제공할 수 있으며, 이는 명지전문대학의 입장을
           대변하지 않습니다.
