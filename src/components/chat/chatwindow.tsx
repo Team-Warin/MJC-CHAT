@@ -44,9 +44,26 @@ export default function ChatWindow({
   const [conversations, setConversations] = useState<ConversationPrisma[]>([]);
   const [value, setValue] = useState('');
 
-  const { messages, input, handleInputChange, handleSubmit, setData } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, setData, setMessages } = useChat({
     api: `/api/chatrooms/${chatRoomId}/conversations`,
   });
+
+  // 초기에 채팅 히스토리 불러오기
+  useEffect(() => {
+    if (chatRoomId) {
+      const fetchConversationHistory = async () => {
+        try {
+          const response = await fetch(`/api/chatrooms/${chatRoomId}/conversations?page=0&limit=20`);
+          const data = await response.json();
+          setConversations(data);
+        } catch (error) {
+          console.error("채팅 히스토리를 로드하는 중 에러 발생:", error);
+        }
+      };
+
+      fetchConversationHistory();
+    }
+  }, [chatRoomId]);
 
   return (
     <main className={style.chat_window}>
@@ -93,6 +110,7 @@ export default function ChatWindow({
             setData(undefined);
             handleSubmit(e);
           }}
+          className={style.chat_form}
         >
           <Textarea
             value={input}

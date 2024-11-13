@@ -8,12 +8,13 @@ import { AgentExecutor, createToolCallingAgent } from "langchain/agents";
 
 import { LangChainAdapter } from 'ai';
 import { Message as VercelChatMessage } from "ai";
+import { output } from "framer-motion/client";
+import { Console } from "console";
 
 // VercelChatMessage -> 텍스트 형태로 변환한다.
 const formatMessage = (message: VercelChatMessage) => {
     return `${message.role}: ${message.content}`;
 };
-
 
 // 시스템 프롬포트를 선언한다
 const SYSTEM_PROMPT_TEMPLATE = `오늘 날짜는 {today} 입니다.
@@ -49,7 +50,7 @@ export async function POST(
     try {
         
     } catch (error) {
-        
+
     }
     const body = await req.json();
     const messages = body.messages ?? [];
@@ -67,14 +68,38 @@ export async function POST(
     });
 
     const outputParser = new StringOutputParser();
-    const chain = systemPrompt.pipe(model).pipe(outputParser)
+    const chain = systemPrompt.pipe(model).pipe(outputParser);
 
     const stream = await chain.stream({
         chat_history: formattedPreviousMessages.join("\n"),
         input: currentMessageContent,
         today: '11월 13일',
         docs: '문서 없음'
-    }); 
+    }, {
+        callbacks: [
+            {
+                async handleChainEnd(outputs, runId, parentRunId, tags, kwargs) {
+                    const aiMessage = outputs.output.replaceAll('\n', '');
+                    
+                    // DB에 사용자 메시지와 AI 응답 저장
+                    await prisma.conversation.createMany({
+                        data: [
+                            {
+                                chatRoomId,
+                                sender: 'user',
+                                message: currentMessageContent
+                            },
+                            {
+                                chatRoomId,
+                                sender: 'ai',
+                                message: aiMessage
+                            }
+                        ]
+                    });
+                },
+            }
+        ]
+    });
 
     return LangChainAdapter.toDataStreamResponse(stream);
 }
