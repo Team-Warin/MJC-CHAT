@@ -25,7 +25,7 @@ import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
-import Bookmark from '@/components/chat/chatbookmark';
+import ChatBookmark from '@/components/chat/chatbookmark';
 
 export default function ChatWindow({
   session,
@@ -62,7 +62,7 @@ export default function ChatWindow({
           )}
         </div>
         <div className={style.settings}>
-          <Bookmark />
+          <ChatBookmark />
           <div>
             {session ? (
               <UserMenu size='sm' session={session} />
@@ -73,11 +73,17 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        <Conversation userType='user'>
+        <Conversation userType='user' id='user-01'>
           <span>안녕하세요.</span>
         </Conversation>
-        <Conversation userType='ai'>
-          <span>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</span>
+        <Conversation userType='ai' id='ai-01'>
+          <span>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다</span>
+        </Conversation>
+        <Conversation userType='user' id='user-02'>
+          <span>반갑습니다.</span>
+        </Conversation>
+        <Conversation userType='ai' id='ai-02'>
+          <span>네 안녕하세요 :) 어떤 질문이라도 좋으니 편하게 말씀해주세요!</span>
         </Conversation>
       </div>
       <div className={style.chat_window_footer}>

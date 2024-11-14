@@ -7,6 +7,7 @@ import { Button } from "@nextui-org/button";
 import style from "@/styles/chat.module.css";
 
 export default function ChatBookMark() {
+
     return (
         <Popover>
             <PopoverTrigger>
@@ -23,12 +24,8 @@ export default function ChatBookMark() {
             <PopoverContent>
                 <div className={style.bookmark_list}>
                     <div className={style.bookmark_items}>
-                        <h1>안녕하세요</h1>
-                        <p>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</p>
-                    </div>
-                    <div className={style.bookmark_items}>
-                        <h1>안녕하세요</h1>
-                        <p>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</p>
+                        <h1>title</h1>
+                        <p>contents</p>
                     </div>
                 </div>
             </PopoverContent>
