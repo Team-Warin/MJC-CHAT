@@ -30,6 +30,10 @@
   }
 }
 
+.chat_icon {
+  @apply pl-8 pt-1
+}
+
 /* chat window part */
 .chat_window {
   @apply flex flex-col flex-1 w-full;
