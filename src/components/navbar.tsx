@@ -133,6 +133,35 @@ export function UserMenu({
   session: Session | null;
   size?: 'sm' | 'md' | 'lg';
 }) {
+  const pathname = usePathname(); // 현재 경로 확인
+
+  // 드롭다운 항목을 조건에 따라 추가
+  const dropdownItems = [];
+  if (pathname !== '/mypage') {
+    dropdownItems.push(
+      <DropdownItem
+        key='mypage'
+        startContent={<FontAwesomeIcon icon={faUser} />}
+        onClick={() => {
+          window.location.href = '/mypage';
+        }}
+      >
+        마이페이지
+      </DropdownItem>
+    );
+  }
+
+  dropdownItems.push(
+    <DropdownItem
+      key='logout'
+      className='text-danger'
+      color='danger'
+      startContent={<FontAwesomeIcon icon={faRightFromBracket} />}
+    >
+      로그아웃
+    </DropdownItem>
+  );
+
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -152,24 +181,12 @@ export function UserMenu({
           }
         }}
       >
-        <DropdownItem
-          key='mypage'
-          startContent={<FontAwesomeIcon icon={faUser} />}
-        >
-          마이페이지
-        </DropdownItem>
-        <DropdownItem
-          key='logout'
-          className='text-danger'
-          color='danger'
-          startContent={<FontAwesomeIcon icon={faRightFromBracket} />}
-        >
-          로그아웃
-        </DropdownItem>
+        {dropdownItems}
       </DropdownMenu>
     </Dropdown>
   );
 }
+
 
 export function LoginButton({ pathname }: { pathname: string | null }) {
   return (
