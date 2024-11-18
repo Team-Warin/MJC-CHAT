@@ -72,7 +72,7 @@
   }
 }
 .chat_window_body {
-  @apply ps-72 pe-72 flex-1 w-full;
+  @apply ps-[10%] pe-[10%] flex-1 w-full;
 }
 
 .chatroom_nav_body {
@@ -92,7 +92,7 @@
 }
 
 .chat_window_footer {
-  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-72 pe-72;
+  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-[10%] pe-[10%];
 
   & > form {
     @apply relative w-full flex items-center gap-2;

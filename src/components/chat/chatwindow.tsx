@@ -87,7 +87,7 @@ export default function ChatWindow({
       </div>
       <div className={style.chat_window_footer}>
         <form
-          onSubmit={e => {
+          onSubmit={(e) => {
             setData(undefined);
             handleSubmit(e);
           }}
