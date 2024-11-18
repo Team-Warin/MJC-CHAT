@@ -26,7 +26,7 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
-import { Conversation as ConversationPrisma } from '@prisma/client'
+import { Conversation as ConversationPrisma } from '@prisma/client';
 
 import { useChat } from 'ai/react';
 
@@ -45,10 +45,12 @@ export default function ChatWindow({
   const [conversations, setConversations] = useState<ConversationPrisma[]>([]);
   const [value, setValue] = useState('');
 
-  const { messages, input, handleInputChange, handleSubmit, setData } = useChat({
-    api: `/api/chatrooms/${chatRoomId}/conversations`,
-    streamProtocol: 'text'
-  });
+  const { messages, input, handleInputChange, handleSubmit, setData } = useChat(
+    {
+      api: `/api/chatrooms/${chatRoomId}/conversations`,
+      streamProtocol: 'text',
+    }
+  );
 
   return (
     <main className={style.chat_window}>
@@ -80,7 +82,7 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        {messages.map(message => (
+        {messages.map((message) => (
           <Conversation
             userType={message.role === 'user' ? 'user' : 'ai'}
             key={message.id}
@@ -91,7 +93,7 @@ export default function ChatWindow({
       </div>
       <div className={style.chat_window_footer}>
         <form
-          onSubmit={e => {
+          onSubmit={(e) => {
             setData(undefined);
             handleSubmit(e);
           }}
@@ -104,10 +106,7 @@ export default function ChatWindow({
             minRows={2}
             placeholder='자유롭게 대화해 보세요.'
           />
-          <Button
-            type='submit'
-            isIconOnly
-            radius='full'>
+          <Button type='submit' isIconOnly radius='full'>
             <FontAwesomeIcon size='sm' icon={faArrowRight} />
           </Button>
           <motion.div
@@ -116,10 +115,7 @@ export default function ChatWindow({
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
-            <Button
-              type='submit'
-              isIconOnly
-              radius='full'>
+            <Button type='submit' isIconOnly radius='full'>
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>
           </motion.div>
