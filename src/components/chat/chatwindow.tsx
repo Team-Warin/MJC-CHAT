@@ -7,13 +7,12 @@ import style from '@/styles/chat.module.css';
 
 import Image from 'next/image';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { usePathname, useParams } from 'next/navigation';
 
 import { createChatRoom } from '@/action/chatRoomHandler';
-import { askConversationStream } from '@/action/conversationHandler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -23,10 +22,9 @@ import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
 import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
+import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 import Conversation from '@/components/conversation';
-
-import { Conversation as ConversationPrisma } from '@prisma/client';
 
 import { useChat } from 'ai/react';
 
@@ -42,15 +40,9 @@ export default function ChatWindow({
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();
 
-  const [conversations, setConversations] = useState<ConversationPrisma[]>([]);
-  const [value, setValue] = useState('');
-
-  const { messages, input, handleInputChange, handleSubmit, setData } = useChat(
-    {
-      api: `/api/chatrooms/${chatRoomId}/conversations`,
-      streamProtocol: 'text',
-    }
-  );
+  const { messages, input, handleInputChange, handleSubmit, setData } = useChat({
+    api: `/api/chatrooms/${chatRoomId}/conversations`,
+  });
 
   return (
     <main className={style.chat_window}>
@@ -82,14 +74,16 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        {messages.map((message) => (
-          <Conversation
-            userType={message.role === 'user' ? 'user' : 'ai'}
-            key={message.id}
-          >
-            <span>{message.content}</span>
-          </Conversation>
-        ))}
+        <ScrollShadow>
+          {messages.map(message => (
+            <Conversation
+              userType={message.role === 'user' ? 'user' : 'ai'}
+              key={message.id}
+            >
+              <span>{message.content}</span>
+            </Conversation>
+          ))}
+        </ScrollShadow>
       </div>
       <div className={style.chat_window_footer}>
         <form
@@ -97,6 +91,7 @@ export default function ChatWindow({
             setData(undefined);
             handleSubmit(e);
           }}
+          className={style.chat_form}
         >
           <Textarea
             value={input}
@@ -106,16 +101,17 @@ export default function ChatWindow({
             minRows={2}
             placeholder='자유롭게 대화해 보세요.'
           />
-          <Button type='submit' isIconOnly radius='full'>
-            <FontAwesomeIcon size='sm' icon={faArrowRight} />
-          </Button>
           <motion.div
             initial={{ scale: 0 }}
-            animate={{ scale: value.length > 0 ? 1 : 0 }}
+            animate={{ scale: input.length > 0 ? 1 : 0 }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
-            <Button type='submit' isIconOnly radius='full'>
+            <Button
+              isIconOnly
+              type='submit'
+              radius='full'
+            >
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>
           </motion.div>

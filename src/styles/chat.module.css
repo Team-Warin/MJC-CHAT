@@ -94,7 +94,7 @@
 .chat_window_footer {
   @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-[10%] pe-[10%];
 
-  & > div {
+  & > form {
     @apply relative w-full flex items-center gap-2;
 
     & > .send_button {
