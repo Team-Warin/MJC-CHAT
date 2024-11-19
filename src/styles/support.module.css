@@ -18,7 +18,7 @@
   @apply mt-20 px-[10vw] w-full h-full;
 
   & .support_content_text {
-    @apply px-5 flex justify-between items-center mb-2;
+    @apply flex justify-between items-center mb-2;
 
     & > h2 {
       @apply text-2xl font-bold;
@@ -27,5 +27,45 @@
 
   & > hr {
     @apply border-1 rounded-full border-mjcblue;
+  }
+}
+
+.support_write_container {
+  @apply w-full px-[10vw] mt-20;
+
+  & > h1 {
+    @apply text-3xl font-black;
+  }
+}
+
+.support_write_select {
+  @apply flex flex-col gap-4 w-[800px] mt-5;
+
+  & .select {
+    @apply w-[400px];
+  }
+}
+
+.support_content_list {
+  @apply w-full;
+
+  & table {
+    @apply w-full;
+
+    & > thead > tr {
+      @apply border-b-2 border-mjcblue w-full h-10 flex items-center justify-around;
+    }
+
+    & > tbody > tr {
+      @apply cursor-pointer bg-slate-50 w-full h-10 flex items-center justify-around;
+    }
+
+    & th {
+      @apply w-full text-center;
+    }
+
+    & td {
+      @apply w-full text-center flex items-center justify-center;
+    }
   }
 }

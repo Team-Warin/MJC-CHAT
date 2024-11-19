@@ -7,7 +7,8 @@ import style from '@/styles/chat.module.css';
 
 import Image from 'next/image';
 
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
+
 import { motion } from 'framer-motion';
 
 import { usePathname, useParams } from 'next/navigation';
@@ -22,11 +23,12 @@ import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
 import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import { ScrollShadow } from '@nextui-org/scroll-shadow';
 
 import Conversation from '@/components/conversation';
 
 import { useChat } from 'ai/react';
+import Link from 'next/link';
 
 export default function ChatWindow({
   session,
@@ -40,18 +42,34 @@ export default function ChatWindow({
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();
 
-  const { messages, input, handleInputChange, handleSubmit, setData } = useChat({
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: `/api/chatrooms/${chatRoomId}/conversations`,
   });
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const sendButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    window.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter' && input.length > 0) {
+        await sendButtonRef.current?.click();
+        await inputRef.current?.focus();
+      }
+    });
+
+    return () => {
+      window.removeEventListener('keydown', () => {});
+    };
+  }, [input]);
 
   return (
     <main className={style.chat_window}>
       <div className={style.chat_window_header}>
         <div className={style.title}>
-          <div className={style.logo}>
+          <Link href='/' className={style.logo}>
             <Image src={'/webps/mjc.webp'} alt='logo' width={30} height={30} />
             <h1>명전이</h1>
-          </div>
+          </Link>
           {isOpen ? null : (
             <Button
               className='flex-shrink-0'
@@ -74,8 +92,8 @@ export default function ChatWindow({
         </div>
       </div>
       <div className={style.chat_window_body}>
-        <ScrollShadow>
-          {messages.map(message => (
+        <ScrollShadow className={style.chat_window_body_scroll}>
+          {messages.map((message) => (
             <Conversation
               userType={message.role === 'user' ? 'user' : 'ai'}
               key={message.id}
@@ -88,29 +106,34 @@ export default function ChatWindow({
       <div className={style.chat_window_footer}>
         <form
           onSubmit={(e) => {
-            setData(undefined);
             handleSubmit(e);
           }}
           className={style.chat_form}
         >
           <Textarea
+            ref={inputRef}
             value={input}
             onChange={handleInputChange}
             size='lg'
             variant='bordered'
             minRows={2}
+            maxRows={4}
             placeholder='자유롭게 대화해 보세요.'
           />
           <motion.div
             initial={{ scale: 0 }}
-            animate={{ scale: input.length > 0 ? 1 : 0 }}
+            animate={{
+              scale: input.replace(/\s/g, '').length > 0 ? 1 : 0,
+            }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
             <Button
+              disabled={input.replace(/\s/g, '').length === 0}
               isIconOnly
               type='submit'
               radius='full'
+              ref={sendButtonRef}
             >
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>

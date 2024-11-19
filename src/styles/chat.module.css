@@ -11,10 +11,10 @@
 }
 
 .paragraph {
-  @apply flex gap-3 items-center font-medium;
+  @apply flex gap-3 font-medium;
 
   & > img {
-    @apply rounded-full;
+    @apply w-[27px] h-[27px] rounded-full;
   }
 
   &[data-type='ai'] {
@@ -25,8 +25,12 @@
     @apply justify-end;
 
     & > span {
-      @apply order-first;
+      @apply order-first text-end;
     }
+  }
+
+  & > span {
+    @apply w-[60%];
   }
 }
 
@@ -73,6 +77,10 @@
 }
 .chat_window_body {
   @apply ps-[10%] pe-[10%] flex-1 w-full;
+
+  & > .chat_window_body_scroll {
+    @apply flex flex-col gap-2;
+  }
 }
 
 .chatroom_nav_body {

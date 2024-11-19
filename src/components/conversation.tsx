@@ -1,5 +1,7 @@
 import style from '@/styles/chat.module.css';
 
+import * as motion from 'framer-motion/client';
+
 import React from 'react';
 import Image from 'next/image';
 
@@ -12,7 +14,13 @@ export default function Conversation({
 }) {
   /** AI 대화일 경우 */
   return (
-    <div className={style.paragraph} data-type={userType}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+      className={style.paragraph}
+      data-type={userType}
+    >
       <Image
         src={userType === 'ai' ? '/avatar/mjc_face.webp' : '/avatar/user.webp'}
         alt=''
@@ -21,6 +29,6 @@ export default function Conversation({
         className={style.icon}
       />
       {typeof children === 'string' ? <span>{children}</span> : children}
-    </div>
+    </motion.div>
   );
 }
