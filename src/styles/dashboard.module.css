@@ -1,0 +1,26 @@
+/* sidebar part */
+
+.sidebar {
+    @apply w-80 h-dvh border-r border-gray-200;
+}
+
+.sidebarLinks {
+    @apply w-full h-dvh flex flex-col items-center gap-2 p-4;
+
+    & > a {
+        @apply w-full;
+
+        & > button {
+            @apply w-full font-bold;
+        }
+    }
+}
+
+/* User Control page part */
+.user_window {
+    @apply grow p-12;
+
+    & > h1 {
+        @apply text-2xl font-bold;
+    }
+}
