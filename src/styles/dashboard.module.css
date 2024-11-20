@@ -24,3 +24,15 @@
         @apply text-2xl font-bold;
     }
 }
+
+.user_table {
+    @apply mt-4 table-auto border w-full shadow-md;
+
+    & > thead {
+        @apply bg-gray-100;
+    }
+
+    .table_cell {
+        @apply px-6 py-2 justify-items-center text-center;
+    }
+}

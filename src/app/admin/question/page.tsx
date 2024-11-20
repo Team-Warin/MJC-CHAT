@@ -1,19 +1,23 @@
-// import prisma from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import styles from '@/styles/dashboard.module.css';
 import Sidebar from '@/components/admin/sidebar'
 export default async function QuestionPage() {
-  // const users = await prisma.user.findMany({
-  //   orderBy: {
-  //     createdAt: 'desc',
-  //   },
-  //   select: {
-  //     avatar: true,
-  //     nickname: true,
-  //     email: true,
-  //     roles: true,
-  //     createdAt: true,
-  //   },
-  // });
+  const supports = await prisma.report.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      userId: true,
+      conversationId: true,
+      createdAt: true,
+      type: true,
+      status: true,
+      title: true,
+      messages: true,
+      user: true
+    },
+  });
 
   return (
     <div className='flex'>
