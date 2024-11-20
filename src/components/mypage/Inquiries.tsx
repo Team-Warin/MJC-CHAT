@@ -25,26 +25,26 @@ interface InquiryItem {
   const [inquiries] = useState<InquiryItem[]>([
     {
       id: 1,
-      title: '휴학 신청은 어떻게? 내가 곧 있으면 군대를 가게 되는데 어떻게 해야할지 모르겠어 관련 서류도 많은 거 같고',
-      content: '휴학 횟수를 수업연한 기준 1회(1년)로 축소하고 재등록 제한(2회)을 통해 재학연한을 단축함 (2023학년도 신입생부터 적용하며, 2022학년도 이전 입학한 재적생은 종전의 학칙을 적용함) - 학칙 제19조(휴학) ④ 일반휴학은 1회에 한하여 허가하며 그 기간은 1년 이내로 한다. 다만, 병역의무로 인한 휴학 기간은 휴학 횟수에 산입하지 아니하며, 부득이한 경우 총장의 승인을 얻어 일반휴학을 추가로 허가할 수 있다.',
+      title: '안녕하세요 저는 명지전문대학에 재학 중인 1학년 학생입니다. 명전이가 귀여운 사실을 개발자 분들도 아시나요?',
+      content: '명전이는 최고로 귀엽습니다.',
       date: new Date().toISOString().split('T')[0]
     },
     {
       id: 2,
-      title: '두 번째 북마크 제목입니다',
-      content: '두 번째 북마크의 내용입니다. 여기에는 중요한 정보가 담겨있습니다.',
+      title: '두 번째 문의',
+      content: '두 번째 문의 내용입니다. 여기에는 중요한 정보가 담겨있습니다.',
       date: generateRandomDate()
     },
     {
       id: 3,
-      title: '세 번째 북마크입니다',
-      content: '세 번째 북마크에 대한 상세한 내용을 여기에 작성합니다.',
+      title: '세 번째 문의',
+      content: '세 번째 문의 대한 상세한 내용을 여기에 작성합니다.',
       date: generateRandomDate()
     },
     {
       id: 4,
-      title: '네 번째 북마크 제목',
-      content: '네 번째 북마크의 자세한 내용입니다. 이 내용은 나중에 다시 확인하고 싶은 정보입니다.',
+      title: '네 번째 문의',
+      content: '네 번째 문의 이 내용은 나중에 다시 확인하고 싶은 정보입니다.',
       date: generateRandomDate()
     }
   ]);
@@ -103,7 +103,7 @@ interface InquiryItem {
       {/* 테이블 헤더 */}
       <div className="grid grid-cols-12 px-6 py-3 bg-gray-50 border-b text-sm">
         <div className="col-span-1 pl-1">ID</div>
-        <div className="col-span-8 text-center">제목</div>
+        <div className="col-span-8 text-center ml-10">제목</div>
         <div className="col-span-2 pr-10 text-right">작성일</div>
         <div className="col-span-1 text-right pr-7">상태</div>
       </div>

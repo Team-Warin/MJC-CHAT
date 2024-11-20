@@ -104,7 +104,7 @@ export default function Bookmarks() {
       {/* 테이블 헤더 - 간격 조절 가능 */}
       <div className="grid grid-cols-12 px-6 py-3 bg-gray-50 border-b text-sm">
         <div className="col-span-1 pl-1">ID</div>
-        <div className="col-span-9 text-center">제목</div>
+        <div className="col-span-9 text-center mr-9">제목</div>
         <div className="col-span-2 pr-10 text-right">작성일</div>
       </div>
 
@@ -125,7 +125,7 @@ export default function Bookmarks() {
               <div className="grid grid-cols-12 items-center p-4">
                 <div className="col-span-1 text-gray-600">{item.id}</div>
                 <div className="col-span-9">
-                  <span className="text-base">
+                  <span className="text-base pl-4">
                     {item.title.length > 30 ? highlightSearchTerm(item.title.substring(0, 30) + 
                     '...', searchTerm) : highlightSearchTerm(item.title, searchTerm)}
                   </span>
