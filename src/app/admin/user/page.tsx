@@ -53,7 +53,21 @@ export default async function UserControlPage() {
                 </td>
                 <td className={styles.table_cell}>{user.nickname ?? 'null'}</td>
                 <td className={styles.table_cell}>{user.email}</td>
-                <td className={styles.table_cell}><Code color='danger'>관리자</Code></td>
+                <td className={styles.table_cell}>
+                  {user.roles && user.roles.length > 0 ? (() => {
+                    const role = JSON.parse(user.roles[0]).role;
+
+                    if (role === 'admin') {
+                      return <Code color='danger'>{role}</Code>
+                    } else if (role === 'student') {
+                      return <Code color='primary'>{role}</Code>
+                    } else if (role === 'professor') {
+                      return <Code color='warning'>{role}</Code>
+                    } else if (role === 'staff') {
+                      return <Code color='secondary'>{role}</Code>
+                    }
+                  }) () : "No role"}
+                </td>
                 <td className={styles.table_cell}>{user.createdAt.getFullYear()}년 {user.createdAt.getMonth() + 1}월 {user.createdAt.getDate()}일</td>
               </tr>
             ))}

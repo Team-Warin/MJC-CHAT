@@ -1,36 +1,47 @@
-import styles from '@/styles/dashboard.module.css'
-import { Link } from "@nextui-org/link"
+"use client";
+
+import styles from '@/styles/dashboard.module.css';
 import { Button } from '@nextui-org/button';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function AdminSidebar() {
+    const router = useRouter();
+    const pathname = usePathname();
+
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.sidebarLinks}>
-                <Link>
-                    <Button
-                        disabled
-                    >
-                        DASHBOARD
-                    </Button>
-                </Link>
-                <Link
-                    href='/admin/user'
+                <Button
+                    disabled
                 >
-                    <Button
-                        variant='light'
-                    >
-                        USER
-                    </Button>
-                </Link>
-                <Link
-                    href='/admin/question'
+                    DASHBOARD
+                </Button>
+
+                <Button
+                    onClick={() => {
+                        router.replace('/admin/user');
+                    }}
+                    variant={pathname === "/admin/user" ? 'bordered' : 'light'}
                 >
-                    <Button
-                        variant='light'
-                    >
-                        QUESTION
-                    </Button>
-                </Link>
+                    USER
+                </Button>
+                <Button
+                    onClick={() => {
+                        router.replace('/admin/question');
+                    }}
+                    variant={pathname === "/admin/question" ? 'bordered' : 'light'}
+                >
+                    QUESTION
+                </Button>
+                <Button
+                    onClick={() => {
+                        router.replace('/admin/analytics');
+                    }}
+                    variant={pathname === "/admin/analytics" ? 'bordered' : 'light'}
+                >
+                    ANALYTICS
+                </Button>
             </div>
         </div>
     );
