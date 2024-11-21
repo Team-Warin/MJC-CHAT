@@ -56,7 +56,12 @@ export const dev: Profile[] = [
     name: '진건희',
     studentId: 2024931024,
     avatar: '/avatar/kunhee.webp',
-    role: ['Project Developer', 'Back-End Developer', 'Product Manager'],
+    role: [
+      'Project Developer',
+      'Back-End Developer',
+      'Product Manager',
+      'Ai Stream',
+    ],
     social: {
       github: 'gh100435',
       email: 'gh10043510@gmail.com',

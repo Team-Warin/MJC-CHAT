@@ -136,7 +136,7 @@ function ChatroomItem({ chatRoom }: { chatRoom: ChatRoom }) {
         pathname === `/chat/${chatRoom.id}` ? 'bg-slate-100' : ''
       }`}
       key={chatRoom.id}
-      onClick={(e) => {
+      onClick={() => {
         router.replace(`/chat/${chatRoom.id}`);
       }}
     >

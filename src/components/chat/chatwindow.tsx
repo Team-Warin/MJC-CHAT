@@ -7,10 +7,11 @@ import style from '@/styles/chat.module.css';
 
 import Image from 'next/image';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import { motion } from 'framer-motion';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 
 import { createChatRoom } from '@/action/chatRoomHandler';
 
@@ -25,6 +26,12 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
+import { useChat } from 'ai/react';
+import Link from 'next/link';
+
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
+
 export default function ChatWindow({
   session,
   isOpen,
@@ -35,17 +42,49 @@ export default function ChatWindow({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
+  const { id: chatRoomId } = useParams();
 
-  const [value, setValue] = useState('');
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: `/api/chatrooms/${chatRoomId}/conversations`,
+    });
+
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const sendButtonRef = useRef<HTMLButtonElement>(null);
+
+  const chatBodyRef = useRef<HTMLDivElement | null>(null);
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    window.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter' && input.length > 0) {
+        await sendButtonRef.current?.click();
+        await inputRef.current?.focus();
+      }
+    });
+
+    return () => {
+      window.removeEventListener('keydown', () => {});
+    };
+  }, [input]);
+
+  useEffect(() => {
+    if (messageEndRef.current && chatBodyRef.current) {
+      chatBodyRef.current.scrollTo({
+        top: messageEndRef.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages]);
 
   return (
     <main className={style.chat_window}>
       <div className={style.chat_window_header}>
         <div className={style.title}>
-          <div className={style.logo}>
+          <Link href='/' className={style.logo}>
             <Image src={'/webps/mjc.webp'} alt='logo' width={30} height={30} />
             <h1>명전이</h1>
-          </div>
+          </Link>
           {isOpen ? null : (
             <Button
               className='flex-shrink-0'
@@ -67,40 +106,115 @@ export default function ChatWindow({
           )}
         </div>
       </div>
-      <div className={style.chat_window_body}>
-        <Conversation userType='user'>
-          <span>안녕하세요.</span>
-        </Conversation>
-        <Conversation userType='ai'>
-          <span>안녕하세요. 저는 명지전문대학 학사도우미 명전이 입니다.</span>
-        </Conversation>
+      <div ref={chatBodyRef} className={style.chat_window_body}>
+        {messages.map((message) => {
+          if (message.toolInvocations) return null;
+
+          return (
+            <Conversation
+              userType={message.role === 'user' ? 'user' : 'ai'}
+              key={message.id}
+            >
+              {message.role === 'assistant' ? (
+                <MDXContent>{message.content}</MDXContent>
+              ) : (
+                <span className={style.content}>{message.content}</span>
+              )}
+            </Conversation>
+          );
+        })}
+        {isLoading &&
+        (messages[messages.length - 1].role !== 'assistant' ||
+          messages[messages.length - 1]?.content.length === 0) ? (
+          <Conversation userType='ai'>
+            <Loading />
+          </Conversation>
+        ) : null}
+        <div ref={messageEndRef}></div>
       </div>
       <div className={style.chat_window_footer}>
-        <div>
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className={style.chat_form}
+        >
           <Textarea
-            value={value}
-            onValueChange={setValue}
+            disabled={isLoading}
+            ref={inputRef}
+            value={input}
+            onChange={handleInputChange}
             size='lg'
             variant='bordered'
             minRows={2}
+            maxRows={4}
             placeholder='자유롭게 대화해 보세요.'
           />
           <motion.div
             initial={{ scale: 0 }}
-            animate={{ scale: value.length > 0 ? 1 : 0 }}
+            animate={{
+              scale: input.replace(/\s/g, '').length > 0 ? 1 : 0,
+            }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
           >
-            <Button isIconOnly radius='full'>
+            <Button
+              disabled={input.replace(/\s/g, '').length === 0}
+              isIconOnly
+              type='submit'
+              radius='full'
+              ref={sendButtonRef}
+            >
               <FontAwesomeIcon size='sm' icon={faArrowRight} />
             </Button>
           </motion.div>
-        </div>
+        </form>
         <p>
           명전이는 부정확한 정보를 제공할 수 있으며, 이는 명지전문대학의 입장을
           대변하지 않습니다.
         </p>
       </div>
     </main>
+  );
+}
+
+function MDXContent({ children }: { children: string }) {
+  const [content, setContent] = useState<MDXRemoteSerializeResult | null>(null);
+  useEffect(() => {
+    (async () => {
+      if (children)
+        setContent(
+          await serialize(children, {
+            mdxOptions: { development: process.env.NODE_ENV === 'development' },
+          })
+        );
+    })();
+  }, [children]);
+
+  if (content) {
+    return (
+      <div className={style.content}>
+        <MDXRemote {...content} />
+      </div>
+    );
+  }
+}
+
+function Loading() {
+  const texts = '명전이가 답변을 생성중입니다...';
+
+  return (
+    <div>
+      {texts.split('').map((text, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0.2, 1, 0.2] }}
+          transition={{ duration: 1, delay: 0.2 * i, repeat: Infinity }}
+        >
+          {text}
+        </motion.span>
+      ))}
+    </div>
   );
 }

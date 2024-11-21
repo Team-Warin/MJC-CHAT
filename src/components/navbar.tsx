@@ -86,34 +86,32 @@ export default function Navbar({ session }: { session: Session | null }) {
     pathname?.startsWith('/auth/') ||
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/api') ||
-    pathname?.startsWith('/chat')
+    pathname?.startsWith('/chat') ||
+    pathname?.startsWith('/support/write')
   )
     return null;
 
   return (
     <motion.div
       ref={navbar}
-      className={`${style.container} ${navbarBg ? 'bg-white shadow-md' : ''}`}
+      className={`${style.container} ${
+        pathname?.startsWith('/support') ? 'bg-white !relative' : ''
+      } ${navbarBg ? 'bg-white shadow-md' : ''}`}
     >
       <Link href='/' className={style.logo}>
         <Image src={'/webps/mjc.webp'} alt='logo' width={30} height={30} />
         <h1 className='text-mjcblue'>명전이</h1>
       </Link>
       <div className={style.menu}>
-        {menus.map((menu) => (
-          <Link href={menu.href} key={menu.href}>
-            <p
-              className={style.hoverText}
-              style={
-                pathname === menu.href
-                  ? { color: '#002968', fontWeight: 'bold' }
-                  : {}
-              }
-            >
-              {menu.name}
-            </p>
-          </Link>
-        ))}
+        {menus.map((menu) => {
+          if (!session && menu.href.startsWith('/support')) return null;
+
+          return (
+            <Link href={menu.href} key={menu.href}>
+              <p className={style.hoverText}>{menu.name}</p>
+            </Link>
+          );
+        })}
         <div className={style.auth}>
           {session ? (
             <UserMenu session={session} />
@@ -168,7 +166,7 @@ export function UserMenu({
         <Avatar
           isBordered
           radius='lg'
-          size='md'
+          size={size}
           src={session?.user?.avatar ?? ''}
         />
       </DropdownTrigger>
