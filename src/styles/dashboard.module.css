@@ -1,11 +1,33 @@
-.container {
-  @apply max-w-[calc(100%-16rem)] w-full h-dvh p-10;
+/* sidebar part */
+
+.sidebar {
+    @apply w-80 h-dvh border-r border-gray-200;
 }
 
-.user_management {
-  @apply flex flex-col gap-5 p-5 bg-white shadow-md rounded-2xl border border-gray-200;
+.sidebarLinks {
+    @apply w-full h-dvh flex flex-col items-center gap-2 p-4;
 
-  & > h1 {
-    @apply text-2xl font-semibold;
-  }
+    & > button {
+        @apply w-full font-bold;
+    }
+}
+
+.dashboard_window {
+    @apply grow p-12;
+
+    & > h1 {
+        @apply text-2xl font-bold;
+    }
+}
+
+.dashboard_table {
+    @apply mt-4 table-auto border w-full shadow-md;
+
+    & > thead {
+        @apply bg-gray-100;
+    }
+
+    .table_cell {
+        @apply px-6 py-2 justify-items-center text-center;
+    }
 }
