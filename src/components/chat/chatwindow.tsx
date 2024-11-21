@@ -107,14 +107,23 @@ export default function ChatWindow({
         </div>
       </div>
       <div ref={chatBodyRef} className={style.chat_window_body}>
-        {messages.map((message) => (
-          <Conversation
-            userType={message.role === 'user' ? 'user' : 'ai'}
-            key={message.id}
-          >
-            <MDXContent>{message.content}</MDXContent>
+        {messages.map((message) => {
+          if (message.toolInvocations) return null;
+
+          return (
+            <Conversation
+              userType={message.role === 'user' ? 'user' : 'ai'}
+              key={message.id}
+            >
+              <MDXContent>{message.content}</MDXContent>
+            </Conversation>
+          );
+        })}
+        {isLoading && messages[messages.length - 1].role !== 'assistant' ? (
+          <Conversation userType='ai'>
+            <Loading />
           </Conversation>
-        ))}
+        ) : null}
         <div ref={messageEndRef}></div>
       </div>
       <div className={style.chat_window_footer}>
@@ -183,4 +192,23 @@ function MDXContent({ children }: { children: string }) {
       </div>
     );
   }
+}
+
+function Loading() {
+  const texts = '명전이가 답변을 생성중입니다...';
+
+  return (
+    <div>
+      {texts.split('').map((text, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0.2, 1, 0.2] }}
+          transition={{ duration: 1, delay: 0.2 * i, repeat: Infinity }}
+        >
+          {text}
+        </motion.span>
+      ))}
+    </div>
+  );
 }
