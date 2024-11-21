@@ -5,6 +5,8 @@ import * as motion from 'framer-motion/client';
 import React from 'react';
 import Image from 'next/image';
 
+import Markdown from './markdown/markdown';
+
 export default function Conversation({
   userType,
   children,
@@ -28,7 +30,7 @@ export default function Conversation({
         height={27}
         className={style.icon}
       />
-      {typeof children === 'string' ? <span>{children}</span> : children}
+      {typeof children === 'string' ? <Markdown source={children} /> : children}
     </motion.div>
   );
 }

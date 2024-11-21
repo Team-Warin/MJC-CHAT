@@ -7,7 +7,7 @@ import style from '@/styles/chat.module.css';
 
 import Image from 'next/image';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { motion } from 'framer-motion';
 
@@ -23,12 +23,14 @@ import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
 import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
-import { ScrollShadow } from '@nextui-org/scroll-shadow';
 
 import Conversation from '@/components/conversation';
 
 import { useChat } from 'ai/react';
 import Link from 'next/link';
+
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize';
 
 export default function ChatWindow({
   session,
@@ -42,12 +44,16 @@ export default function ChatWindow({
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();
 
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: `/api/chatrooms/${chatRoomId}/conversations`,
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      api: `/api/chatrooms/${chatRoomId}/conversations`,
+    });
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const sendButtonRef = useRef<HTMLButtonElement>(null);
+
+  const chatBodyRef = useRef<HTMLDivElement | null>(null);
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     window.addEventListener('keydown', async (e) => {
@@ -61,6 +67,15 @@ export default function ChatWindow({
       window.removeEventListener('keydown', () => {});
     };
   }, [input]);
+
+  useEffect(() => {
+    if (messageEndRef.current && chatBodyRef.current) {
+      chatBodyRef.current.scrollTo({
+        top: messageEndRef.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages]);
 
   return (
     <main className={style.chat_window}>
@@ -91,17 +106,16 @@ export default function ChatWindow({
           )}
         </div>
       </div>
-      <div className={style.chat_window_body}>
-        <ScrollShadow className={style.chat_window_body_scroll}>
-          {messages.map((message) => (
-            <Conversation
-              userType={message.role === 'user' ? 'user' : 'ai'}
-              key={message.id}
-            >
-              <span>{message.content}</span>
-            </Conversation>
-          ))}
-        </ScrollShadow>
+      <div ref={chatBodyRef} className={style.chat_window_body}>
+        {messages.map((message) => (
+          <Conversation
+            userType={message.role === 'user' ? 'user' : 'ai'}
+            key={message.id}
+          >
+            <MDXContent>{message.content}</MDXContent>
+          </Conversation>
+        ))}
+        <div ref={messageEndRef}></div>
       </div>
       <div className={style.chat_window_footer}>
         <form
@@ -111,6 +125,7 @@ export default function ChatWindow({
           className={style.chat_form}
         >
           <Textarea
+            disabled={isLoading}
             ref={inputRef}
             value={input}
             onChange={handleInputChange}
@@ -146,4 +161,26 @@ export default function ChatWindow({
       </div>
     </main>
   );
+}
+
+function MDXContent({ children }: { children: string }) {
+  const [content, setContent] = useState<MDXRemoteSerializeResult | null>(null);
+  useEffect(() => {
+    (async () => {
+      if (children)
+        setContent(
+          await serialize(children, {
+            mdxOptions: { development: process.env.NODE_ENV === 'development' },
+          })
+        );
+    })();
+  }, [children]);
+
+  if (content) {
+    return (
+      <div className={style.content}>
+        <MDXRemote {...content} />
+      </div>
+    );
+  }
 }

@@ -21,14 +21,6 @@
     @apply justify-start;
   }
 
-  &[data-type='user'] {
-    @apply justify-end;
-
-    & > span {
-      @apply order-first text-end;
-    }
-  }
-
   & > span {
     @apply w-[60%];
   }
@@ -76,11 +68,7 @@
   }
 }
 .chat_window_body {
-  @apply ps-[10%] pe-[10%] flex-1 w-full;
-
-  & > .chat_window_body_scroll {
-    @apply flex flex-col gap-2;
-  }
+  @apply ps-[15%] pe-[15%] flex flex-col gap-8 flex-1 w-full overflow-y-scroll;
 }
 
 .chatroom_nav_body {
@@ -100,7 +88,7 @@
 }
 
 .chat_window_footer {
-  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-[10%] pe-[10%];
+  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-[15%] pe-[15%];
 
   & > form {
     @apply relative w-full flex items-center gap-2;

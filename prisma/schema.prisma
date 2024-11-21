@@ -6,7 +6,7 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
-  extensions = [uuid_ossp(map: "uuid-ossp")]
+  extensions = [uuid_ossp(map: "uuid-ossp"), vector]
 }
 
 model User {
@@ -107,6 +107,13 @@ model Report {
   messages       Json
   title          String
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Documents {
+  id      Int                    @id @default(autoincrement())
+  content String
+  latest  DateTime               @default(now())
+  vector  Unsupported("vector")?
 }
 
 enum SenderType {
