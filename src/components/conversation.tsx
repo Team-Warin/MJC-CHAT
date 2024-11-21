@@ -1,11 +1,15 @@
 import style from '@/styles/chat.module.css';
+
 import React from 'react';
 import Image from 'next/image';
+
 import { Button } from '@nextui-org/button';
 import { useState } from 'react';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkRegular, faComment } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 export default function Conversation({
 
   userType,
