@@ -25,9 +25,9 @@ export default async function UserControlPage() {
       <div>
         <Sidebar />
       </div>
-      <div className={styles.user_window}>
+      <div className={styles.dashboard_window}>
         <h1>UserControl Page</h1>
-        <table className={styles.user_table}>
+        <table className={styles.dashboard_table}>
           <thead>
             <tr>
               {Object.keys(selectedFields).map((field, index) => (
@@ -45,8 +45,8 @@ export default async function UserControlPage() {
                     <Image
                       src={user.avatar}
                       alt={`${user.nickname ?? 'User' }`}
-                      width={30}
-                      height={30}
+                      width={27}
+                      height={27}
                       className='rounded-lg'
                     />
                   ) : ('No Avatar')}

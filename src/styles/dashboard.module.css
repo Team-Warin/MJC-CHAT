@@ -16,8 +16,7 @@
     }
 }
 
-/* User Control page part */
-.user_window {
+.dashboard_window {
     @apply grow p-12;
 
     & > h1 {
@@ -25,7 +24,7 @@
     }
 }
 
-.user_table {
+.dashboard_table {
     @apply mt-4 table-auto border w-full shadow-md;
 
     & > thead {
