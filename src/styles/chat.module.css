@@ -21,8 +21,8 @@
     @apply justify-start;
   }
 
-  & > span {
-    @apply w-[60%];
+  & > .content {
+    @apply w-full flex-shrink-0;
   }
 }
 

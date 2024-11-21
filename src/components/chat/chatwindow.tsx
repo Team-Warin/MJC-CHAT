@@ -115,11 +115,17 @@ export default function ChatWindow({
               userType={message.role === 'user' ? 'user' : 'ai'}
               key={message.id}
             >
-              <MDXContent>{message.content}</MDXContent>
+              {message.role === 'assistant' ? (
+                <MDXContent>{message.content}</MDXContent>
+              ) : (
+                <span className={style.content}>{message.content}</span>
+              )}
             </Conversation>
           );
         })}
-        {isLoading && messages[messages.length - 1].role !== 'assistant' ? (
+        {isLoading &&
+        (messages[messages.length - 1].role !== 'assistant' ||
+          messages[messages.length - 1]?.content.length === 0) ? (
           <Conversation userType='ai'>
             <Loading />
           </Conversation>
