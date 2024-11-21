@@ -86,34 +86,32 @@ export default function Navbar({ session }: { session: Session | null }) {
     pathname?.startsWith('/auth/') ||
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/api') ||
-    pathname?.startsWith('/chat')
+    pathname?.startsWith('/chat') ||
+    pathname?.startsWith('/support/write')
   )
     return null;
 
   return (
     <motion.div
       ref={navbar}
-      className={`${style.container} ${navbarBg ? 'bg-white shadow-md' : ''}`}
+      className={`${style.container} ${
+        pathname?.startsWith('/support') ? 'bg-white !relative' : ''
+      } ${navbarBg ? 'bg-white shadow-md' : ''}`}
     >
       <Link href='/' className={style.logo}>
         <Image src={'/webps/mjc.webp'} alt='logo' width={30} height={30} />
         <h1 className='text-mjcblue'>명전이</h1>
       </Link>
       <div className={style.menu}>
-        {menus.map((menu) => (
-          <Link href={menu.href} key={menu.href}>
-            <p
-              className={style.hoverText}
-              style={
-                pathname === menu.href
-                  ? { color: '#002968', fontWeight: 'bold' }
-                  : {}
-              }
-            >
-              {menu.name}
-            </p>
-          </Link>
-        ))}
+        {menus.map((menu) => {
+          if (!session && menu.href.startsWith('/support')) return null;
+
+          return (
+            <Link href={menu.href} key={menu.href}>
+              <p className={style.hoverText}>{menu.name}</p>
+            </Link>
+          );
+        })}
         <div className={style.auth}>
           {session ? (
             <UserMenu session={session} />
@@ -133,13 +131,42 @@ export function UserMenu({
   session: Session | null;
   size?: 'sm' | 'md' | 'lg';
 }) {
+  const pathname = usePathname(); // 현재 경로 확인
+
+  // 드롭다운 항목을 조건에 따라 추가
+  const dropdownItems = [];
+  if (pathname !== '/mypage') {
+    dropdownItems.push(
+      <DropdownItem
+        key='mypage'
+        startContent={<FontAwesomeIcon icon={faUser} />}
+        onClick={() => {
+          window.location.href = '/mypage';
+        }}
+      >
+        마이페이지
+      </DropdownItem>
+    );
+  }
+
+  dropdownItems.push(
+    <DropdownItem
+      key='logout'
+      className='text-danger'
+      color='danger'
+      startContent={<FontAwesomeIcon icon={faRightFromBracket} />}
+    >
+      로그아웃
+    </DropdownItem>
+  );
+
   return (
     <Dropdown>
       <DropdownTrigger>
         <Avatar
           isBordered
           radius='lg'
-          size='md'
+          size={size}
           src={session?.user?.avatar ?? ''}
         />
       </DropdownTrigger>
@@ -152,24 +179,12 @@ export function UserMenu({
           }
         }}
       >
-        <DropdownItem
-          key='mypage'
-          startContent={<FontAwesomeIcon icon={faUser} />}
-        >
-          마이페이지
-        </DropdownItem>
-        <DropdownItem
-          key='logout'
-          className='text-danger'
-          color='danger'
-          startContent={<FontAwesomeIcon icon={faRightFromBracket} />}
-        >
-          로그아웃
-        </DropdownItem>
+        {dropdownItems}
       </DropdownMenu>
     </Dropdown>
   );
 }
+
 
 export function LoginButton({ pathname }: { pathname: string | null }) {
   return (

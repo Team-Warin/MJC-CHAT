@@ -1,9 +1,10 @@
+import type { NextConfig } from 'next';
+
 import createMDX from '@next/mdx';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: false,
-  transpilePackages: ['three'],
+  transpilePackages: ['three', 'next-mdx-remote'],
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'], // .md 파일도 페이지로 사용할 수 있음.
   images: {
     remotePatterns: [
@@ -13,6 +14,12 @@ const nextConfig = {
       },
     ],
   },
+  webpack(config) {
+    config.experiments = { ...config.experiments, topLevelAwait: true };
+    config.externals = [...config.externals, 'hnswlib-node'];
+    return config;
+  },
+  serverExternalPackages: ['hnswlib-node'],
 };
 
 const withMDX = createMDX({});

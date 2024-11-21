@@ -15,6 +15,10 @@ export default auth(async (req) => {
     // return NextResponse.redirect(new URL('/', req.url));
   }
 
+  if (req.nextUrl.pathname.startsWith('/support') && !req.auth?.user) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
   if (req.nextUrl.pathname.startsWith('/chat') && !req.auth?.user) {
     const tempUserId = req.cookies.get('TempUserId');
 

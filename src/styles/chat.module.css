@@ -11,23 +11,23 @@
 }
 
 .paragraph {
-  @apply flex gap-3 items-center font-medium;
+  @apply flex gap-3 font-medium;
 
   & > img {
-    @apply rounded-full;
+    @apply w-[27px] h-[27px] rounded-full;
   }
 
   &[data-type='ai'] {
     @apply justify-start;
   }
 
-  &[data-type='user'] {
-    @apply justify-end;
-
-    & > span {
-      @apply order-first;
-    }
+  & > .content {
+    @apply w-full flex-shrink-0;
   }
+}
+
+.chat_icon {
+  @apply pl-8 pt-1
 }
 
 /* chat window part */
@@ -41,7 +41,32 @@
   & > .title {
     @apply flex items-center gap-5;
   }
+
+  & > .settings {
+    @apply flex;
+  }
 }
+
+.bookmark_btn {
+  @apply mr-2;
+}
+
+.bookmark_list {
+  @apply p-4 flex flex-col gap-3;
+}
+
+.bookmark_items {
+  @apply cursor-pointer border border-slate-300 hover:border-indigo-300 p-3 rounded-lg;
+
+  & > h1 {
+    @apply block text-left text-base;
+  }
+  
+  & > p {
+    @apply block text-left text-sm;
+  }
+}
+
 
 /* navagation part */
 .chatroom_nav {
@@ -72,7 +97,7 @@
   }
 }
 .chat_window_body {
-  @apply ps-72 pe-72 flex-1 w-full;
+  @apply ps-[15%] pe-[15%] flex flex-col gap-8 flex-1 w-full overflow-y-scroll;
 }
 
 .chatroom_nav_body {
@@ -92,9 +117,9 @@
 }
 
 .chat_window_footer {
-  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-72 pe-72;
+  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-[15%] pe-[15%];
 
-  & > div {
+  & > form {
     @apply relative w-full flex items-center gap-2;
 
     & > .send_button {
