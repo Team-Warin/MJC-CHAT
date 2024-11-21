@@ -7,7 +7,6 @@ import { StatusBadge } from './StatusBadge';
 interface InquiryItem {
     id: number;
     title: string;
-    content: string;
     date: string;
     answer?: string;  // 답변 필드 추가
   }
@@ -25,26 +24,26 @@ interface InquiryItem {
   const [inquiries] = useState<InquiryItem[]>([
     {
       id: 1,
-      title: '안녕하세요 저는 명지전문대학에 재학 중인 1학년 학생입니다. 명전이가 귀여운 사실을 개발자 분들도 아시나요?',
-      content: '명전이는 최고로 귀엽습니다.',
+      title: '안녕하세요 저는 명지전문대학에 재학 중인 1학년 학생입니다.',
+      answer: '네, 저희도 명전이가 매우 귀엽다고 생각합니다!',
       date: new Date().toISOString().split('T')[0]
     },
     {
       id: 2,
       title: '두 번째 문의',
-      content: '두 번째 문의 내용입니다. 여기에는 중요한 정보가 담겨있습니다.',
+      answer: '두 번째 문의 내용입니다. 여기에는 중요한 정보가 담겨있습니다.',
       date: generateRandomDate()
     },
     {
       id: 3,
       title: '세 번째 문의',
-      content: '세 번째 문의 대한 상세한 내용을 여기에 작성합니다.',
+      answer: '',
       date: generateRandomDate()
     },
     {
       id: 4,
       title: '네 번째 문의',
-      content: '네 번째 문의 이 내용은 나중에 다시 확인하고 싶은 정보입니다.',
+      answer: '네 번째 문의 이 내용은 나중에 다시 확인하고 싶은 정보입니다.',
       date: generateRandomDate()
     }
   ]);
@@ -61,9 +60,8 @@ interface InquiryItem {
   const handleSearch = () => {
     const searchResults = inquiries.filter((item) => {
       const titleMatch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const contentMatch = item.content.toLowerCase().includes(searchTerm.toLowerCase());
       const answerMatch = item.answer?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
-      return titleMatch || contentMatch || answerMatch;
+      return titleMatch || answerMatch;
     }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   
     setFilteredInquiries(searchResults);
@@ -152,10 +150,6 @@ interface InquiryItem {
               {/* 전체 제목 */}
               <div className="p-4 bg-gray-50 rounded-md mb-[15px]">
                 {item.title}
-              </div>
-              {/* 내용 */}
-              <div className="p-4 bg-gray-50 rounded-md">
-                {item.content}
               </div>
               {/* 답변이 있는 경우 */}
               {item.answer && (
