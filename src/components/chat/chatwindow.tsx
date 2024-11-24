@@ -29,6 +29,7 @@ import Conversation from '@/components/conversation';
 import { useChat } from 'ai/react';
 import Link from 'next/link';
 
+import { components, options } from '@/components/markdown/markdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 
@@ -46,6 +47,7 @@ export default function ChatWindow({
 
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
+      maxSteps: 5,
       api: `/api/chatrooms/${chatRoomId}/conversations`,
     });
 
@@ -114,6 +116,7 @@ export default function ChatWindow({
             <Conversation
               userType={message.role === 'user' ? 'user' : 'ai'}
               key={message.id}
+              id={message.id}
             >
               {message.role === 'assistant' ? (
                 <MDXContent>{message.content}</MDXContent>
@@ -124,9 +127,9 @@ export default function ChatWindow({
           );
         })}
         {isLoading &&
-        (messages[messages.length - 1].role !== 'assistant' ||
+        (messages[messages.length - 1]?.role !== 'assistant' ||
           messages[messages.length - 1]?.content.length === 0) ? (
-          <Conversation userType='ai'>
+          <Conversation userType='ai' id={'loding'}>
             <Loading />
           </Conversation>
         ) : null}
@@ -194,7 +197,7 @@ function MDXContent({ children }: { children: string }) {
   if (content) {
     return (
       <div className={style.content}>
-        <MDXRemote {...content} />
+        <MDXRemote {...content} components={components} />
       </div>
     );
   }

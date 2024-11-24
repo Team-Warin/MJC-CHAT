@@ -1,0 +1,29 @@
+.link {
+  @apply text-blue-500;
+}
+
+.pre {
+  @apply border border-gray-200 rounded-md;
+}
+
+.fileCode {
+  @apply px-4 py-4 text-sm flex flex-col;
+}
+
+.code_Line {
+  counter-increment: line;
+}
+
+.code_Line::before {
+  display: inline-block;
+  width: 2em;
+  padding-right: 0.8em;
+  color: rgb(119, 119, 119);
+  content: counter(line);
+  alt: '';
+  text-align: end;
+  -webkit-user-select: none !important;
+  -moz-user-select: -moz-none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}

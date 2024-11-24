@@ -14,7 +14,7 @@
   @apply flex gap-3 font-medium;
 
   & > img {
-    @apply w-[27px] h-[27px] rounded-full;
+    @apply w-[27px] h-[27px] rounded-full sticky;
   }
 
   &[data-type='ai'] {
@@ -27,7 +27,7 @@
 }
 
 .chat_icon {
-  @apply pl-8 pt-1
+  @apply pl-8 pt-1;
 }
 
 /* chat window part */
@@ -61,12 +61,11 @@
   & > h1 {
     @apply block text-left text-base;
   }
-  
+
   & > p {
     @apply block text-left text-sm;
   }
 }
-
 
 /* navagation part */
 .chatroom_nav {

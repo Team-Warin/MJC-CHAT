@@ -2,3 +2,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hljs-comment {
+  color: #ababab;
+  font-style: italic;
+}
+
+.hljs-keyword {
+  color: #ca99eb;
+}
+
+.hljs-string {
+  color: #c3e88d;
+}
+
+.hljs-tag {
+  color: #89ddff;
+}
+
+.hljs-tag .hljs-name {
+  color: #f49094;
+}
+
+.hljs-title.function_ {
+  color: #82aaff;
+}
+
+.hljs-attr {
+  color: white;
+}
+
+.hljs-built_in {
+  color: #ffcb6b;
+}
+
+.hljs-params {
+  color: #ff5370;
+}
+
+.hljs-property {
+  color: #82aaff;
+}
