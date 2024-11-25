@@ -69,3 +69,51 @@
     }
   }
 }
+
+.support_content_detail_header_back {
+  @apply absolute top-20 left-10 text-2xl;
+}
+
+.support_content_detail {
+  @apply w-full px-[10vw] mt-20;
+}
+
+.support_content_detail_header {
+  @apply flex justify-between items-center;
+
+  & > h1 {
+    @apply text-3xl font-black;
+  }
+}
+
+.support_conversation_item {
+  @apply mt-10 w-full shadow-md p-5 rounded-lg bg-slate-50;
+}
+
+.support_conversation_header {
+  @apply flex items-center gap-2;
+
+  & > img {
+    @apply rounded-lg;
+  }
+}
+
+.support_conversation_content {
+  @apply mt-5;
+
+  & > .support_conversation {
+    @apply font-bold mb-2;
+  }
+}
+
+.accept {
+  @apply bg-blue-600;
+}
+
+.waiting {
+  @apply bg-yellow-500;
+}
+
+.complete {
+  @apply bg-green-600;
+}

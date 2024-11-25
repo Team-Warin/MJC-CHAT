@@ -100,7 +100,7 @@
 }
 
 .chat_window_body_chat {
-  @apply absolute ps-[15%] pe-[15%] flex flex-col gap-8 w-full overflow-y-scroll z-10;
+  @apply absolute ps-[15%] pe-[15%] flex flex-col gap-8 w-full z-10;
 }
 
 .chat_body_background {
@@ -128,7 +128,7 @@
 }
 
 .chat_window_footer {
-  @apply flex flex-col mb-2 items-center justify-center gap-2 w-full ps-[15%] pe-[15%];
+  @apply flex flex-col mb-4 items-center justify-center gap-2 w-full ps-[15%] pe-[15%];
 
   & > form {
     @apply relative w-full flex items-center gap-2;

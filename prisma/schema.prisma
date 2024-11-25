@@ -109,13 +109,6 @@ model Report {
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Documents {
-  id      Int                    @id @default(autoincrement())
-  content String
-  latest  DateTime               @default(now())
-  vector  Unsupported("vector")?
-}
-
 enum SenderType {
   user
   ai

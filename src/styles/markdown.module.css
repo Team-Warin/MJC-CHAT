@@ -3,7 +3,7 @@
 }
 
 .pre {
-  @apply border border-gray-200 rounded-md;
+  @apply border bg-white border-gray-200 rounded-md mb-2 overflow-scroll;
 }
 
 .fileCode {
@@ -15,6 +15,7 @@
 }
 
 .code_Line::before {
+  @apply me-3;
   display: inline-block;
   width: 2em;
   padding-right: 0.8em;

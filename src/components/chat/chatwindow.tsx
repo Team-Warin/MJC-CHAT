@@ -33,6 +33,7 @@ import Link from 'next/link';
 import { components } from '@/components/markdown/markdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { div } from 'framer-motion/client';
 
 export default function ChatWindow({
   session,
@@ -57,6 +58,9 @@ export default function ChatWindow({
   const chatBodyRef = useRef<HTMLDivElement | null>(null);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     window.addEventListener('keydown', async (e) => {
       if (e.key === 'Enter' && input.length > 0) {
@@ -71,13 +75,54 @@ export default function ChatWindow({
   }, [input]);
 
   useEffect(() => {
-    if (messageEndRef.current && chatBodyRef.current) {
+    const chatBody = chatBodyRef.current;
+
+    if (!chatBody) return;
+
+    const handleScroll = () => {
+      setIsUserScrolling(true);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsUserScrolling(false);
+      }, 2000); // 사용자가 스크롤을 멈춘 후 2초 후에 실행
+    };
+
+    chatBody.addEventListener('scroll', handleScroll);
+
+    return () => {
+      chatBody.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isUserScrolling && messageEndRef.current && chatBodyRef.current) {
       chatBodyRef.current.scrollTo({
         top: messageEndRef.current.offsetTop,
         behavior: 'smooth',
       });
     }
-  }, [messages]);
+  }, [messages, isUserScrolling]);
+
+  function filterMessage(message: string) {
+    message = message.replace(
+      /[^가-힣a-zA-Z0-9\s~`!@#$%^&*()\-_=+[\]{}|\\;:'",.<>]/g,
+      ''
+    ); // 한글, 영어, 숫자, 공백 제외 모두 제거
+
+    if (message.length === 0)
+      message =
+        '죄송합니다. 명전이가 답변을 생성하는 도중 오류가 발생했습니다.';
+    else if (message.includes('<tool'))
+      message =
+        '죄송합니다. 명전이가 제공할 수 없는 정보가 포함되어 있는 것 같습니다.';
+
+    return message;
+  }
 
   return (
     <main className={style.chat_window}>
@@ -109,7 +154,7 @@ export default function ChatWindow({
         </div>
       </div>
       <div ref={chatBodyRef} className={style.chat_window_body}>
-        <div ref={chatBodyRef} className={style.chat_window_body_chat}>
+        <div className={style.chat_window_body_chat}>
           {messages.map((message) => {
             if (message.toolInvocations) return null;
 
@@ -128,6 +173,8 @@ export default function ChatWindow({
                 </Conversation>
               );
             });
+
+            message.content = filterMessage(message.content);
 
             return (
               <Conversation
@@ -219,11 +266,17 @@ function MDXContent({ children }: { children: string }) {
   useEffect(() => {
     (async () => {
       if (children)
-        setContent(
-          await serialize(children, {
-            mdxOptions: { development: process.env.NODE_ENV === 'development' },
-          })
-        );
+        try {
+          setContent(
+            await serialize(children, {
+              mdxOptions: {
+                development: process.env.NODE_ENV === 'development',
+              },
+            })
+          );
+        } catch {
+          setContent(null);
+        }
     })();
   }, [children]);
 
