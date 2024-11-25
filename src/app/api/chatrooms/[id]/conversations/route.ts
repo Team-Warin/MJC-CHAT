@@ -4,9 +4,13 @@ import { NextResponse, NextRequest } from 'next/server';
 import { z } from 'zod';
 
 import { streamText, tool } from 'ai';
-import { ollama } from 'ollama-ai-provider';
+import { createOllama } from 'ollama-ai-provider';
 
 import { getSchedule } from '@/lib/mjc_schedule';
+
+const ollama = createOllama({
+  baseURL: 'http://mjc-chat.asuscomm.com:11434/api'
+});
 
 export async function POST(
   req: NextRequest,
@@ -89,7 +93,7 @@ export async function POST(
 이 외의 소셜 미디어는 제공하지 않습니다.`;
 
   const result = await streamText({
-    model: ollama(process.env.MODEL_NAME ?? 'gemma2_tools:9b'), // env에 모델 이름이 없으면 gemma2_tools:9b를 사용합니다. 정의 된 환경에서는 학습된 Gemma2 모델을 사용합니다.
+    model: ollama(process.env.MODEL_NAME ?? 'gemma2_tools'), // env에 모델 이름이 없으면 gemma2_tools:9b를 사용합니다. 정의 된 환경에서는 학습된 Gemma2 모델을 사용합니다.
     async onFinish({ text, toolCalls, toolResults }) {
       console.log('onFinish', text, toolCalls, toolResults);
     },
