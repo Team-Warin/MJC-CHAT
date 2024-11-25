@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { postReport } from '@/action/postReport';
-import { getChatRooms } from '@/action/getChatRooms';
+import { getChatRooms } from '@/action/chatRoomHandler';
 
 import { Select, SelectItem } from '@nextui-org/select';
 import { Input, Textarea } from '@nextui-org/input';
