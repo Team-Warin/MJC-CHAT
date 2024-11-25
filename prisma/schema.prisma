@@ -102,10 +102,10 @@ model Report {
   conversationId Int?
   userId         String
   createdAt      DateTime @default(now())
-  type           Int
-  status         Int      @default(0)
   messages       Json
+  status         Int      @default(0)
   title          String
+  type           Int
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
