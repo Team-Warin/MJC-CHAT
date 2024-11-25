@@ -23,8 +23,7 @@ export default async function Chat({ params }: { params: { id: string } }) {
   });
 
   const conversations = await prisma.conversation.findMany({
-    where: { chatRoomId },
-    take: 10
+    where: { chatRoomId }
   });
 
   return (
