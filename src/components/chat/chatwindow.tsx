@@ -27,20 +27,23 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
-import { useChat } from 'ai/react';
+import { Message, useChat } from 'ai/react';
 import Link from 'next/link';
 
 import { components } from '@/components/markdown/markdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import { div } from 'framer-motion/client';
+import Chat from '@/app/chat/[id]/page';
 
 export default function ChatWindow({
   session,
+  initialMessages,
   isOpen,
-  setIsOpen,
+  setIsOpen
 }: {
   session: Session | null;
+  initialMessages: Array<Message>
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -49,7 +52,9 @@ export default function ChatWindow({
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({
-      api: `/api/chatrooms/${chatRoomId}/conversations`,
+      api: '/api/chat',
+      body: { id: chatRoomId },
+      initialMessages
     });
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -70,7 +75,7 @@ export default function ChatWindow({
     });
 
     return () => {
-      window.removeEventListener('keydown', () => {});
+      window.removeEventListener('keydown', () => { });
     };
   }, [input]);
 
@@ -191,8 +196,8 @@ export default function ChatWindow({
             );
           })}
           {isLoading &&
-          (messages[messages.length - 1]?.role !== 'assistant' ||
-            messages[messages.length - 1]?.content.length === 0) ? (
+            (messages[messages.length - 1]?.role !== 'assistant' ||
+              messages[messages.length - 1]?.content.length === 0) ? (
             <Conversation userType='ai' id={'loding'}>
               <Loading />
             </Conversation>
