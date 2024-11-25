@@ -96,7 +96,19 @@
   }
 }
 .chat_window_body {
-  @apply ps-[15%] pe-[15%] flex flex-col gap-8 flex-1 w-full overflow-y-scroll;
+  @apply relative flex flex-col gap-8 flex-1 overflow-y-scroll;
+}
+
+.chat_window_body_chat {
+  @apply absolute ps-[15%] pe-[15%] flex flex-col gap-8 w-full overflow-y-scroll z-10;
+}
+
+.chat_body_background {
+  @apply absolute flex items-center justify-center top-0 left-0 w-full h-full;
+
+  & > img {
+    @apply opacity-15 select-none;
+  }
 }
 
 .chatroom_nav_body {

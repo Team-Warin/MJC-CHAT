@@ -18,6 +18,7 @@ import { createChatRoom } from '@/action/chatRoomHandler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faStop } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
@@ -29,7 +30,7 @@ import Conversation from '@/components/conversation';
 import { useChat } from 'ai/react';
 import Link from 'next/link';
 
-import { components, options } from '@/components/markdown/markdown';
+import { components } from '@/components/markdown/markdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 
@@ -45,9 +46,8 @@ export default function ChatWindow({
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({
-      maxSteps: 5,
       api: `/api/chatrooms/${chatRoomId}/conversations`,
     });
 
@@ -109,31 +109,57 @@ export default function ChatWindow({
         </div>
       </div>
       <div ref={chatBodyRef} className={style.chat_window_body}>
-        {messages.map((message) => {
-          if (message.toolInvocations) return null;
+        <div ref={chatBodyRef} className={style.chat_window_body_chat}>
+          {messages.map((message) => {
+            if (message.toolInvocations) return null;
 
-          return (
-            <Conversation
-              userType={message.role === 'user' ? 'user' : 'ai'}
-              key={message.id}
-              id={message.id}
-            >
-              {message.role === 'assistant' ? (
-                <MDXContent>{message.content}</MDXContent>
-              ) : (
-                <span className={style.content}>{message.content}</span>
-              )}
+            serialize(message.content, {
+              mdxOptions: {
+                development: process.env.NODE_ENV === 'development',
+              },
+            }).catch(() => {
+              return (
+                <Conversation
+                  userType={message.role === 'user' ? 'user' : 'ai'}
+                  key={message.id}
+                  id={message.id}
+                >
+                  <span className={style.content}>{message.content}</span>
+                </Conversation>
+              );
+            });
+
+            return (
+              <Conversation
+                userType={message.role === 'user' ? 'user' : 'ai'}
+                key={message.id}
+                id={message.id}
+              >
+                {message.role === 'assistant' ? (
+                  <MDXContent>{message.content}</MDXContent>
+                ) : (
+                  <span className={style.content}>{message.content}</span>
+                )}
+              </Conversation>
+            );
+          })}
+          {isLoading &&
+          (messages[messages.length - 1]?.role !== 'assistant' ||
+            messages[messages.length - 1]?.content.length === 0) ? (
+            <Conversation userType='ai' id={'loding'}>
+              <Loading />
             </Conversation>
-          );
-        })}
-        {isLoading &&
-        (messages[messages.length - 1]?.role !== 'assistant' ||
-          messages[messages.length - 1]?.content.length === 0) ? (
-          <Conversation userType='ai' id={'loding'}>
-            <Loading />
-          </Conversation>
-        ) : null}
-        <div ref={messageEndRef}></div>
+          ) : null}
+          <div ref={messageEndRef}></div>
+        </div>
+        <div className={style.chat_body_background}>
+          <Image
+            src={'/mascot/pos_1.svg'}
+            alt='logo'
+            width={300}
+            height={300}
+          />
+        </div>
       </div>
       <div className={style.chat_window_footer}>
         <form
@@ -156,7 +182,7 @@ export default function ChatWindow({
           <motion.div
             initial={{ scale: 0 }}
             animate={{
-              scale: input.replace(/\s/g, '').length > 0 ? 1 : 0,
+              scale: input.replace(/\s/g, '').length || isLoading ? 1 : 0,
             }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
@@ -167,8 +193,15 @@ export default function ChatWindow({
               type='submit'
               radius='full'
               ref={sendButtonRef}
+              onPress={() => {
+                if (isLoading) stop();
+              }}
             >
-              <FontAwesomeIcon size='sm' icon={faArrowRight} />
+              {isLoading ? (
+                <FontAwesomeIcon size='sm' icon={faStop} />
+              ) : (
+                <FontAwesomeIcon size='sm' icon={faArrowRight} />
+              )}
             </Button>
           </motion.div>
         </form>
