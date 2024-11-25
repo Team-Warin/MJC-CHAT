@@ -2,7 +2,7 @@ import type { Message } from "ai";
 
 import prisma from "@/lib/prisma";
 
-import { z } from 'zod';
+import { number, z } from 'zod';
 
 import { createOllama } from 'ollama-ai-provider';
 import { streamText, tool, convertToCoreMessages } from 'ai';
@@ -20,9 +20,13 @@ export async function POST(request: Request) {
         messages: Array<Message>;
     } = await request.json();
 
+    const chatRoomId = Number(id);
+
     const coreMessages = convertToCoreMessages(messages);
     const userMessage = getMostRecentUserMessage(coreMessages);
     const userMessageContent = userMessage?.content.toString();
+
+    console.log(coreMessages);
 
     const now = new Date();
     const options: Intl.DateTimeFormatOptions = {
@@ -119,22 +123,25 @@ export async function POST(request: Request) {
             console.log('onFinish', text, toolCalls, toolResults);
             console.log(userMessageContent);
 
-            await prisma.conversation.create({
-                data: {
-                    chatRoomId: id,
-                    sender: "user",
-                    message: userMessageContent ?? ""
+            try {
+                await prisma.conversation.createMany({
+                    data: [
+                        {
+                            chatRoomId,
+                            sender: "user",
+                            message: userMessageContent ?? ""
+                        },
+                        {
+                            chatRoomId,
+                            sender: 'ai',
+                            message: text
+                        }
+                    ]
+                });
+            } catch (error: any) {
+                    console.error(error.message);
                 }
-            });
-
-            await prisma.conversation.create({
-                data: {
-                    chatRoomId: id,
-                    sender: 'ai',
-                    message: text
-                }
-            });
-        }
+            }
     });
 
     return result.toDataStreamResponse();
