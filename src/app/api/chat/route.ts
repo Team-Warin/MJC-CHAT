@@ -2,13 +2,21 @@ import type { Message } from "ai";
 
 import prisma from "@/lib/prisma";
 
-import { number, z } from 'zod';
+import { z } from 'zod';
+
+import { isAIMessageChunk } from "@langchain/core/messages";
 
 import { createOllama } from 'ollama-ai-provider';
 import { streamText, tool, convertToCoreMessages } from 'ai';
+import { LangChainAdapter } from 'ai';
 
 import { getSchedule } from '@/lib/mjc_schedule';
-import { getMostRecentUserMessage } from '@/lib/utils';
+import { formatMessage, convertVercelMessageToLangChainMessage, convertLangChainMessageToVercelMessage, formatMessageJson } from '@/lib/utils';
+
+import { input } from "@nextui-org/theme";
+
+import { agent } from '@/lib/ai/agent';
+import { model } from "@/lib/ai/model";
 
 const ollama = createOllama({
     baseURL: process.env.MODEL_URL // .env에 OLLMA_URL 설정 (예 http://mjc-chat.asuscomm.com:11434/api)
@@ -22,6 +30,7 @@ export async function POST(request: Request) {
 
     const chatRoomId = Number(id);
 
+    /*
     const coreMessages = convertToCoreMessages(messages);
     const userMessage = getMostRecentUserMessage(coreMessages);
     const userMessageContent = userMessage?.content.toString();
@@ -143,6 +152,32 @@ export async function POST(request: Request) {
                 }
             }
     });
+    */
 
-    return result.toDataStreamResponse();
+    const previousMessages = messages.map(formatMessageJson);
+    const currentMessageContent = messages[messages.length - 1].content;
+
+    console.log(previousMessages, currentMessageContent);
+
+    const streamEvents = await agent.streamEvents(
+        { messages: previousMessages },
+        { version: "v2" },
+    );
+
+    // 청크 뜯어서 분석
+    const stream = new ReadableStream({
+        async start(controller) {
+            for await (const { event, data, tags } of streamEvents) {
+                if (event === 'on_chat_model_stream') {
+                    if (!!data.chunk.content) {
+                        const aiMessage = convertLangChainMessageToVercelMessage(data.chunk);
+                        controller.enqueue(aiMessage);
+                    }
+                }
+            }
+            controller.close();
+        }
+    });
+
+    return LangChainAdapter.toDataStreamResponse(stream);
 }
