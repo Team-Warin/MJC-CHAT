@@ -9,7 +9,6 @@ export const routeMessage = (
     state: typeof StateAnnotation.State
 ) => {
     const { messages } = state;
-    console.log("라우터 에이전트: ", messages);
     const lastMessage = messages[messages.length - 1] as AIMessage;
     // If no tools are called, we can finish (respond to the user)
     if (!lastMessage?.tool_calls?.length) {
@@ -26,7 +25,6 @@ export const callModel = async (
     // and aggregate the message from chunks instead of calling `.invoke()`.
     const { messages } = state;
     const responseMessage = await modelWithTools.invoke(messages);
-    console.log("모델 콜링 에이전트: ", responseMessage);
     return { messages: [responseMessage] };
 };
 
