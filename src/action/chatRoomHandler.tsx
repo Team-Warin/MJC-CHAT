@@ -17,7 +17,7 @@ import { auth } from '@/auth';
 export async function createChatRoom() {
   const session = await auth();
 
-  let userId = session?.user.id ?? cookies().get('TempUserId')?.value;
+  let userId = session?.user.id ?? (await cookies()).get('TempUserId')?.value;
 
   const chatRoom = await prisma.chatRoom.create({
     data: {
@@ -30,17 +30,19 @@ export async function createChatRoom() {
   redirect(`/chat/${chatRoom.id}`);
 }
 
-export async function deleteChatRoom({ chatRoomId }: { chatRoomId: number }) {
-  await prisma.chatRoom.delete({ where: { id: chatRoomId } });
+// 채팅방 조회 서버 액션
+export async function getChatRooms() {
+  const session = await auth();
 
-  const chatRoom = await prisma.chatRoom.findFirst({
-    orderBy: { createdAt: 'desc' },
+  const chatRooms = await prisma.chatRoom.findMany({
+    where: {
+      userId: session?.user.id,
+    },
   });
-
-  revalidatePath('/chat');
-  redirect(`/chat/${chatRoom?.id}`);
+  return chatRooms;
 }
 
+// 채팅방 업데이트 서버 액션
 export async function updateChatRoom({
   chatRoomId,
   editRoom,
@@ -54,4 +56,16 @@ export async function updateChatRoom({
   });
 
   revalidatePath('/chat');
+}
+
+// 채팅방 삭제 서버 액션
+export async function deleteChatRoom({ chatRoomId }: { chatRoomId: number }) {
+  await prisma.chatRoom.delete({ where: { id: chatRoomId } });
+
+  const chatRoom = await prisma.chatRoom.findFirst({
+    orderBy: { createdAt: 'desc' },
+  });
+
+  revalidatePath('/chat');
+  redirect(`/chat/${chatRoom?.id}`);
 }

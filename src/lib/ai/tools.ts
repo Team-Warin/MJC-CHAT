@@ -1,17 +1,25 @@
-import { tool as createTool } from 'ai';
-import { z } from 'zod';
+import { ToolNode } from "@langchain/langgraph/prebuilt";
+import { tool } from "@langchain/core/tools";
 
-export const weatherTool = createTool({
-  description: 'Display the weather for a location',
-  parameters: z.object({
-    location: z.string(),
-  }),
-  execute: async function ({ location }) {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return { weather: 'Sunny', temperature: 75, location };
-  },
+import { z } from "zod";
+
+export const searchTool = tool(async ({ query: _query }: { query: string }) => {
+    console.log("tool calling", _query);
+    // 임의
+    return "Cold, with a low of 3℃";
+}, {
+    name: "search",
+    description:
+        "Use to surf the web, fetch current information, check the weather, and retrieve other information.",
+    schema: z.object({
+        query: z.string().describe("The query to use in your search."),
+    }),
 });
 
-export const tools = {
-  displayWeather: weatherTool,
-};
+await searchTool.invoke({ query: "What's the weather like?" });
+
+// 툴 목록
+export const tools = [searchTool];
+
+// 툴 노드
+export const toolNode = new ToolNode(tools);

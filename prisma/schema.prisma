@@ -102,18 +102,11 @@ model Report {
   conversationId Int?
   userId         String
   createdAt      DateTime @default(now())
-  type           Int
-  status         Int      @default(0)
   messages       Json
+  status         Int      @default(0)
   title          String
+  type           Int
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Documents {
-  id      Int                    @id @default(autoincrement())
-  content String
-  latest  DateTime               @default(now())
-  vector  Unsupported("vector")?
 }
 
 enum SenderType {

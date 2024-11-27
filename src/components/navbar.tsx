@@ -87,7 +87,8 @@ export default function Navbar({ session }: { session: Session | null }) {
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/api') ||
     pathname?.startsWith('/chat') ||
-    pathname?.startsWith('/support/write')
+    pathname?.startsWith('/support/write') ||
+    /^\/support\/\d+$/.test(pathname)
   )
     return null;
 
@@ -184,7 +185,6 @@ export function UserMenu({
     </Dropdown>
   );
 }
-
 
 export function LoginButton({ pathname }: { pathname: string | null }) {
   return (

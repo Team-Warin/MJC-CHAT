@@ -9,8 +9,8 @@ import prisma from '@/lib/prisma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-import { Code } from '@nextui-org/code';
 import { Button } from '@nextui-org/button';
+import SupportTable from '@/components/support/table';
 
 export default async function SupportPage() {
   const session = await auth();
@@ -23,43 +23,6 @@ export default async function SupportPage() {
       createdAt: 'desc',
     },
   });
-
-  const status: {
-    [key: number]: {
-      color: 'primary' | 'warning' | 'success';
-      text: string;
-      style: string;
-    };
-  } = {
-    0: { color: 'primary', text: '등록됨', style: 'bg-blue-600' },
-    1: { color: 'warning', text: '처리중', style: 'bg-yellow-600' },
-    2: { color: 'success', text: '완료', style: 'bg-green-600' },
-  };
-
-  function timeForToday(value: Date) {
-    const today = new Date();
-    const timeValue = new Date(value);
-
-    const betweenTime = Math.floor(
-      (today.getTime() - timeValue.getTime()) / 1000 / 60
-    );
-    if (betweenTime < 1) return '방금전';
-    if (betweenTime < 60) {
-      return `${betweenTime}분전`;
-    }
-
-    const betweenTimeHour = Math.floor(betweenTime / 60);
-    if (betweenTimeHour < 24) {
-      return `${betweenTimeHour}시간전`;
-    }
-
-    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
-    if (betweenTimeDay < 365) {
-      return `${betweenTimeDay}일전`;
-    }
-
-    return `${Math.floor(betweenTimeDay / 365)}년전`;
-  }
 
   return (
     <div>
@@ -95,28 +58,14 @@ export default async function SupportPage() {
               </tr>
             </thead>
             <tbody>
-              {reports.map((report) => (
-                <tr key={report.id}>
-                  <td>{report.id}</td>
-                  <td>{report.title}</td>
-                  <td>{timeForToday(report.createdAt)}</td>
-                  <td className='flex items-center justify-center'>
-                    <Code
-                      className='w-fit flex items-center gap-2'
-                      color={status[report.status].color}
-                    >
-                      <div
-                        className={`w-3 h-3 shadow-sm rounded-full ${
-                          status[report.status].style
-                        }`}
-                      />
-                      <p>{status[report.status].text}</p>
-                    </Code>
-                  </td>
-                </tr>
-              ))}
+              <SupportTable reports={reports} />
             </tbody>
           </table>
+          {reports.length === 0 ? (
+            <div className='p-5 w-full h-full flex items-center justify-center'>
+              <h1>문의 내역이 없습니다.</h1>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

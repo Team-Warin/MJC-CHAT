@@ -9,11 +9,15 @@
 }
 
 .hljs-keyword {
-  color: #ca99eb;
+  @apply text-red-600;
+}
+
+.hljs-number {
+  @apply text-blue-600;
 }
 
 .hljs-string {
-  color: #c3e88d;
+  @apply text-green-600;
 }
 
 .hljs-tag {
@@ -21,7 +25,7 @@
 }
 
 .hljs-tag .hljs-name {
-  color: #f49094;
+  @apply text-red-600;
 }
 
 .hljs-title.function_ {
@@ -29,11 +33,11 @@
 }
 
 .hljs-attr {
-  color: white;
+  @apply text-black;
 }
 
 .hljs-built_in {
-  color: #ffcb6b;
+  @apply text-yellow-600;
 }
 
 .hljs-params {

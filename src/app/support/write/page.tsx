@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { postReport } from '@/action/postReport';
-import { getChatRooms } from '@/action/getChatRooms';
+import { getChatRooms } from '@/action/chatRoomHandler';
 
 import { Select, SelectItem } from '@nextui-org/select';
 import { Input, Textarea } from '@nextui-org/input';
@@ -24,12 +24,6 @@ export default function SupportWritePage() {
   ];
 
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
-
-  const defaultValues = [
-    '---채팅방---\n부적절 답변:\n------------\n\n내용:\n\n---주의 사항---\n상담 직원에게 폭언이나 욕설을 할 경우, 이에 따른 적절한 조치가 취해질 수 있습니다.',
-    '',
-    '',
-  ];
 
   const [title, setTitle] = useState('');
   const [reportCategory, setReportCategory] = useState<Set<number>>(new Set());
@@ -51,6 +45,12 @@ export default function SupportWritePage() {
   useEffect(() => {
     setContent(defaultValues[Array.from(reportCategory)[0]]);
   }, [reportCategory]);
+
+  const defaultValues = [
+    '---채팅방---\n부적절 답변:\n------------\n\n내용:\n\n---주의 사항---\n상담 직원에게 폭언이나 욕설을 할 경우, 이에 따른 적절한 조치가 취해질 수 있습니다.',
+    '',
+    '',
+  ];
 
   return (
     <div className={style.support_write_container}>

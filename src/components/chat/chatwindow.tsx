@@ -18,6 +18,7 @@ import { createChatRoom } from '@/action/chatRoomHandler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faStop } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '@nextui-org/button';
 import { Textarea } from '@nextui-org/input';
@@ -26,29 +27,34 @@ import { LoginButton } from '@/components/navbar';
 
 import Conversation from '@/components/conversation';
 
-import { useChat } from 'ai/react';
+import { Message, useChat } from 'ai/react';
 import Link from 'next/link';
 
-import { components, options } from '@/components/markdown/markdown';
+import { components } from '@/components/markdown/markdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
+import { div } from 'framer-motion/client';
+import Chat from '@/app/chat/[id]/page';
 
 export default function ChatWindow({
   session,
+  initialMessages,
   isOpen,
-  setIsOpen,
+  setIsOpen
 }: {
   session: Session | null;
+  initialMessages: Array<Message>
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({
-      maxSteps: 5,
-      api: `/api/chatrooms/${chatRoomId}/conversations`,
+      api: '/api/chat',
+      body: { id: chatRoomId },
+      initialMessages
     });
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -56,6 +62,9 @@ export default function ChatWindow({
 
   const chatBodyRef = useRef<HTMLDivElement | null>(null);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     window.addEventListener('keydown', async (e) => {
@@ -66,18 +75,59 @@ export default function ChatWindow({
     });
 
     return () => {
-      window.removeEventListener('keydown', () => {});
+      window.removeEventListener('keydown', () => { });
     };
   }, [input]);
 
   useEffect(() => {
-    if (messageEndRef.current && chatBodyRef.current) {
+    const chatBody = chatBodyRef.current;
+
+    if (!chatBody) return;
+
+    const handleScroll = () => {
+      setIsUserScrolling(true);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsUserScrolling(false);
+      }, 2000); // 사용자가 스크롤을 멈춘 후 2초 후에 실행
+    };
+
+    chatBody.addEventListener('scroll', handleScroll);
+
+    return () => {
+      chatBody.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isUserScrolling && messageEndRef.current && chatBodyRef.current) {
       chatBodyRef.current.scrollTo({
         top: messageEndRef.current.offsetTop,
         behavior: 'smooth',
       });
     }
-  }, [messages]);
+  }, [messages, isUserScrolling]);
+
+  function filterMessage(message: string) {
+    message = message.replace(
+      /[^가-힣a-zA-Z0-9\s~`!@#$%^&*()\-_=+[\]{}|\\;:'",.<>]/g,
+      ''
+    ); // 한글, 영어, 숫자, 공백 제외 모두 제거
+
+    if (message.length === 0)
+      message =
+        '죄송합니다. 명전이가 답변을 생성하는 도중 오류가 발생했습니다.';
+    else if (message.includes('<tool'))
+      message =
+        '죄송합니다. 명전이가 제공할 수 없는 정보가 포함되어 있는 것 같습니다.';
+
+    return message;
+  }
 
   return (
     <main className={style.chat_window}>
@@ -109,31 +159,59 @@ export default function ChatWindow({
         </div>
       </div>
       <div ref={chatBodyRef} className={style.chat_window_body}>
-        {messages.map((message) => {
-          if (message.toolInvocations) return null;
+        <div className={style.chat_window_body_chat}>
+          {messages.map((message) => {
+            if (message.toolInvocations) return null;
 
-          return (
-            <Conversation
-              userType={message.role === 'user' ? 'user' : 'ai'}
-              key={message.id}
-              id={message.id}
-            >
-              {message.role === 'assistant' ? (
-                <MDXContent>{message.content}</MDXContent>
-              ) : (
-                <span className={style.content}>{message.content}</span>
-              )}
+            serialize(message.content, {
+              mdxOptions: {
+                development: process.env.NODE_ENV === 'development',
+              },
+            }).catch(() => {
+              return (
+                <Conversation
+                  userType={message.role === 'user' ? 'user' : 'ai'}
+                  key={message.id}
+                  id={message.id}
+                >
+                  <span className={style.content}>{message.content}</span>
+                </Conversation>
+              );
+            });
+
+            message.content = filterMessage(message.content);
+
+            return (
+              <Conversation
+                userType={message.role === 'user' ? 'user' : 'ai'}
+                key={message.id}
+                id={message.id}
+              >
+                {message.role === 'assistant' ? (
+                  <MDXContent>{message.content}</MDXContent>
+                ) : (
+                  <span className={style.content}>{message.content}</span>
+                )}
+              </Conversation>
+            );
+          })}
+          {isLoading &&
+            (messages[messages.length - 1]?.role !== 'assistant' ||
+              messages[messages.length - 1]?.content.length === 0) ? (
+            <Conversation userType='ai' id={'loding'}>
+              <Loading />
             </Conversation>
-          );
-        })}
-        {isLoading &&
-        (messages[messages.length - 1]?.role !== 'assistant' ||
-          messages[messages.length - 1]?.content.length === 0) ? (
-          <Conversation userType='ai' id={'loding'}>
-            <Loading />
-          </Conversation>
-        ) : null}
-        <div ref={messageEndRef}></div>
+          ) : null}
+          <div ref={messageEndRef}></div>
+        </div>
+        <div className={style.chat_body_background}>
+          <Image
+            src={'/mascot/pos_1.svg'}
+            alt='logo'
+            width={300}
+            height={300}
+          />
+        </div>
       </div>
       <div className={style.chat_window_footer}>
         <form
@@ -156,7 +234,7 @@ export default function ChatWindow({
           <motion.div
             initial={{ scale: 0 }}
             animate={{
-              scale: input.replace(/\s/g, '').length > 0 ? 1 : 0,
+              scale: input.replace(/\s/g, '').length || isLoading ? 1 : 0,
             }}
             transition={{ duration: 0.2, stiffness: 100, type: 'spring' }}
             className={style.send_button}
@@ -167,8 +245,15 @@ export default function ChatWindow({
               type='submit'
               radius='full'
               ref={sendButtonRef}
+              onPress={() => {
+                if (isLoading) stop();
+              }}
             >
-              <FontAwesomeIcon size='sm' icon={faArrowRight} />
+              {isLoading ? (
+                <FontAwesomeIcon size='sm' icon={faStop} />
+              ) : (
+                <FontAwesomeIcon size='sm' icon={faArrowRight} />
+              )}
             </Button>
           </motion.div>
         </form>
@@ -186,11 +271,17 @@ function MDXContent({ children }: { children: string }) {
   useEffect(() => {
     (async () => {
       if (children)
-        setContent(
-          await serialize(children, {
-            mdxOptions: { development: process.env.NODE_ENV === 'development' },
-          })
-        );
+        try {
+          setContent(
+            await serialize(children, {
+              mdxOptions: {
+                development: process.env.NODE_ENV === 'development',
+              },
+            })
+          );
+        } catch {
+          setContent(null);
+        }
     })();
   }, [children]);
 
