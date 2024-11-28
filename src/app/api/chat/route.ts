@@ -13,52 +13,44 @@ import { LangChainAdapter } from 'ai';
 import { getSchedule } from '@/lib/mjc_schedule';
 import { formatMessage, convertVercelMessageToLangChainMessage, convertLangChainMessageToVercelMessage, formatMessageJson } from '@/lib/utils';
 
-import { input } from "@nextui-org/theme";
-
-import { agent } from '@/lib/ai/agent';
-import { model } from "@/lib/ai/model";
+import { graph } from '@/lib/ai/graph';
+import { output } from "framer-motion/client";
 
 export async function POST(request: Request) {
-    const { id, messages }: {
-        id: number; // 채팅방 ID를 인자로 함께 받습니다
-        messages: Array<Message>;
-    } = await request.json();
+    const { id, messages } = await request.json();
 
     const chatRoomId = Number(id);
+    const formattedMessages = messages.map(formatMessageJson);
 
-    /*
-    const coreMessages = convertToCoreMessages(messages);
-    const userMessage = getMostRecentUserMessage(coreMessages);
-    const userMessageContent = userMessage?.content.toString();
-
-    console.log(coreMessages);
-
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        weekday: 'long',
-        timeZone: 'Asia/Seoul',
-    };
-    const today = now.toLocaleString('ko-KR', options);
-
-    */
-
-    const previousMessages = messages.map(formatMessageJson);
-    const currentMessageContent = messages[messages.length - 1].content;
-
-    // console.log(previousMessages, currentMessageContent);
-
-    const streamEvents = await agent.streamEvents(
-        { messages: previousMessages },
+    const streamEvents = await graph.streamEvents(
+        { messages: formattedMessages },
         {
             version: "v2",
             callbacks: [{
                 async handleChainEnd(outputs, runId, parentRunId, tags, kwargs) {
-
+                    const outputMessages = outputs.messages ?? [];
+                    const userMessage = outputMessages[outputMessages.length - 2]?.content;
+                    const aiMessage = outputMessages[outputMessages.length - 1]?.content;
+                    
+                    // 데이터베이스에 채팅 내역 저장
+                    try {
+                        await prisma.conversation.createMany({
+                            data: [
+                                {
+                                    chatRoomId,
+                                    sender: 'user',
+                                    message: userMessage
+                                },
+                                {
+                                    chatRoomId,
+                                    sender: 'ai',
+                                    message: aiMessage
+                                },
+                            ]
+                        });
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             }]
         },
@@ -71,7 +63,6 @@ export async function POST(request: Request) {
                 if (event === 'on_chat_model_stream') {
                     if (!!data.chunk.content) {
                         const aiMessage = convertLangChainMessageToVercelMessage(data.chunk);
-                        console.log(aiMessage);
                         controller.enqueue(aiMessage);
                     }
                 }
