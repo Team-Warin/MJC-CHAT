@@ -179,7 +179,7 @@ export default function ChatWindow({
               );
             });
 
-            message.content = filterMessage(message.content);
+            // message.content = filterMessage(message.content);
 
             return (
               <Conversation
