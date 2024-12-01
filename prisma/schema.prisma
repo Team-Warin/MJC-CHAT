@@ -85,16 +85,8 @@ model ChatRoom {
   important  Boolean  @default(false)
   sortOrder  Int      @default(0)
   tempUserId String?
+  messages   Json?
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model Conversation {
-  id         Int        @id @default(autoincrement())
-  sender     SenderType
-  message    String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  chatRoomId Int
 }
 
 model Report {
@@ -102,10 +94,10 @@ model Report {
   conversationId Int?
   userId         String
   createdAt      DateTime @default(now())
-  type           Int
-  status         Int      @default(0)
   messages       Json
+  status         Int      @default(0)
   title          String
+  type           Int
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

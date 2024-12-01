@@ -1,11 +1,11 @@
 'use server';
 
-import type { Session } from 'next-auth';
+import type { Message } from 'ai';
+
 import type { ChatRoom } from '@prisma/client';
 
 import prisma from '@/lib/prisma';
 
-import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
 
 import { redirect } from 'next/navigation';
@@ -17,7 +17,7 @@ import { auth } from '@/auth';
 export async function createChatRoom() {
   const session = await auth();
 
-  let userId = session?.user.id ?? cookies().get('TempUserId')?.value;
+  const userId = session?.user.id ?? cookies().get('TempUserId')?.value;
 
   const chatRoom = await prisma.chatRoom.create({
     data: {

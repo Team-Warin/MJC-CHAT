@@ -1,12 +1,16 @@
 'use client';
 
+import type { Message } from 'ai';
+
 import type { Session } from 'next-auth';
 import type { Dispatch, SetStateAction } from 'react';
 
 import style from '@/styles/chat.module.css';
 
+import Link from 'next/link';
 import Image from 'next/image';
 
+import { useChat } from 'ai/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { motion } from 'framer-motion';
@@ -25,30 +29,27 @@ import { Textarea } from '@nextui-org/input';
 import { UserMenu } from '@/components/navbar';
 import { LoginButton } from '@/components/navbar';
 
-import Conversation from '@/components/conversation';
-
-import { useChat } from 'ai/react';
-import Link from 'next/link';
-
-import { components } from '@/components/markdown/markdown';
-import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
+import ChatMessage from '@/components/chat/chatMessage';
 
 export default function ChatWindow({
   session,
   isOpen,
-  setIsOpen,
+  initialMessages,
 }: {
   session: Session | null;
   isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  initialMessages: Message[];
 }) {
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({
-      api: `/api/chatrooms/${chatRoomId}/conversations`,
+      initialMessages,
+      body: {
+        chatRoomId: Number(chatRoomId),
+      },
+      api: `/api/chat`,
     });
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -107,22 +108,6 @@ export default function ChatWindow({
     }
   }, [messages, isUserScrolling]);
 
-  function filterMessage(message: string) {
-    message = message.replace(
-      /[^가-힣a-zA-Z0-9\s~`!@#$%^&*()\-_=+[\]{}|\\;:'",.<>]/g,
-      ''
-    ); // 한글, 영어, 숫자, 공백 제외 모두 제거
-
-    if (message.length === 0)
-      message =
-        '죄송합니다. 명전이가 답변을 생성하는 도중 오류가 발생했습니다.';
-    else if (message.includes('<tool'))
-      message =
-        '죄송합니다. 명전이가 제공할 수 없는 정보가 포함되어 있는 것 같습니다.';
-
-    return message;
-  }
-
   return (
     <main className={style.chat_window}>
       <div className={style.chat_window_header}>
@@ -154,47 +139,15 @@ export default function ChatWindow({
       </div>
       <div ref={chatBodyRef} className={style.chat_window_body}>
         <div className={style.chat_window_body_chat}>
-          {messages.map((message) => {
+          {messages.map((message, i) => {
             if (message.toolInvocations) return null;
 
-            serialize(message.content, {
-              mdxOptions: {
-                development: process.env.NODE_ENV === 'development',
-              },
-            }).catch(() => {
-              return (
-                <Conversation
-                  userType={message.role === 'user' ? 'user' : 'ai'}
-                  key={message.id}
-                  id={message.id}
-                >
-                  <span className={style.content}>{message.content}</span>
-                </Conversation>
-              );
-            });
-
-            message.content = filterMessage(message.content);
-
-            return (
-              <Conversation
-                userType={message.role === 'user' ? 'user' : 'ai'}
-                key={message.id}
-                id={message.id}
-              >
-                {message.role === 'assistant' ? (
-                  <MDXContent>{message.content}</MDXContent>
-                ) : (
-                  <span className={style.content}>{message.content}</span>
-                )}
-              </Conversation>
-            );
+            return <ChatMessage key={i} message={message} />;
           })}
           {isLoading &&
           (messages[messages.length - 1]?.role !== 'assistant' ||
             messages[messages.length - 1]?.content.length === 0) ? (
-            <Conversation userType='ai' id={'loding'}>
-              <Loading />
-            </Conversation>
+            <ChatMessage isLoading={isLoading} />
           ) : null}
           <div ref={messageEndRef}></div>
         </div>
@@ -257,52 +210,5 @@ export default function ChatWindow({
         </p>
       </div>
     </main>
-  );
-}
-
-function MDXContent({ children }: { children: string }) {
-  const [content, setContent] = useState<MDXRemoteSerializeResult | null>(null);
-  useEffect(() => {
-    (async () => {
-      if (children)
-        try {
-          setContent(
-            await serialize(children, {
-              mdxOptions: {
-                development: process.env.NODE_ENV === 'development',
-              },
-            })
-          );
-        } catch {
-          setContent(null);
-        }
-    })();
-  }, [children]);
-
-  if (content) {
-    return (
-      <div className={style.content}>
-        <MDXRemote {...content} components={components} />
-      </div>
-    );
-  }
-}
-
-function Loading() {
-  const texts = '명전이가 답변을 생성중입니다...';
-
-  return (
-    <div>
-      {texts.split('').map((text, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0.2, 1, 0.2] }}
-          transition={{ duration: 1, delay: 0.2 * i, repeat: Infinity }}
-        >
-          {text}
-        </motion.span>
-      ))}
-    </div>
   );
 }

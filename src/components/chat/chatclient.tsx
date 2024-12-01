@@ -1,5 +1,6 @@
 'use client';
 
+import type { Message } from 'ai';
 import type { Session } from 'next-auth';
 
 import style from '@/styles/chat.module.css';
@@ -15,10 +16,12 @@ export default function ChatClient({
   session,
   chatRooms,
   tempUserId,
+  messages,
 }: {
   session: Session | null;
   chatRooms: ChatRoom[];
   tempUserId?: string;
+  messages: Message[];
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -33,7 +36,7 @@ export default function ChatClient({
       <ChatWindow
         session={session}
         isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        initialMessages={messages}
       ></ChatWindow>
     </div>
   );

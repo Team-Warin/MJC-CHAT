@@ -1,36 +1,28 @@
+import type { Message } from 'ai';
+
+import { NextRequest } from 'next/server';
+
 import prisma from '@/lib/prisma';
-import { NextResponse, NextRequest } from 'next/server';
 
-import { z } from 'zod';
-
-import { streamText, tool } from 'ai';
+import { streamText } from 'ai';
 import { ollama } from 'ollama-ai-provider';
 
-import { getSchedule } from '@/lib/mjc_schedule';
+import { tools } from '@/lib/ai/tools';
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const body = await req.json();
-  const messages = body.messages ?? [];
+export const maxDuration = 30;
 
-  const { id } = await params;
+export async function POST(req: NextRequest) {
+  const body: {
+    chatRoomId: number;
+    messages: Message[];
+  } = await req.json();
 
-  const now = new Date();
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    weekday: 'long',
-    timeZone: 'Asia/Seoul',
-  };
-  const today = now.toLocaleString('ko-KR', options);
+  const { chatRoomId, messages } = body;
+
+  console.log('request body', body);
+  console.log('message dialog', messages);
 
   const SYSTEM_PROMPT = `
-
 모델 시작일: 2024년 11월 24일 일요일 (명전이 생일)
 명전이 데이터 업데이트 일자: 2024년 11월 25일 월요일 (1주일 주기로 업데이트)
 
@@ -87,52 +79,22 @@ export async function POST(
 이 외의 소셜 미디어는 제공하지 않습니다.`;
 
   const result = await streamText({
-    model: ollama(process.env.MODEL_NAME ?? 'gemma2_tools:9b'), // env에 모델 이름이 없으면 gemma2_tools:9b를 사용합니다. 정의 된 환경에서는 학습된 Gemma2 모델을 사용합니다.
-    async onFinish({ text, toolCalls, toolResults }) {
-      console.log('onFinish', text, toolCalls, toolResults);
+    model: ollama(process.env.MODEL_NAME ?? 'cow/gemma2_tools:9b'),
+    onFinish: async ({ responseMessages }) => {
+      await prisma.chatRoom.update({
+        where: { id: chatRoomId },
+        data: {
+          messages: JSON.stringify([...messages, ...responseMessages]),
+        },
+      });
     },
+    messages: messages ?? [],
     abortSignal: req.signal,
     maxSteps: 5,
     temperature: 0.8,
     system: SYSTEM_PROMPT,
-    messages,
-    tools: {
-      currentDate: tool({
-        description: '현재 시간을 보여주는 도구',
-        parameters: z.object({}),
-        execute: async () => {
-          console.log(`EXECUTING TOOL: currentDate`);
-
-          return today;
-        },
-      }),
-    },
+    tools: tools,
   });
 
   return result.toDataStreamResponse();
-}
-
-//
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const chatRoomId = Number(params.id);
-    const searchParams = req.nextUrl.searchParams;
-
-    const page = Number(searchParams.get('page'));
-    const limit = Number(searchParams.get('limit'));
-    const offset = page * limit;
-
-    const conversations = await prisma.conversation.findMany({
-      where: { chatRoomId },
-      skip: offset,
-      take: limit,
-    });
-
-    return NextResponse.json(conversations);
-  } catch (error) {
-    return NextResponse.json({ message: error }, { status: 500 });
-  }
 }
