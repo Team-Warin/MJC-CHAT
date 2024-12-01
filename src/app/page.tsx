@@ -1,6 +1,7 @@
 import style from '@/styles/main.module.css';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 import * as motion from 'framer-motion/client';
 
@@ -87,7 +88,56 @@ function Banner() {
 
 /** Intro */
 function Intro() {
-  return <div id='intro' className={style.intro}></div>;
+  return (
+    <div id='intro' className={style.intro}>
+      <motion.div
+        initial={{ opacity: 0, y: 100, rotate: 10 }}
+        animate={{ opacity: 1, y: 0, rotate: 0 }}
+        transition={{
+          duration: 0.7,
+          stiffness: 100,
+          type: 'spring',
+          delay: 1,
+        }}
+      >
+        <Image src='/mascot/pos_2.svg' alt='intro' width={400} height={400} />
+      </motion.div>
+      <div className={style.intro_text_box}>
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.7,
+            delay: 1.5,
+            type: 'spring',
+            stiffness: 100,
+            ease: 'easeInOut',
+          }}
+          className={style.intro_text}
+        >
+          <h1>안녕 나는 학사도우미 명전이야!!!!</h1>
+        </motion.div>
+        <div className={style.intro_mascot_box}>
+          {new Array(3).fill(0).map((_, i: number) => (
+            <motion.div
+              key={i}
+              className={style.intro_mascot}
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 2 + i * 0.1 }}
+            >
+              <Image
+                src={`/mascot/pos_${i + 1}.svg`}
+                alt='intro'
+                width={200}
+                height={200}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Credit() {
