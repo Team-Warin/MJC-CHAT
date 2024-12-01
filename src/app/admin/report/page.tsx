@@ -5,7 +5,7 @@ import type { Report } from '@prisma/client'
 import { getReports, replyReport, deleteReport } from '@/action/report';
 
 import styles from '@/styles/dashboard.module.css';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/table";
 import { Pagination, PaginationItemType, PaginationItemRenderProps } from "@nextui-org/pagination";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal'
@@ -70,7 +70,7 @@ export default function QuestionPage() {
 
   // Reply 전송
   const handleReplySubmit = async () => {
-    if (selectedReport) {
+    if (selectedReport && !!replyContent.trim()) {
       await replyReport({ reportId: selectedReport.id, content: replyContent });
       setReplyContent('');
       setReplyMessages((prev) => ([
@@ -189,6 +189,7 @@ export default function QuestionPage() {
   );
 }
 
+// 페이지네이션 커스텀
 function PageNationRenderItem({
   ref,
   key,
@@ -252,6 +253,17 @@ function ReplyModal({
   // setReplyMessages: SetStateAction<ReplyMessage[]>,
   handleReplySubmit: () => Promise<void>
 }) {
+  // 메시지 컨테이너의 참조 생성
+  const messageContainerRef = useRef<HTMLDivElement>(null);
+
+  // 메시지 변경시 스크롤
+  useEffect(() => {
+    if (messageContainerRef && messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+    }
+  }, [replyMessages]);
+
+  // 엔터키
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -259,6 +271,7 @@ function ReplyModal({
     }
   };
 
+  // 요칭 & 닫기
   const handleSubmitAndClose = async () => {
     await handleReplySubmit();
     onClose();
@@ -271,7 +284,10 @@ function ReplyModal({
           <>
             <ModalHeader className="flex flex-col gap-1">오류 문의 ID: {selectedReport?.id}</ModalHeader>
             <ModalBody>
-              <div className="overflow-y-auto max-h-60">
+              <div
+                className="overflow-y-auto max-h-60"
+                ref={messageContainerRef}
+              >
                 {replyMessages.map((msg, index) => (
                   <div key={index} className="mb-2">
                     <strong>{msg.from}:</strong> {msg.content}
@@ -328,6 +344,7 @@ function DeleteModal({
   selectedReport?: Report;
   handleDeleteConfirm: () => void
 }) {
+  // 요청 & 닫기
   const handleDeleteAndClose = async () => {
     await handleDeleteConfirm();
     onClose();
