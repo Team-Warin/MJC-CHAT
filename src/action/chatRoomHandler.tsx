@@ -17,7 +17,9 @@ import { auth } from '@/auth';
 export async function createChatRoom() {
   const session = await auth();
 
-  const userId = session?.user.id ?? cookies().get('TempUserId')?.value;
+  const cookiesList = await cookies();
+
+  const userId = session?.user.id ?? cookiesList.get('TempUserId')?.value;
 
   const chatRoom = await prisma.chatRoom.create({
     data: {
@@ -50,7 +52,7 @@ export async function updateChatRoom({
 }) {
   await prisma.chatRoom.update({
     where: { id: chatRoomId },
-    data: editRoom,
+    data: { title: editRoom.title },
   });
 
   revalidatePath('/chat');

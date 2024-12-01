@@ -1,9 +1,8 @@
 'use client';
 
 import type { Message } from 'ai';
-
 import type { Session } from 'next-auth';
-import type { Dispatch, SetStateAction } from 'react';
+import type { ChatRoom } from '@prisma/client';
 
 import style from '@/styles/chat.module.css';
 
@@ -17,7 +16,8 @@ import { motion } from 'framer-motion';
 
 import { usePathname, useParams } from 'next/navigation';
 
-import { createChatRoom } from '@/action/chatRoomHandler';
+import { createChatRoom, updateChatRoom } from '@/action/chatRoomHandler';
+import { saveChatMessages } from '@/action/chatRoomHandler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -31,16 +31,16 @@ import { LoginButton } from '@/components/navbar';
 
 import ChatMessage from '@/components/chat/chatMessage';
 
-import { saveChatMessages } from '@/action/chatRoomHandler';
-
 export default function ChatWindow({
   session,
   isOpen,
   initialMessages,
+  chatRoom,
 }: {
   session: Session | null;
   isOpen: boolean;
   initialMessages: Message[];
+  chatRoom: ChatRoom;
 }) {
   const pathname = usePathname();
   const { id: chatRoomId } = useParams();

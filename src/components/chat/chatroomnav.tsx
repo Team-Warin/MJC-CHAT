@@ -105,6 +105,8 @@ function CloseChatroomNav({
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
+
   return (
     <div>
       <div className={style.chatroom_nav_header}>
@@ -115,7 +117,12 @@ function CloseChatroomNav({
         </button>
       </div>
       <div className={style.chatroom_nav_body}>
-        <Button isIconOnly variant='light' radius='full'>
+        <Button
+          isIconOnly
+          variant='light'
+          radius='full'
+          onPress={() => router.push('/chat')}
+        >
           <FontAwesomeIcon icon={faComment} />
         </Button>
       </div>
@@ -137,7 +144,7 @@ function ChatroomItem({ chatRoom }: { chatRoom: ChatRoom }) {
       }`}
       key={chatRoom.id}
       onClick={() => {
-        router.replace(`/chat/${chatRoom.id}`);
+        router.push(`/chat/${chatRoom.id}`);
       }}
     >
       <div className='flex items-center gap-2'>

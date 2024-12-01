@@ -1,3 +1,7 @@
+.main {
+  @apply w-full h-dvh overflow-hidden;
+}
+
 .banner {
   @apply relative flex items-center h-dvh w-full;
 }

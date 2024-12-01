@@ -17,11 +17,13 @@ export default function ChatClient({
   chatRooms,
   tempUserId,
   messages,
+  chatRoom,
 }: {
   session: Session | null;
   chatRooms: ChatRoom[];
   tempUserId?: string;
-  messages: Message[];
+  messages?: Message[];
+  chatRoom?: ChatRoom;
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -33,11 +35,14 @@ export default function ChatClient({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       ></ChatroomNav>
-      <ChatWindow
-        session={session}
-        isOpen={isOpen}
-        initialMessages={messages}
-      ></ChatWindow>
+      {messages && chatRoom && (
+        <ChatWindow
+          session={session}
+          isOpen={isOpen}
+          initialMessages={messages}
+          chatRoom={chatRoom}
+        ></ChatWindow>
+      )}
     </div>
   );
 }

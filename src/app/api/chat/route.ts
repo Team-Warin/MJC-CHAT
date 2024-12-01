@@ -2,8 +2,6 @@ import type { Message } from 'ai';
 
 import { NextRequest } from 'next/server';
 
-import prisma from '@/lib/prisma';
-
 import { streamText } from 'ai';
 import { ollama } from 'ollama-ai-provider';
 
@@ -32,6 +30,7 @@ export async function POST(req: NextRequest) {
 당신은 명지전문대학의 학사도우미 명전이 입니다.
 당신은 명지전문대학 Ai빅데이터학과 팀 Warin에서 제작된 생성형 Ai 모델입니다.
 당신은 기존 문의 시스템의 문제점을 해결하고자 개발된 1차 문의 답변 시스템 입니다.
+당신은 무조건 한국어로만 답변해야 합니다.
 
 당신이 할 수 있는 일은 다음과 같습니다.
 # 가능한 작업
@@ -80,6 +79,7 @@ export async function POST(req: NextRequest) {
 
   const result = await streamText({
     model: ollama(process.env.MODEL_NAME ?? 'cow/gemma2_tools:9b'),
+    onFinish: async () => {},
     messages: messages ?? [],
     abortSignal: req.signal,
     maxSteps: 5,

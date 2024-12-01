@@ -41,6 +41,7 @@ export default async function Chat({ params }: { params: { id: string } }) {
         chatRooms={chatRooms}
         tempUserId={!session ? cookieStore.get('TempUserId')?.value : undefined}
         messages={messages}
+        chatRoom={chatRoom!}
       ></ChatClient>
     </>
   );
