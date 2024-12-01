@@ -54,7 +54,6 @@ export async function postReport(formData: FormData) {
 }
 
 
-
 // 페이지네이션에 따라 신고 목록 가져오는 함수
 export async function getReports({
   page = 1,
@@ -88,6 +87,7 @@ export async function getReports({
   };
 }
 
+// 리폿 상태 가져오는 함수 
 export async function updateReportStatus(reportId: number, newStatus: number) {
   const session = await auth();
 
@@ -102,6 +102,7 @@ export async function updateReportStatus(reportId: number, newStatus: number) {
   return updatedReport;
 }
 
+// 신고 내역 삭제하는 함수
 export async function deleteReport(reportId: number) {
   const session = await auth();
 
@@ -112,4 +113,34 @@ export async function deleteReport(reportId: number) {
   });
 
   revalidatePath('/reports');
+}
+
+// 스파게티 주의
+// 선택된 신고에 답장하는 함수
+export async function replyReport({
+  reportId,
+  content
+}: {
+  reportId: number,
+  content: string
+}) {
+  const session = await auth();
+
+  if (!session) throw new Error('Unauthorized');
+
+  const report = await prisma.report.findUnique({
+    where: { id: reportId },
+  });
+
+  if (!report) throw new Error('Report not found');
+
+  const updatedMessages = [
+    ...(report.messages as any[] || []), // any 죄송합니다
+    { from: 'admin', content },
+  ];
+
+  await prisma.report.update({
+    where: { id: reportId },
+    data: { messages: updatedMessages },
+  });
 }
