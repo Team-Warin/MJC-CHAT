@@ -1,3 +1,7 @@
+.main {
+  @apply w-full h-dvh overflow-hidden;
+}
+
 .banner {
   @apply relative flex items-center h-dvh w-full;
 }
@@ -23,7 +27,43 @@
 }
 
 .intro {
-  @apply w-full h-dvh bg-mjcblue;
+  @apply p-20 w-full h-dvh flex justify-start items-center gap-10 bg-slate-50 shadow-lg;
+}
+
+.intro_text_box {
+  @apply py-52 h-dvh flex flex-col items-start;
+}
+
+.intro_text {
+  @apply px-10 py-5 relative rounded-lg bg-mjcsky text-white;
+
+  & h1 {
+    @apply text-6xl font-black;
+  }
+}
+
+.intro_text:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 37px solid transparent;
+  border-right-color: #00aabb;
+  border-left: 0;
+  border-bottom: 0;
+  margin-top: -18.5px;
+  margin-left: -37px;
+  @apply border-r-mjcsky;
+}
+
+.intro_mascot_box {
+  @apply mt-10 flex gap-10;
+}
+
+.intro_mascot {
+  @apply flex justify-center items-end bg-white rounded-md px-10 py-5 shadow-lg;
 }
 
 .credit {

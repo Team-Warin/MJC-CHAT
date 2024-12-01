@@ -11,18 +11,22 @@
 }
 
 .paragraph {
-  @apply flex gap-3 font-medium;
+  @apply flex flex-col gap-3 font-medium;
 
-  & > img {
-    @apply w-[27px] h-[27px] rounded-full sticky;
-  }
+  & > .chat_message {
+    @apply flex gap-3 font-medium;
 
-  &[data-type='ai'] {
-    @apply justify-start;
-  }
+    & > img {
+      @apply flex-shrink-0 h-[27px] rounded-full sticky;
+    }
 
-  & > .content {
-    @apply w-full flex-shrink-0;
+    &[data-type='ai'] {
+      @apply justify-start;
+    }
+
+    & > .content {
+      @apply w-full flex-shrink-0;
+    }
   }
 }
 
@@ -124,6 +128,10 @@
 
   & .edit_input {
     @apply px-1 py-0 w-[180px];
+  }
+
+  & > div > p {
+    @apply whitespace-nowrap;
   }
 }
 
