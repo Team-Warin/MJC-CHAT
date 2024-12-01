@@ -119,22 +119,8 @@ export default function QuestionPage() {
       />
 
       <h1 className='mb-4'>Report Page</h1>
-      <Table aria-label="Example table with dynamic content"
-        bottomContent={
-          <div className="flex w-full justify-center">
-            <Pagination
-              className='min-h-[500px]'
-              isCompact
-              showShadow
-              showControls
-              page={page}
-              total={numPages}
-              onChange={(page) => setPage(page)}
-              renderItem={PageNationRenderItem}
-            />
-          </div>
-        }
-      >
+
+      <Table aria-label="Example table with dynamic content">
         <TableHeader>
           <TableColumn>Conversation ID</TableColumn>
           <TableColumn>Title</TableColumn>
@@ -185,6 +171,18 @@ export default function QuestionPage() {
           ))}
         </TableBody>
       </Table>
+
+      <div className="flex w-full mt-4 justify-center">
+        <Pagination
+          isCompact
+          showShadow
+          showControls
+          page={page}
+          total={numPages}
+          onChange={(page) => setPage(page)}
+          renderItem={PageNationRenderItem}
+        />
+      </div>
     </div>
   );
 }

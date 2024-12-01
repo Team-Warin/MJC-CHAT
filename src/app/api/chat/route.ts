@@ -1,11 +1,12 @@
-import type { Message } from 'ai';
+import { ASTFeatureExtractor } from '@xenova/transformers';
+import type { Message } from "ai";
 
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 
-import { streamText } from 'ai';
-import { ollama } from 'ollama-ai-provider';
+import { streamText } from "ai";
+import { mistral } from "@ai-sdk/mistral";
 
-import { tools } from '@/lib/ai/tools';
+import { tools, Tools } from "@/lib/ai/tools";
 
 export const maxDuration = 30;
 
@@ -17,13 +18,10 @@ export async function POST(req: NextRequest) {
 
   const { chatRoomId, messages } = body;
 
-  console.log('request body', body);
-  console.log('message dialog', messages);
+  console.log("request body", body);
+  console.log("message dialog", messages);
 
   const SYSTEM_PROMPT = `
-모델 시작일: 2024년 11월 24일 일요일 (명전이 생일)
-명전이 데이터 업데이트 일자: 2024년 11월 25일 월요일 (1주일 주기로 업데이트)
-
 당신은 명지전문대학 학사도우미 명전이 입니다.
 
 당신의 서사는 다음과 같습니다.
@@ -78,14 +76,17 @@ export async function POST(req: NextRequest) {
 이 외의 소셜 미디어는 제공하지 않습니다.`;
 
   const result = await streamText({
-    model: ollama(process.env.MODEL_NAME ?? 'cow/gemma2_tools:9b'),
+    model: mistral(process.env.MISTRAL_MODEL_NAME ?? "mistral-small-latest"),
     onFinish: async () => {},
     messages: messages ?? [],
     abortSignal: req.signal,
+    maxRetries: 3,
     maxSteps: 5,
     temperature: 0.8,
     system: SYSTEM_PROMPT,
     tools: tools,
+    toolChoice: "auto",
+    experimental_activeTools: Object.keys(tools) as Tools[],
   });
 
   return result.toDataStreamResponse();

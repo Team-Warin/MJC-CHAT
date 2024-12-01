@@ -30,12 +30,12 @@ export default function AdminSidebar() {
                     href={'/admin/report'}
                     text={'QUESTION'}
                 />
-                <AdminSidebarButton
+                {/* <AdminSidebarButton
                     router={router}
                     pathname={pathname}
                     href={'/admin/analytics'}
                     text={'ANALYTICS'}
-                />
+                /> */}
             </div>
         </div>
     );

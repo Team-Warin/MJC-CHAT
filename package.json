@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/mistral": "^1.0.3",
     "@ai-sdk/openai": "^0.0.72",
     "@auth/prisma-adapter": "^2.7.2",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -16,8 +17,9 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@langchain/community": "^0.3.15",
-    "@langchain/core": "^0.3.18",
+    "@huggingface/inference": "^2.8.1",
+    "@langchain/community": "^0.3.16",
+    "@langchain/core": "^0.3.19",
     "@langchain/ollama": "^0.1.1",
     "@langchain/openai": "^0.3.14",
     "@mdx-js/loader": "^3.0.1",
@@ -49,6 +51,9 @@
     "bcrypt": "^5.1.1",
     "chart.js": "^4.4.6",
     "cheerio": "^1.0.0",
+    "chromadb": "^1.9.4",
+    "chromadb-default-embed": "^2.13.2",
+    "cohere-ai": "^7.14.0",
     "es-hangul": "^2.1.0",
     "faiss-node": "^0.5.1",
     "framer-motion": "^11.11.9",
@@ -61,7 +66,9 @@
     "next": "^15.0.3",
     "next-auth": "^5.0.0-beta.25",
     "next-mdx-remote": "^5.0.0",
+    "node-fetch": "^3.3.2",
     "ollama-ai-provider": "^0.16.1",
+    "onnxruntime-node": "^1.20.1",
     "pdf-parse": "^1.1.1",
     "pgvector": "^0.2.0",
     "pickleparser": "^0.2.1",
@@ -71,6 +78,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^19.0.0-rc.1",
     "react-wordcloud": "^1.0.5",
+    "sharp": "^0.33.5",
     "three": "^0.169.0",
     "ts-node": "^10.9.2",
     "uuid": "^11.0.2",
@@ -84,6 +92,7 @@
     "eslint-config-next": "^15.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.14",
-    "typescript": "^5"
+    "typescript": "^5",
+    "webpack-external-import": "^2.2.4"
   }
 }
