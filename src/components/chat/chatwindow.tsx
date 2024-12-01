@@ -31,6 +31,8 @@ import { LoginButton } from '@/components/navbar';
 
 import ChatMessage from '@/components/chat/chatMessage';
 
+import { saveChatMessages } from '@/action/chatRoomHandler';
+
 export default function ChatWindow({
   session,
   isOpen,
@@ -108,6 +110,10 @@ export default function ChatWindow({
     }
   }, [messages, isUserScrolling]);
 
+  useEffect(() => {
+    saveChatMessages({ chatRoomId: Number(chatRoomId), messages });
+  }, [messages]);
+
   return (
     <main className={style.chat_window}>
       <div className={style.chat_window_header}>
@@ -142,7 +148,13 @@ export default function ChatWindow({
           {messages.map((message, i) => {
             if (message.toolInvocations) return null;
 
-            return <ChatMessage key={i} message={message} />;
+            return (
+              <ChatMessage
+                id={`${message.role}-${i}`}
+                key={i}
+                message={message}
+              />
+            );
           })}
           {isLoading &&
           (messages[messages.length - 1]?.role !== 'assistant' ||

@@ -80,14 +80,6 @@ export async function POST(req: NextRequest) {
 
   const result = await streamText({
     model: ollama(process.env.MODEL_NAME ?? 'cow/gemma2_tools:9b'),
-    onFinish: async ({ responseMessages }) => {
-      await prisma.chatRoom.update({
-        where: { id: chatRoomId },
-        data: {
-          messages: JSON.stringify([...messages, ...responseMessages]),
-        },
-      });
-    },
     messages: messages ?? [],
     abortSignal: req.signal,
     maxSteps: 5,

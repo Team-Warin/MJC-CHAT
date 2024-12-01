@@ -15,9 +15,11 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 export default function ChatMessage({
+  id,
   message,
   isLoading,
 }: {
+  id?: string;
   message?: Message;
   isLoading?: boolean;
 }) {
@@ -94,6 +96,7 @@ export default function ChatMessage({
 
   return (
     <motion.div
+      id={id}
       className={style.paragraph}
       data-type={message.role}
       initial={{ opacity: message.role === 'assistant' ? 1 : 0 }}

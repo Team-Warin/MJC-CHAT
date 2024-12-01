@@ -55,3 +55,16 @@ export async function updateChatRoom({
 
   revalidatePath('/chat');
 }
+
+export async function saveChatMessages({
+  chatRoomId,
+  messages,
+}: {
+  chatRoomId: number;
+  messages: Message[];
+}) {
+  await prisma.chatRoom.update({
+    where: { id: chatRoomId },
+    data: { messages: JSON.stringify(messages) },
+  });
+}
