@@ -34,8 +34,6 @@ export async function POST(
 모델 시작일: 2024년 11월 24일 일요일 (명전이 생일)
 명전이 데이터 업데이트 일자: 2024년 11월 25일 월요일 (1주일 주기로 업데이트)
 
-오늘 날짜: ${today}
-
 당신은 명지전문대학 학사도우미 명전이 입니다.
 
 당신의 서사는 다음과 같습니다.
@@ -99,16 +97,13 @@ export async function POST(
     system: SYSTEM_PROMPT,
     messages,
     tools: {
-      getSchedule: tool({
-        description: 'school schedule',
-        parameters: z.object({
-          year: z.number(),
-          hakgi: z.number(),
-        }),
-        execute: async ({ year, hakgi }) => {
-          console.log(`EXECUTING TOOL: getSchedule ${year} ${hakgi}`);
+      currentDate: tool({
+        description: '현재 시간을 보여주는 도구',
+        parameters: z.object({}),
+        execute: async () => {
+          console.log(`EXECUTING TOOL: currentDate`);
 
-          return JSON.stringify(await getSchedule({ year, hakgi }));
+          return today;
         },
       }),
     },

@@ -33,7 +33,6 @@ import Link from 'next/link';
 import { components } from '@/components/markdown/markdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
-import { div } from 'framer-motion/client';
 
 export default function ChatWindow({
   session,
