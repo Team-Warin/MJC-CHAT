@@ -1,48 +1,64 @@
-"use client";
+'use client'
 
 import styles from '@/styles/dashboard.module.css';
 import { Button } from '@nextui-org/button';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter, usePathname } from 'next/navigation';
 
 export default function AdminSidebar() {
     const router = useRouter();
     const pathname = usePathname();
-
-
     return (
         <div className={styles.sidebar}>
             <div className={styles.sidebarLinks}>
                 <Button
                     disabled
+                    disableRipple
                 >
                     DASHBOARD
                 </Button>
 
-                <Button
-                    onClick={() => {
-                        router.replace('/admin/user');
-                    }}
-                    variant={pathname === "/admin/user" ? 'bordered' : 'light'}
-                >
-                    USER
-                </Button>
-                <Button
-                    onClick={() => {
-                        router.replace('/admin/question');
-                    }}
-                    variant={pathname === "/admin/question" ? 'bordered' : 'light'}
-                >
-                    QUESTION
-                </Button>
-                <Button
-                    onClick={() => {
-                        router.replace('/admin/analytics');
-                    }}
-                    variant={pathname === "/admin/analytics" ? 'bordered' : 'light'}
-                >
-                    ANALYTICS
-                </Button>
+                <AdminSidebarButton
+                    router={router}
+                    pathname={pathname}
+                    href={'/admin/user'}
+                    text={'USER'}
+                />
+                <AdminSidebarButton
+                    router={router}
+                    pathname={pathname}
+                    href={'/admin/report'}
+                    text={'QUESTION'}
+                />
+                <AdminSidebarButton
+                    router={router}
+                    pathname={pathname}
+                    href={'/admin/analytics'}
+                    text={'ANALYTICS'}
+                />
             </div>
         </div>
     );
+}
+
+function AdminSidebarButton({
+    router,
+    pathname,
+    href,
+    text
+}: {
+    router: AppRouterInstance,
+    pathname: string,
+    href: string;
+    text: string;
+}) {
+    return (
+        <Button
+            onClick={() => router.replace(href)}
+            variant={pathname === href ? 'bordered' : 'light'}
+            disableRipple
+        >
+            {text}
+        </Button>
+    )
 }
