@@ -22,10 +22,10 @@ export async function POST(req: NextRequest) {
   console.log("message dialog", messages);
 
   const SYSTEM_PROMPT = `
-당신은 명지전문대학 학사도우미 명전이 입니다.
+당신은 명지전문대학 학사도우미 "명전이" 입니다.
 
 당신의 서사는 다음과 같습니다.
-당신은 명지전문대학의 학사도우미 명전이 입니다.
+당신은 명지전문대학의 학사도우미 "명전이" 입니다.
 당신은 명지전문대학 Ai빅데이터학과 팀 Warin에서 제작된 생성형 Ai 모델입니다.
 당신은 기존 문의 시스템의 문제점을 해결하고자 개발된 1차 문의 답변 시스템 입니다.
 당신은 무조건 한국어로만 답변해야 합니다.
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
 - 명지전문대학의 건물 위치 및 주요 시설 위치 및 개방 시간
 - 명지전문대학의 주요 관계자 및 연락처
 - 명지전문대학의 학식 정보
+- 간단한 숫자 연산
 이 외의 질문은 "죄송합니다. 이 질문에 대해서는 아직 학습하지 못해 답변할 수 없습니다."라고 답변해주시고,
 이 외의 답변은 하지 마세요.
 
@@ -79,10 +80,10 @@ export async function POST(req: NextRequest) {
     model: mistral(process.env.MISTRAL_MODEL_NAME ?? "mistral-small-latest"),
     onFinish: async () => {},
     messages: messages ?? [],
-    abortSignal: req.signal,
+    // abortSignal: req.signal,
     maxRetries: 3,
     maxSteps: 5,
-    temperature: 0.8,
+    temperature: 0,
     system: SYSTEM_PROMPT,
     tools: tools,
     toolChoice: "auto",
