@@ -1,64 +1,214 @@
 'use client'
 
-import styles from '@/styles/dashboard.module.css';
-import { Button } from '@nextui-org/button';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { useRouter, usePathname } from 'next/navigation';
+// import styles from '@/styles/admin.module.css';
 
-export default function AdminSidebar() {
+import clsx from "clsx";
+import React from 'react';
+
+import { useRouter, usePathname } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
+import {
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownSection,
+    DropdownTrigger
+} from '@nextui-org/dropdown';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faBottleDroplet,
+    faChartLine,
+    faHouseChimney,
+    faPenToSquare,
+    faUsers
+} from '@fortawesome/free-solid-svg-icons';
+
+export function AdminSidebar() {
     const router = useRouter();
     const pathname = usePathname();
-    return (
-        <div className={styles.sidebar}>
-            <div className={styles.sidebarLinks}>
-                <Button
-                    disabled
-                    disableRipple
-                >
-                    DASHBOARD
-                </Button>
 
-                <AdminSidebarButton
-                    router={router}
-                    pathname={pathname}
-                    href={'/admin/user'}
-                    text={'USER'}
-                />
-                <AdminSidebarButton
-                    router={router}
-                    pathname={pathname}
-                    href={'/admin/report'}
-                    text={'QUESTION'}
-                />
-                {/* <AdminSidebarButton
-                    router={router}
-                    pathname={pathname}
-                    href={'/admin/analytics'}
-                    text={'ANALYTICS'}
-                /> */}
+    return (
+        <aside className='bg-white h-full w-64 py-6 px-3 shrink-0 overflow-y-auto scrollbar-hide border-r border-divider flex-col'>
+            <div className='h-full'>
+                {/* 헤더 */}
+                <div className='flex gap-8 items-center px-6'>
+                    <LogoDropdown
+                        name='명전이'
+                        location='관리자 패널'
+                    />
+                </div>
+                {/* 몸체 */}
+                <nav className='flex flex-col justify-between h-full'>
+                    <div className='flex flex-col gap-6 mt-9 px-2'>
+                        <AdminSidebarItem
+                            router={router}
+                            title="홈"
+                            icon={<FontAwesomeIcon icon={faHouseChimney} />}
+                            isActive={pathname === "/admin"}
+                            href="/admin"
+                        />
+                        <AdminSidebarMenu
+                            title='기본 메뉴'
+                        >
+                            <AdminSidebarItem
+                                router={router}
+                                title="유저"
+                                icon={<FontAwesomeIcon icon={faUsers} />}
+                                isActive={pathname === "/admin/user"}
+                                href="/admin/user"
+                            />
+                            <AdminSidebarItem
+                                router={router}
+                                title="문의"
+                                icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                                isActive={pathname === "/admin/report"}
+                                href="/admin/report"
+                            />
+                            <AdminSidebarItem
+                                router={router}
+                                title="통계"
+                                icon={<FontAwesomeIcon icon={faChartLine} />}
+                                isActive={pathname === "/admin/analytics"}
+                                href="/admin/analytics"
+                            />
+                        </AdminSidebarMenu>
+                    </div>
+                </nav>
+                {/* 푸터 */}
+                <div className='flex items-center justify-center gap-6 pt-16 pb-8 px-8'>
+
+                </div>
             </div>
-        </div>
+        </aside>
     );
 }
 
-function AdminSidebarButton({
+/* 섹션 */
+function AdminSidebarMenu({ title, children }: { title: string, children?: React.ReactNode }) {
+    return (
+        <div className="flex gap-2 flex-col">
+            <span className="text-xs font-normal">{title}</span>
+            {children}
+        </div>
+    )
+}
+
+/* 아이템 */
+function AdminSidebarItem({
     router,
-    pathname,
-    href,
-    text
+    title,
+    icon,
+    isActive,
+    href
 }: {
     router: AppRouterInstance,
-    pathname: string,
+    title: string,
+    icon: JSX.Element,
+    isActive: boolean;
     href: string;
-    text: string;
+}) {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        console.log(e);
+
+        e.preventDefault(); // 기본 링크 동작 방지
+        router.replace(href); // SPA 네비게이션
+    }
+
+    return (
+        <div
+            onClick={handleClick}
+            className="text-gray-900 active:bg-none max-w-full"
+        >
+            <div
+                className={clsx(
+                    isActive
+                        ? "bg-gray-100 [&_svg_path]:fill-gray-500"
+                        : "hover:bg-gray-100",
+                    "flex gap-2 w-full min-h-[44px] h-full items-center px-3.5 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.98]"
+                )}
+            >
+                {icon}
+                <span className="text-gray-900">{title}</span>
+            </div>
+        </div>
+    )
+}
+
+
+/** Logo Dropdown */
+function LogoDropdown({
+    name,
+    location
+}: {
+    name: string,
+    location: string
 }) {
     return (
-        <Button
-            onClick={() => router.replace(href)}
-            variant={pathname === href ? 'bordered' : 'light'}
-            disableRipple
+        <Dropdown
+            className="w-full min-w-[260px]"
         >
-            {text}
-        </Button>
+            <DropdownTrigger className="cursor-pointer">
+                <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-4">
+                        <h3 className="text-xl font-bold m-0 text-gray-900 -mb-4 whitespace-nowrap">
+                            {name}
+                        </h3>
+                        <span className="text-xs font-medium text-gray-500">
+                            {location}
+                        </span>
+                    </div>
+                </div>
+            </DropdownTrigger>
+            <DropdownMenu>
+                <DropdownSection title="Companies">
+                    <DropdownItem
+                        key="1"
+                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
+                        description="San Fransico, CA"
+                        classNames={{
+                            base: "py-4",
+                            title: "text-base font-semibold",
+                        }}
+                    >
+                        Facebook
+                    </DropdownItem>
+                    <DropdownItem
+                        key="2"
+                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
+                        description="Austin, Tx"
+                        classNames={{
+                            base: "py-4",
+                            title: "text-base font-semibold",
+                        }}
+                    >
+                        Instagram
+                    </DropdownItem>
+                    <DropdownItem
+                        key="3"
+                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
+                        description="Brooklyn, NY"
+                        classNames={{
+                            base: "py-4",
+                            title: "text-base font-semibold",
+                        }}
+                    >
+                        Twitter
+                    </DropdownItem>
+                    <DropdownItem
+                        key="4"
+                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
+                        description="Palo Alto, CA"
+                        classNames={{
+                            base: "py-4",
+                            title: "text-base font-semibold",
+                        }}
+                    >
+                        Acme Co.
+                    </DropdownItem>
+                </DropdownSection>
+            </DropdownMenu>
+        </Dropdown>
     )
 }
