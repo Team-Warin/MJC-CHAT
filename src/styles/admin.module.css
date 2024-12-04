@@ -1,0 +1,7 @@
+.sidebar {
+  @apply h-full w-64;
+}
+
+.sidebar_header {
+  @apply flex gap-8 items-center px-6;
+}
