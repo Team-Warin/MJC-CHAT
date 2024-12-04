@@ -1,19 +1,16 @@
-import AdminSidebar from "@/components/admin/sidebar";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Input } from "@nextui-org/input";
 
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { AdminNavbar } from "@/components/admin/navbar";
+import { AdminSidebar } from "@/components/admin/sidebar";
 
 export default async function AdminLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-  const session = await auth();
-
-  if(!session) {
-    redirect('/404');
-  }
-
   return (
     <div className="flex">
       <AdminSidebar />
-      <div>
+      <div className='relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden'>
+        <AdminNavbar />
         {children}
       </div>
     </div>

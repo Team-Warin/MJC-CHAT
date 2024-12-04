@@ -1,4 +1,4 @@
-import styles from '@/styles/dashboard.module.css';
+import styles from '@/styles/admin.module.css';
 import { Button } from '@nextui-org/button';
 import React from 'react';
 import LineChart from '@/components/admin/linechart';

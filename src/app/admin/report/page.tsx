@@ -4,7 +4,7 @@ import type { Report } from '@prisma/client'
 
 import { getReports, replyReport, deleteReport } from '@/action/report';
 
-import styles from '@/styles/dashboard.module.css';
+import styles from '@/styles/admin.module.css';
 import React, { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/table";
 import { Pagination, PaginationItemType, PaginationItemRenderProps } from "@nextui-org/pagination";

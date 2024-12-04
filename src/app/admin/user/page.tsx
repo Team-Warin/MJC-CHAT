@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma';
-import styles from '@/styles/dashboard.module.css';
-import Sidebar from '@/components/admin/sidebar';
+import styles from '@/styles/admin.module.css';
 import Image from 'next/image';
 import { Code } from "@nextui-org/code";
 
