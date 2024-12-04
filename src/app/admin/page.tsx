@@ -1,9 +1,10 @@
-import prisma from '@/lib/prisma';
+'use client'
 
-export default async function AdminDashboard() {
+/** Admin Main Page */
+export default function AdminMain() {
     return (
-        <div>
-            u can't use this
-        </div>
+        <>
+            어서오세요
+        </>
     )
 }
