@@ -8,7 +8,7 @@ interface BookmarkItem {
   date: string;
 }
 
-export default function Bookmarks() {
+export default function BookMarks() {
   const generateRandomDate = () => {
     const start = new Date(2024, 0, 1);
     const end = new Date();

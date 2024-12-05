@@ -79,6 +79,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^19.0.0-rc.1",
     "react-wordcloud": "^1.0.5",
+    "recharts": "^2.14.1",
     "sharp": "^0.33.5",
     "three": "^0.169.0",
     "ts-node": "^10.9.2",

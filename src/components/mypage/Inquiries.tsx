@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { Button } from "@nextui-org/react";
-import { StatusBadge } from './StatusBadge';
-
-
+import { Button } from '@nextui-org/button';
+import { StatusBadge } from './statusBadge';
 
 interface InquiryItem {
     id: number;
