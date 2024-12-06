@@ -11,7 +11,7 @@ export default function Settings({
 }) {
 
   const [isEditing, setIsEditing] = useState(false);
-  const [nickname, setNickname] = useState(session?.user?.name || '');
+  const [nickname, setNickname] = useState(session?.user?.nickname || '');
 
   return (
     <Card
@@ -42,24 +42,24 @@ export default function Settings({
         <div>
           {isEditing ? (
             <>
-              <div className="mb-4 w-full">
+              <div className={styles.changeNicknameInputContainer}>
                 <input
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded"
+                  className={styles.changeNicknameInput}
                 />
               </div>
-              <div className="flex justify-between w-full">
+              <div className={styles.btnContainer}>
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-300"
+                  className={styles.cancelBtn}
                 >
                   취소
                 </button>
                 <button
-                  onClick={() => console.log('닉네임 저장 기능은 추후 구현됩니다.')}
-                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+                  onClick={() => console.log({nickname})}
+                  className={styles.saveBtn}
                 >
                   저장
                 </button>
@@ -68,9 +68,9 @@ export default function Settings({
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className={styles.changeNickname}
+              className={styles.changeNicknameBtn}
             >
-              {session.user?.name} ✏️
+              {session.user?.nickname ?? session.user?.name} ✏️
             </button>
           )}
         </div>
@@ -78,14 +78,8 @@ export default function Settings({
       <div className={styles.settingContent}>
         <div>
           <p className={styles.contentTitle}>고객 지원</p>
-          <p className={styles.contentSubTitle}><Link href={"#"}>홈</Link><span>|</span><Link href={"#"}>소개</Link><span>|</span><Link href={"#"}>크레딧</Link></p>
+          <p className={styles.contentSubTitle}><Link href={"/"}>홈</Link><span>|</span><Link href={"/#intro"}>소개</Link><span>|</span><Link href={"/#credit"}>크레딧</Link></p>
         </div>
-      </div>
-
-
-
-      <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-md max-w-md mx-auto mt-10">
-
       </div>
     </Card>
   );

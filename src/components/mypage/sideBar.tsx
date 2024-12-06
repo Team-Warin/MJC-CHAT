@@ -1,29 +1,17 @@
 import styles from '@/styles/mypage.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 interface SidebarProps {
-  isSidebarVisible: boolean;
   activeTab: string;
   handleTabClick: (tabName: string) => void;
-  toggleSidebar: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isSidebarVisible, activeTab, handleTabClick, toggleSidebar }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, handleTabClick }) => {
 
   return (
-    <aside className={`${styles.sidebar} 
-    transform ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out z-50`}>
+    <aside className={styles.sidebar}>
       <div className={styles.sidebarContent}>
         <div className={styles.sidebarTitleContainer}>
           <h2 className={styles.sidebarTitle}>마이페이지</h2>
-          <button
-            className={`${styles.sidebarToggle} 
-             ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden}`}
-            onClick={toggleSidebar}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </button>
         </div>
         <div className={styles.sidebarItemContainer}>
           <button
