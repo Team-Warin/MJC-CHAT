@@ -4,6 +4,7 @@
 
 import clsx from "clsx";
 import React from 'react';
+import Image from 'next/image';
 
 import { useRouter, usePathname } from 'next/navigation';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -18,14 +19,16 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faBottleDroplet,
     faChartLine,
     faHouseChimney,
     faPenToSquare,
-    faUsers
+    faUsers,
+    faCaretDown,
+    faHouse,
+    faMessage
 } from '@fortawesome/free-solid-svg-icons';
 
-export function AdminSidebar() {
+export default function AdminSidebar() {
     const router = useRouter();
     const pathname = usePathname();
 
@@ -35,8 +38,9 @@ export function AdminSidebar() {
                 {/* 헤더 */}
                 <div className='flex gap-8 items-center px-6'>
                     <LogoDropdown
+                        logo={<Image src={'/webps/mjc.webp'} alt='logo' width={30} height={30} />}
                         name='명전이'
-                        location='관리자 패널'
+                        description='관리자 패널'
                     />
                 </div>
                 {/* 몸체 */}
@@ -85,7 +89,6 @@ export function AdminSidebar() {
     );
 }
 
-/* 섹션 */
 function AdminSidebarMenu({ title, children }: { title: string, children?: React.ReactNode }) {
     return (
         <div className="flex gap-2 flex-col">
@@ -95,7 +98,6 @@ function AdminSidebarMenu({ title, children }: { title: string, children?: React
     )
 }
 
-/* 아이템 */
 function AdminSidebarItem({
     router,
     title,
@@ -119,7 +121,7 @@ function AdminSidebarItem({
     return (
         <div
             onClick={handleClick}
-            className="text-gray-900 active:bg-none max-w-full"
+            className="text-gray-900 max-w-full"
         >
             <div
                 className={clsx(
@@ -139,73 +141,51 @@ function AdminSidebarItem({
 
 /** Logo Dropdown */
 function LogoDropdown({
+    logo,
     name,
-    location
+    description
 }: {
+    logo: React.ReactNode
     name: string,
-    location: string
+    description: string
 }) {
     return (
         <Dropdown
             className="w-full min-w-[260px]"
         >
             <DropdownTrigger className="cursor-pointer">
-                <div className="flex items-center gap-2">
+                <div className="w-full flex items-center gap-4">
+                    {logo}
                     <div className="flex flex-col gap-4">
                         <h3 className="text-xl font-bold m-0 text-gray-900 -mb-4 whitespace-nowrap">
                             {name}
                         </h3>
                         <span className="text-xs font-medium text-gray-500">
-                            {location}
+                            {description}
                         </span>
                     </div>
+                    <FontAwesomeIcon icon={faCaretDown} />
                 </div>
             </DropdownTrigger>
             <DropdownMenu>
-                <DropdownSection title="Companies">
+                <DropdownSection title="이동">
                     <DropdownItem
                         key="1"
-                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
-                        description="San Fransico, CA"
-                        classNames={{
-                            base: "py-4",
-                            title: "text-base font-semibold",
-                        }}
+                        startContent={<FontAwesomeIcon icon={faHouse} />}
+                        description="홈페이지로 이동"
+                        className="py-4 text-base font-semibold"
+                        href="/"
                     >
-                        Facebook
+                        홈페이지
                     </DropdownItem>
                     <DropdownItem
                         key="2"
-                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
-                        description="Austin, Tx"
-                        classNames={{
-                            base: "py-4",
-                            title: "text-base font-semibold",
-                        }}
+                        startContent={<FontAwesomeIcon icon={faMessage} />}
+                        description="채팅방으로 이동"
+                        className="py-4 text-base font-semibold"
+                        href="/chat"
                     >
-                        Instagram
-                    </DropdownItem>
-                    <DropdownItem
-                        key="3"
-                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
-                        description="Brooklyn, NY"
-                        classNames={{
-                            base: "py-4",
-                            title: "text-base font-semibold",
-                        }}
-                    >
-                        Twitter
-                    </DropdownItem>
-                    <DropdownItem
-                        key="4"
-                        startContent={<FontAwesomeIcon icon={faBottleDroplet} />}
-                        description="Palo Alto, CA"
-                        classNames={{
-                            base: "py-4",
-                            title: "text-base font-semibold",
-                        }}
-                    >
-                        Acme Co.
+                        채팅방
                     </DropdownItem>
                 </DropdownSection>
             </DropdownMenu>

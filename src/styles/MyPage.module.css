@@ -1,199 +1,110 @@
-.container {
-  @apply flex p-10; /* 좌우 여백 조정 */
-}
-
+/* sidebar */
 .sidebar {
-  @apply fixed top-0 left-0 w-64 h-full bg-background p-5 flex flex-col shadow-lg z-50;
-  /* 기존 justify-between 제거 */
-}
-.sidebar h2 {
-  @apply text-2xl mb-5;
+  @apply flex flex-col w-64 h-full p-5 shadow-lg justify-between;
 }
 
-.sidebar ul {
-  @apply list-none p-0;
+.sidebarTitleContainer {
+  @apply flex items-center justify-between pb-2
 }
 
-.sidebar li {
-  @apply mb-4 text-lg text-foreground flex items-center relative transition-all duration-300 ease-in-out;
-  /* 마우스 오버와 클릭 시 부드러운 전환을 위해 트랜지션을 추가했습니다 */
+.sidebarTitle {
+  @apply text-xl px-2;
 }
 
-.sidebar li:hover {
-  @apply text-mjcsky; /* 마우스 호버 시 텍스트 색상 변경 */
-  transform: translateX(10px); /* 호버 시 오른쪽으로 약간 이동 */
-}
-/* UserProfile.module.css */
-.tabItem {
-  padding: 7px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.sidebarToggle:hover {
+  @apply bg-mjcsky/20 rounded-full;
 }
 
+.sidebarItem {
+  @apply cursor-pointer p-2;
+}
+
+.sidebarItem:hover {
+  @apply text-mjcsky;
+}
 
 .activeTab {
-  background-color: #f0f0f0; /* 활성화된 탭에 회색 배경 적용 */
-}
-
-.sidebar li:active {
-  @apply font-bold text-[#002968]; /* 클릭 시 텍스트 색상 변경과 폰트 강조 */
-}
-
-
-.sidebar .tabItem {
-  @apply mb-4 text-lg text-foreground flex items-center relative transition-all duration-300 ease-in-out cursor-pointer;
-}
-
-.sidebar .tabItem:hover {
-  @apply text-mjcsky; /* 호버 시 색상 변경 */
-}
-
-.sidebar .activeTab {
-  @apply font-bold text-mjcsky border-l-4 border-mjcsky pl-2; /* 선택된 탭 강조 (굵은 글씨 및 왼쪽 테두리 추가) */
-}
-
-
-.sidebar .activeTab::after {
-  @apply absolute right-0 w-1 h-full bg-mjcsky; /* 색상 변경 */
-  content: '';
+  @apply font-bold text-mjcsky;
 }
 
 .logoutBtn {
-  @apply p-2 bg-red-600 text-white rounded cursor-pointer;
-  position: absolute;
-  bottom: 80px; /* 사이드바 하단에서 80px 위로 조정 */
-  left: 20px; /* 사이드바의 왼쪽에서 약간 떨어지게 설정 */
+  @apply p-2 bg-red-600 text-white rounded-md cursor-pointer;
 }
 
-
-.profileContainer {
-  @apply flex-grow p-10 bg-background; /* 프로필 컨테이너의 기본 스타일 지정 (flex-grow, 패딩, 배경색 설정)*/
-  margin-top: 80px; /* 상단에 여백 추가*/
-  margin-left: 100px; /* 왼쪽에 여백 추가*/
-  width: calc(100% - 100px); /* 전체 너비에서 좌우 여백을 제외한 너비 설정*/
-  min-height: calc(100vh - 160px); /* 최소 높이를 뷰포트 높이에서 상하 여백을 제외한 크기로 설정*/
-  border-radius: 12px; /* 모서리를 둥글게 설정*/
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 박스 그림자 추가로 입체감 부여*/
+.logoutBtn:hover {
+  @apply bg-red-500;
 }
 
-
-.container {
-  @apply flex p-6;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-}
-.profileHeader {
-  @apply flex items-center justify-center mb-5; /* 중앙 정렬로 복구 */
-  transform: translateX(-20px); /* 필요 시 약간 왼쪽으로 이동 */
-}
-  
-
-.profileImageWrapper {
-  @apply relative mr-5; /* 간격을 줄이기 위해 mr 값을 줄임 */
+/* mypage */
+.myPageContainer {
+  @apply flex pt-14 w-screen h-screen;
 }
 
-
-.profileImage {
-  @apply rounded-full w-16 h-16; /* 크기를 줄이고 둥글게 */
-}
-.form {
-  @apply w-full max-w-md flex flex-col gap-4; /* 중앙 정렬 제거 */
-  margin-left: auto;
-  margin-right: auto;
-  transform: translateX(20px); /* 중앙 정렬 후 조금 더 오른쪽으로 이동 */
+.myPageSidebarContainer {
+  @apply h-full relative
 }
 
-
-.formGroup {
-  @apply flex flex-col;
+.contentContainer {
+  @apply grow max-w-6xl mx-auto;
 }
 
-.formGroup label {
-  @apply mb-1 text-base text-foreground; /* 색상 변경 */
+/* settings */
+.settingContainer {
+  @apply flex flex-col max-w-2xl mx-auto;
 }
 
-.formGroup input {
-  @apply w-full max-w-xs p-2 border border-gray-300 rounded text-sm bg-google; /* 각 입력 필드의 최대 너비 설정 */
-  margin-left: 40px; /* 입력 필드를 더 왼쪽이나 오른쪽으로 미세하게 조정 */
+.settingTitle {
+  @apply px-8 py-6 text-2xl font-bold
 }
 
-.formGroup input:focus {
-  @apply bg-white outline-none border-mjcsky; /* 색상 변경 */
+.settingContent {
+  @apply px-8 py-7 flex justify-between items-start;
+}
+
+.contentTitle {
+  @apply font-semibold;
+}
+
+.contentSubTitle {
+  @apply text-sm pt-2;
+
+  & > span {
+    @apply m-2 text-gray-200;
+  }
+}
+
+.contentSelect {
+  @apply w-32;
+}
+
+.changeNicknameInputContainer {
+  @apply mb-2;
+}
+
+.changeNicknameInput {
+  @apply w-52 px-2 py-1 border border-gray-300 rounded;
+}
+
+.btnContainer {
+  @apply flex justify-end;
+}
+
+.cancelBtn {
+  @apply bg-gray-500 text-white text-sm py-2 px-4 rounded transition duration-300 mr-1
+}
+
+.cancelBtn:hover {
+  @apply bg-gray-400
 }
 
 .saveBtn {
-  @apply p-2 bg-mjcsky text-white rounded text-center font-medium cursor-pointer max-w-xs mx-auto mt-4; /* 색상 및 여백 조정 */
+  @apply bg-blue-500 text-white text-sm py-2 px-4 rounded transition duration-300
 }
 
-
-.buttonWithIcon {
-  border-radius: 8px; /* 버튼의 모서리 둥글게 */
-  box-shadow: 0 2px 4px rgba(0,s 0, 0, 0.1); /* 버튼에 그림자 */
-}
-.horizontalLine {
-  width: 100%; /* 사이드바 너비를 제외한 만큼만 가로줄 표시 */
-  height: 2px; /* 높이 설정 */
-  background-color: #ccc; /* 배경 색상 */
-  margin: 20px auto; /* 중앙으로 정렬 */
-  position: absolute; /* 절대 위치 */
-  top: 36px; /* 페이지 상단에서의 위치 설정 */
-  left: 0; /* 기본 위치 */
-  right: 0;
-  transition: left 0.3s ease; /* 부드러운 이동 효과 */
+.saveBtn:hover {
+  @apply bg-blue-400
 }
 
-.topProfileImage {
-  width: 30px; /* 원하는 작은 크기로 설정 */
-  height: 30px;
-  border-radius: 50%; /* 이미지 둥글게 만들기 */
-  object-fit: cover; /* 이미지의 비율을 유지하면서 요소 크기에 맞춤 */
-}
-
-
-.profileName {
-  font-size: 16px;
-  color: #333; /* 적당한 색상으로 설정 */
-}
-.popWindow {
-  @apply px-4 py-6 bg-white shadow-lg rounded-lg;
-}
-
-.popHeader {
-  @apply flex items-center mb-4;
-}
-
-.popUserName {
-  @apply text-base font-bold;
-}
-
-.popUserEmail {
-  @apply text-sm;
-}
-
-.popMiddle {
-  @apply flex gap-4 justify-center mb-4;
-}
-
-.popSettingBtn, .popLogoutBtn {
-  @apply w-[90px];
-}
-
-.quickLink {
-  @apply text-center;
-
-  & > div {
-    @apply py-2;
-  }
-}
-.tabContent {
-  @apply w-full max-w-4xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md;
-}
-
-.tabTitle {
-  @apply text-2xl font-bold mb-6 text-gray-800 border-b pb-4;
-}
-
-.bookmarkGrid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+.changeNicknameBtn {
+  @apply bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-400 transition duration-300 text-sm;
 }

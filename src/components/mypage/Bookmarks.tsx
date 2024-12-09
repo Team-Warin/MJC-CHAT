@@ -8,7 +8,7 @@ interface BookmarkItem {
   date: string;
 }
 
-export default function Bookmarks() {
+export default function BookMarks() {
   const generateRandomDate = () => {
     const start = new Date(2024, 0, 1);
     const end = new Date();
@@ -126,8 +126,8 @@ export default function Bookmarks() {
                 <div className="col-span-1 text-gray-600">{item.id}</div>
                 <div className="col-span-9">
                   <span className="text-base pl-4">
-                    {item.title.length > 30 ? highlightSearchTerm(item.title.substring(0, 30) + 
-                    '...', searchTerm) : highlightSearchTerm(item.title, searchTerm)}
+                    {item.title.length > 30 ? highlightSearchTerm(item.title.substring(0, 30) +
+                      '...', searchTerm) : highlightSearchTerm(item.title, searchTerm)}
                   </span>
                 </div>
                 <div className="col-span-2 text-right text-gray-500">{item.date}</div>

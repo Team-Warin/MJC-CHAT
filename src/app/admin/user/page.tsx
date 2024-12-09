@@ -1,72 +1,111 @@
-import prisma from '@/lib/prisma';
-import styles from '@/styles/admin.module.css';
-import Image from 'next/image';
-import { Code } from "@nextui-org/code";
+'use client';
 
-export default async function UserControlPage() {
-  const selectedFields = {
-    avatar: true,
-    nickname: true,
-    email: true,
-    roles: true,
-    createdAt: true,
-  }
+import { getUsers } from "@/action/user";
+import { UserTable } from "@/components/admin/usertable";
+import { faFile, faGear, faInfo, faListDots, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-  const users = await prisma.user.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    }
-  });
+import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
+import { User } from "@prisma/client";
+import { useEffect, useState } from "react";
+
+function useUserTable() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태 추가
+  const pageSize = 10;
+
+  useEffect(() => {
+    const loadUsers = async () => {
+      const { users, totalPages } = await getUsers({
+        page: currentPage,
+        pageSize,
+        query: searchQuery
+      });
+      setUsers(users);
+      setTotalPages(totalPages);
+    };
+
+    loadUsers();
+  }, [currentPage, searchQuery]);
+
+  return { users, currentPage, totalPages, setCurrentPage, searchQuery, setSearchQuery };
+}
+
+export default function AdminUserMain() {
+  const {
+    users,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    searchQuery,
+    setSearchQuery,
+  } = useUserTable();
 
   return (
-    <div className={styles.dashboard_window}>
-      <h1>UserControl Page</h1>
-      <table className={styles.dashboard_table}>
-        <thead>
-          <tr>
-            {Object.keys(selectedFields).map((field, index) => (
-              <th key={index} className={styles.table_cell}>
-                {field.charAt(0).toUpperCase() + field.slice(1)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={index}>
-              <td className={styles.table_cell}>
-                {user.avatar ? (
-                  <Image
-                    src={user.avatar}
-                    alt={`${user.nickname ?? 'User'}`}
-                    width={27}
-                    height={27}
-                    className='rounded-lg'
-                  />
-                ) : ('No Avatar')}
-              </td>
-              <td className={styles.table_cell}>{user.nickname ?? 'null'}</td>
-              <td className={styles.table_cell}>{user.email}</td>
-              <td className={styles.table_cell}>
-                {user.roles && user.roles.length > 0 ? (() => {
-                  const role = JSON.parse(user.roles[0]).role;
+    <>
+      <h3 className="text-xl font-semibold">All Accounts</h3>
+      <div className="flex justify-between flex-wrap gap-4 items-center">
+        <div className="flex items-center gap-1 flex-wrap md:flex-nowrap">
+          <Input
+            className="w-full"
+            placeholder="Search users"
+          />
 
-                  if (role === 'admin') {
-                    return <Code color='danger'>{role}</Code>
-                  } else if (role === 'student') {
-                    return <Code color='primary'>{role}</Code>
-                  } else if (role === 'professor') {
-                    return <Code color='warning'>{role}</Code>
-                  } else if (role === 'staff') {
-                    return <Code color='secondary'>{role}</Code>
-                  }
-                })() : "No role"}
-              </td>
-              <td className={styles.table_cell}>{user.createdAt.getFullYear()}년 {user.createdAt.getMonth() + 1}월 {user.createdAt.getDate()}일</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          <Button
+            isIconOnly
+            disableRipple
+            variant="light"
+            aria-label="Like">
+            <FontAwesomeIcon icon={faGear} />
+          </Button>
+
+          <Button
+            isIconOnly
+            disableRipple
+            variant="light"
+            aria-label="Like">
+            <FontAwesomeIcon icon={faTrash} />
+          </Button>
+
+          <Button
+            isIconOnly
+            disableRipple
+            variant="light"
+            aria-label="Like">
+            <FontAwesomeIcon icon={faInfo} />
+          </Button>
+
+          <Button
+            isIconOnly
+            disableRipple
+            variant="light"
+            aria-label="Like">
+            <FontAwesomeIcon icon={faListDots} />
+          </Button>
+        </div>
+        <div className="flex flex-row gap-3.5 flex-wrap">
+          <Button color="primary">
+            Add User
+          </Button>
+          <Button
+            color="primary"
+            startContent={<FontAwesomeIcon icon={faFile} />}
+          >
+            Export to CSV
+          </Button>
+        </div>
+      </div>
+      <div className="max-w-[95rem] mx-auto w-full">
+        <UserTable
+          users={users}
+          currentPage={0}
+          totalPages={0}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+    </>
   );
 }

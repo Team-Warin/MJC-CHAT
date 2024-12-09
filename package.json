@@ -26,6 +26,7 @@
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^14.2.16",
     "@nextui-org/avatar": "^2.0.33",
+    "@nextui-org/breadcrumbs": "^2.0.13",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/card": "^2.0.34",
     "@nextui-org/checkbox": "^2.1.5",

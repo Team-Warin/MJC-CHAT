@@ -1,4 +1,3 @@
-import { ASTFeatureExtractor } from '@xenova/transformers';
 import type { Message } from "ai";
 
 import { NextRequest } from "next/server";
