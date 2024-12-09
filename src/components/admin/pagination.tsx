@@ -1,9 +1,31 @@
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PaginationItemRenderProps, PaginationItemType } from "@nextui-org/pagination";
 
-// 페이지네이션 커스텀
-export default function PageNationRenderItem({
+import {
+  Pagination,
+  PaginationProps,
+  PaginationItemRenderProps,
+  PaginationItemType
+} from "@nextui-org/pagination";
+
+export default function CustomPagination({
+  total,
+  initialPage,
+  page,
+  onChange
+}: PaginationProps) {
+  return (
+    <Pagination
+      total={total}
+      initialPage={initialPage}
+      page={page}
+      onChange={onChange}
+      renderItem={CustomPageNationRenderItem}
+    />
+  )
+}
+
+function CustomPageNationRenderItem({
   ref,
   key,
   value,

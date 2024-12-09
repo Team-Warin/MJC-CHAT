@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { User } from '@prisma/client';
+import Prisma from '@prisma/client';
 
 import {
   Table,
@@ -11,8 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table";
-import { Pagination } from '@nextui-org/pagination';
-import PageNationRenderItem from './pagenationItem';
+
+import CustomPagination from '@/components/admin/pagination';
 
 export function UserTable({
   users,
@@ -20,7 +20,7 @@ export function UserTable({
   totalPages,
   onPageChange,
 }: {
-  users: User[];
+  users: Prisma.User[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -44,12 +44,11 @@ export function UserTable({
         </TableBody>
       </Table>
       <div className="flex w-full mt-4 justify-center">
-        <Pagination
+        <CustomPagination
           total={totalPages}
           initialPage={1}
           page={currentPage}
           onChange={onPageChange}
-          renderItem={PageNationRenderItem}
         />
       </div>
     </div>
