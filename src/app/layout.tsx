@@ -23,8 +23,10 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default async function RootLayout({
   children,
+  modal
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const session = await auth();
 
@@ -35,6 +37,7 @@ export default async function RootLayout({
           <Navbar session={session} />
           {session?.user?.nickname === '' ? <FirstModal /> : null}
           {children}
+          {modal}
         </NextAuthProvider>
       </body>
     </html>

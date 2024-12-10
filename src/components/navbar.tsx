@@ -7,6 +7,8 @@ import style from '@/styles/navbar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 
+import { useRouter } from 'next/navigation';
+
 import { signOut } from 'next-auth/react';
 
 import {
@@ -133,6 +135,7 @@ export function UserMenu({
   size?: 'sm' | 'md' | 'lg';
 }) {
   const pathname = usePathname(); // 현재 경로 확인
+  const router = useRouter();
 
   // 드롭다운 항목을 조건에 따라 추가
   const dropdownItems = [];
@@ -142,7 +145,7 @@ export function UserMenu({
         key='mypage'
         startContent={<FontAwesomeIcon icon={faUser} />}
         onClick={() => {
-          window.location.href = '/mypage';
+          router.replace('/mypage');
         }}
       >
         마이페이지
